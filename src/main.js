@@ -94,6 +94,8 @@ const worldIds = [
   "door",
   "lens",
   "lens-lit",
+  "beacon-dark",
+  "beacon-lit",
 ];
 const worldReady = Promise.all(
   worldIds.map(
@@ -169,11 +171,11 @@ function world() {
     }
     if (n.id === "beacon") {
       draw(
-        state.flags.complete ? "lens-lit" : "lens",
-        n.x * 24 - 12,
-        n.y * 24 - 24,
-        48,
-        48,
+        state.flags.complete ? "beacon-lit" : "beacon-dark",
+        n.x * 24 - 24,
+        n.y * 24 - 48,
+        72,
+        72,
       );
       continue;
     }
