@@ -101,7 +101,7 @@ export const trainers = {
     flag: "rival",
     team: [["knopp", 4]],
     reward:
-      "Liv: Jag öppnar Vindryggen! Undersök två glödspår längs rutterna. Varelserna där kan visa varför fyren slocknat.",
+      "Liv: Jag öppnar Vindryggen! Undersök gärna glödspåren längs rutterna. Varelserna där kan visa varför fyren slocknat.",
   },
   edda: {
     name: "Edda",
@@ -260,4 +260,3 @@ maps.route.npcs.push(
   { id: "rescue-shore", label: "Glödspår", x: 17, y: 10 },
 );
 maps.ridge.npcs.push({ id: "rescue-cliff", label: "Glödspår", x: 12, y: 3 });
-maps.ridge.exits.find((exit) => exit.map === "cellar").rescues = 2;

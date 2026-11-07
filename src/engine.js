@@ -62,11 +62,6 @@ export function walk(s, dx, dy, rng = Math.random) {
     s.message = exit.locked;
     return false;
   }
-  if (exit?.rescues && !s.flags.complete && s.rescued.length < exit.rescues) {
-    s.message =
-      "Två glödspår behövs för att öppna fyren. Leta i Sävstigens norra vass och södra strand, eller på Vindryggens klipphylla.";
-    return false;
-  }
   s.x = x;
   s.y = y;
   s.steps++;
@@ -229,7 +224,7 @@ function completeRescue(s) {
   s.rescued.push(id);
   s.battle.log.push(
     rescues[id].clue,
-    `Glödspår: ${s.rescued.length}/3. Två räcker för att öppna fyren.`,
+    `Glödspår: ${s.rescued.length}/3. Anteckningen finns i lagets fältbok.`,
   );
 }
 function win(s) {

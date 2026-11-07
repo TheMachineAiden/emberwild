@@ -143,12 +143,7 @@ function world() {
   if (state.map === "ridge") draw("lighthouse", 15 * 24, 0, 72, 96);
   for (const exit of map.exits)
     draw(
-      (exit.requires && !state.flags[exit.requires]) ||
-        (exit.rescues &&
-          !state.flags.complete &&
-          state.rescued.length < exit.rescues)
-        ? "seal"
-        : "stairs",
+      exit.requires && !state.flags[exit.requires] ? "seal" : "stairs",
       exit.x * 24,
       exit.y * 24,
     );
@@ -360,9 +355,6 @@ function render() {
         : !state.flags.puzzle
           ? "Gå in i fyren. Läs inskriften och tänd de tre skålarna."
           : "Trappan är öppen. Vila och möt Signe på fyrens krön.";
-  if (state.flags.trainer && !state.flags.puzzle && state.rescued.length < 2)
-    $("objective").textContent =
-      "Sök två glödspår: norra vassen och södra stranden på Sävstigen, eller Vindryggens klipphylla.";
   $("location").textContent = maps[state.map].name;
   $("message").textContent = state.message;
   $("save").disabled = state.mode !== "world";
