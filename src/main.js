@@ -10,7 +10,6 @@ import {
 import {
   newGame,
   chooseStarter,
-  walk,
   interact,
   moveInfo,
   finishBattle,
@@ -18,6 +17,8 @@ import {
   decodeSave,
   SAVE_KEY,
 } from "./engine.js";
+import { TileTravel } from "./travel.js";
+import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 let state = newGame(),
   panel = null;
@@ -32,6 +33,43 @@ const $ = (id) => document.getElementById(id),
   scene = $("scene"),
   canvas = $("world"),
   ctx = canvas.getContext("2d");
+let queuedInteraction = null;
+const travel = new TileTravel({
+  getState: () => state,
+  canMove: () =>
+    state.mode === "world" && !panel && !sequence.busy && worldLoaded,
+  draw: (pose) => {
+    if (pose.progress === 0) render();
+    else world();
+  },
+  commit: (next, before) => {
+    state = next;
+    if (before.map !== next.map) {
+      store();
+      sceneTransition();
+    }
+    render();
+    if (queuedInteraction) {
+      const action = queuedInteraction;
+      queuedInteraction = null;
+      travel.clear();
+      action();
+    }
+  },
+});
+function sceneTransition() {
+  $("stage").classList.remove("scene-enter");
+  void $("stage").offsetWidth;
+  $("stage").classList.add("scene-enter");
+}
+function afterTravel(action) {
+  travel.clear();
+  if (travel.busy)
+    queuedInteraction = () => {
+      if (state.mode === "world") action();
+    };
+  else action();
+}
 function node(tag, text, className) {
   const el = document.createElement(tag);
   if (text) el.textContent = text;
@@ -85,6 +123,19 @@ function load() {
 const worldAssets = {};
 let worldLoaded = false;
 const worldIds = [
+  "meadow",
+  "path",
+  "flowers",
+  "pebbles",
+  "cottage",
+  "perrin",
+  "rowan",
+  "maren",
+  "alder",
+  "tamsin",
+  ...["north", "south", "east", "west"].flatMap((dir) =>
+    [0, 1, 2].map((step) => `player-${dir}${step ? "-" + step : ""}`),
+  ),
   "sand",
   "ground",
   "water",
@@ -124,6 +175,9 @@ const worldReady = Promise.all(
   ),
 );
 function world() {
+  const pose = travel.position();
+  const px = pose?.x ?? state.x,
+    py = pose?.y ?? state.y;
   const map = maps[state.map],
     inside = ["cellar", "summit"].includes(state.map);
   const narrow = innerWidth <= 600,
@@ -133,24 +187,30 @@ function world() {
   canvas.height = rows * 24;
   const cameraX = Math.max(
       0,
-      Math.min(20 - columns, state.x - Math.floor(columns / 2)),
+      Math.min(20 - columns, px - Math.floor(columns / 2)),
     ),
     cameraY =
       narrow && ["ridge", "summit"].includes(state.map) && state.y <= 6
         ? 0
-        : Math.max(0, Math.min(13 - rows, state.y - Math.floor(rows / 2)));
+        : Math.max(
+            0,
+            Math.min(
+              13 - rows,
+              py - (state.map === "village" ? 7 : Math.floor(rows / 2)),
+            ),
+          );
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.imageSmoothingEnabled = false;
-  ctx.translate(-cameraX * 24, -cameraY * 24);
+  ctx.translate(-Math.round(cameraX * 24), -Math.round(cameraY * 24));
   if (!worldLoaded) return;
   const draw = (id, x, y, width = 24, height = 24) =>
     ctx.drawImage(worldAssets[id], x, y, width, height);
   map.rows.forEach((row, y) =>
     [...row].forEach((tile, x) => {
-      let id = inside ? "floor" : "sand";
+      let id = inside ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
       if (tile === "#") id = inside ? "wall" : "water";
       if (tile === "T" || tile === "g") id = "ground";
-      if (tile === "H")
+      if (tile === "H" && state.map !== "village")
         id =
           state.map === "ridge"
             ? "wall"
@@ -160,9 +220,15 @@ function world() {
       draw(id, x * 24, y * 24);
       if (tile === "T") draw("tree", x * 24, y * 24);
       if (tile === "g") draw("reeds", x * 24, y * 24);
-      if (tile === "h") draw("door", x * 24, y * 24);
+      if (tile === "h" && state.map !== "village") draw("door", x * 24, y * 24);
     }),
   );
+  if (state.map === "village") {
+    draw("cottage", 4 * 24, 2 * 24, 72, 72);
+    draw("cottage", 12 * 24, 2 * 24, 72, 72);
+  }
+  for (const [id, x, y] of decorations[state.map] || [])
+    draw(id, x * 24, y * 24);
   if (state.map === "ridge") draw("lighthouse", 15 * 24, 0, 72, 96);
   for (const exit of map.exits)
     draw(
@@ -171,7 +237,13 @@ function world() {
       exit.y * 24,
     );
   for (const n of map.npcs) {
-    let id = n.id === "healer" || n.id === "rest" ? "healer" : "trainer";
+    let id =
+      npcArt[n.id] ||
+      (n.id === "healer" || n.id === "rest" ? "healer" : "trainer");
+    const actor =
+      !n.id.startsWith("rescue-") &&
+      !n.id.startsWith("bowl-") &&
+      !["reset", "inscription", "beacon"].includes(n.id);
     if (n.id.startsWith("rescue-"))
       id = state.rescued.includes(n.id.slice(7)) ? "bowl" : "flame";
     if (n.id.startsWith("bowl-")) {
@@ -192,13 +264,7 @@ function world() {
       continue;
     }
     if (n.id === "reset" || n.id === "inscription") id = "seal";
-    draw(
-      id,
-      n.x * 24 + (id === "trainer" || id === "healer" ? 4 : 0),
-      n.y * 24,
-      id === "trainer" || id === "healer" ? 16 : 24,
-      24,
-    );
+    draw(id, n.x * 24 + (actor ? 4 : 0), n.y * 24, actor ? 16 : 24, 24);
     ctx.font = "9px monospace";
     ctx.textAlign = "center";
     ctx.fillStyle = "#20323b";
@@ -206,10 +272,19 @@ function world() {
     ctx.fillStyle = "#f5e7c0";
     ctx.fillText(n.label, n.x * 24 + 12, n.y * 24 - 3);
   }
+  const direction =
+    state.facing[0] === 1
+      ? "east"
+      : state.facing[0] === -1
+        ? "west"
+        : state.facing[1] === -1
+          ? "north"
+          : "south";
+  const step = pose && !reducedMotion() ? (pose.progress < 0.5 ? 1 : 2) : 0;
   draw(
-    state.facing[1] === -1 ? "player-back" : "player",
-    state.x * 24 + 4,
-    state.y * 24,
+    `player-${direction}${step ? "-" + (((step + pose.stride) % 2) + 1) : ""}`,
+    Math.round(px * 24) + 4,
+    Math.round(py * 24),
     16,
     24,
   );
@@ -304,7 +379,9 @@ function fighter(c, side) {
   const el = node("div", null, `fighter ${side}`);
   el.append(marker(c.species, side === "ally" ? "back" : "front"));
   const stat = node("div", null, "stats");
-  stat.append(node("strong", `${species[c.species].name} · Lv. ${c.level}`));
+  const heading = node("strong", species[c.species].name);
+  heading.append(node("span", `Lv. ${c.level}`, "level"));
+  stat.append(heading);
   const hp = node("progress");
   hp.max = c.maxHp;
   hp.value = c.hp;
@@ -349,7 +426,6 @@ async function act(action, index) {
   if (sequence.busy || state.mode !== "battle") return;
   const plan = planBattleTurn(state, action, index);
   panel = null;
-  battleMenu = "commands";
   const completed = await sequence.play(
     plan,
     (frame) => {
@@ -363,6 +439,7 @@ async function act(action, index) {
   if (completed) state = plan.finalState;
   presentation = null;
   previousFrame = null;
+  battleMenu = "commands";
   if (state.mode === "world") store();
   render();
   focusScene();
@@ -423,10 +500,8 @@ function renderBattle() {
   for (const line of b.log.slice(-2)) log.append(node("p", line));
   scene.append(log);
   const actions = node("div", null, "actions command-grid");
-  if (sequence.busy) {
-    actions.append(button("Resolving…", () => {}, true));
-    actions.setAttribute("aria-busy", "true");
-  } else if (b.result) {
+  actions.setAttribute("aria-busy", String(sequence.busy));
+  if (b.result && !sequence.busy) {
     actions.append(
       command(
         "Continue",
@@ -506,7 +581,11 @@ function renderBattle() {
       ),
     );
   }
-  if (!sequence.busy && !b.result && battleMenu !== "commands")
+  if (
+    (!b.result || sequence.busy) &&
+    battleMenu !== "commands" &&
+    battleMenu !== "team"
+  )
     actions.append(
       button("Back", () => openBattleMenu("commands"), false, "back"),
     );
@@ -541,17 +620,18 @@ function render() {
           : "The stairs are open. Rest, then meet Alder at the Lantern Crown.";
   $("location").textContent = maps[state.map].name;
   $("message").textContent = state.message;
-  $("save").disabled = state.mode !== "world" || sequence.busy;
-  $("load").disabled = state.mode === "battle" || sequence.busy;
-  $("restart").disabled = sequence.busy;
+  $("save").disabled = state.mode !== "world" || sequence.busy || travel.busy;
+  $("load").disabled = state.mode === "battle" || sequence.busy || travel.busy;
+  $("restart").disabled = sequence.busy || travel.busy;
   $("team-toggle").disabled =
     state.mode === "starter" ||
     state.mode === "ending" ||
     sequence.busy ||
+    travel.busy ||
     (state.mode === "battle" &&
       (!state.team[state.active].hp || !!state.battle.result));
   $("interact").disabled =
-    state.mode !== "world" || panel !== null || sequence.busy;
+    state.mode !== "world" || panel !== null || sequence.busy || travel.busy;
   document
     .querySelectorAll("[data-dir]")
     .forEach(
@@ -620,25 +700,33 @@ function render() {
     focusScene(focusKey);
   scene.setAttribute("aria-busy", String(sequence.busy));
 }
-function move(dx, dy) {
-  if (panel || sequence.busy) return;
-  const previousMap = state.map;
-  walk(state, dx, dy);
-  if (previousMap !== state.map) store();
-  render();
+document.querySelectorAll("[data-dir]").forEach((button) => {
+  const direction = button.dataset.dir.split(",").map(Number);
+  button.addEventListener("pointerdown", (event) => {
+    if (button.disabled || event.button !== 0) return;
+    event.preventDefault();
+    button.setPointerCapture(event.pointerId);
+    travel.press(`pointer-${event.pointerId}`, direction);
+  });
+  const release = (event) => travel.release(`pointer-${event.pointerId}`);
+  button.addEventListener("pointerup", release);
+  button.addEventListener("pointercancel", release);
+  button.addEventListener("lostpointercapture", release);
+  // Keyboard activation has no pointer event; keep native accessible buttons.
+  button.addEventListener("click", (event) => {
+    if (event.detail === 0 && !button.disabled) travel.tap(direction);
+  });
+});
+function talk() {
+  afterTravel(() => {
+    interact(state);
+    if (state.mode === "world") store();
+    render();
+  });
 }
-document
-  .querySelectorAll("[data-dir]")
-  .forEach((b) =>
-    b.addEventListener("click", () =>
-      move(...b.dataset.dir.split(",").map(Number)),
-    ),
-  );
 $("interact").addEventListener("click", () => {
   if (sequence.busy) return;
-  interact(state);
-  if (state.mode === "world") store();
-  render();
+  talk();
 });
 $("team-toggle").addEventListener("click", () => {
   if (sequence.busy) return;
@@ -673,10 +761,22 @@ $("sound").addEventListener("click", async () => {
     $("sound").textContent = "Sound unavailable";
   }
 });
-document.addEventListener("visibilitychange", () =>
-  music.setHidden(document.hidden),
-);
-let lastMove = 0;
+document.addEventListener("visibilitychange", () => {
+  music.setHidden(document.hidden);
+  if (document.hidden) travel.clear();
+});
+const directions = {
+  ArrowUp: [0, -1],
+  w: [0, -1],
+  ArrowDown: [0, 1],
+  s: [0, 1],
+  ArrowLeft: [-1, 0],
+  a: [-1, 0],
+  ArrowRight: [1, 0],
+  d: [1, 0],
+};
+document.addEventListener("keyup", (event) => travel.release(event.key));
+window.addEventListener("blur", () => travel.clear());
 document.addEventListener("keydown", (event) => {
   if (
     (event.key === "Enter" || event.key === " ") &&
@@ -728,29 +828,19 @@ document.addEventListener("keydown", (event) => {
       if (panel || battleMenu !== "commands") openBattleMenu("commands");
       return;
     }
-    panel = panel ? null : "team";
-    render();
-    if (panel) focusScene();
-    else $("team-toggle").focus({ preventScroll: true });
+    afterTravel(() => {
+      panel = panel ? null : "team";
+      render();
+      if (panel) focusScene();
+      else $("team-toggle").focus({ preventScroll: true });
+    });
     return;
   }
   if (state.mode !== "world" || panel) return;
-  const directions = {
-    ArrowUp: [0, -1],
-    w: [0, -1],
-    ArrowDown: [0, 1],
-    s: [0, 1],
-    ArrowLeft: [-1, 0],
-    a: [-1, 0],
-    ArrowRight: [1, 0],
-    d: [1, 0],
-  };
   const dir = directions[event.key];
   if (dir) {
     event.preventDefault();
-    if (performance.now() - lastMove < 110) return;
-    lastMove = performance.now();
-    move(...dir);
+    if (!event.repeat) travel.press(event.key, dir);
   }
   if (
     (event.key === "Enter" || event.key === " ") &&
@@ -758,9 +848,7 @@ document.addEventListener("keydown", (event) => {
   ) {
     event.preventDefault();
     if (event.repeat) return;
-    interact(state);
-    if (state.mode === "world") store();
-    render();
+    talk();
   }
 });
 try {
