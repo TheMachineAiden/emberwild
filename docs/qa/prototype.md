@@ -47,3 +47,9 @@ Against revision fe172fe254a714eea22fe7f218d514ed9959613a on port 4388, mobile 3
 A new exploration pass adds three authored ember rescues and a field journal within the team menu. Two successful rescues plus Edda's trust open the cellar; fleeing leaves a rescue retryable. Thirteen rule/score tests pass. Rescue traversal, journal fit, gate messaging and resulting pacing require a fresh ordinary-input pass before chapter signoff.
 
 Exploration revision: removed the additional two-rescue gate after design review. All three glödspår are optional, retryable and recorded in the journal. The existing trainer/puzzle progression remains sufficient. Thirteen tests still pass. Previous two-rescue requirements above describe a superseded candidate.
+
+## Optional rescue candidate
+
+Revision78756cfd5d571f8b1c72c500a418f47a939ae22c on4388: continued Knopp retry save, walked to northern reed encounter through normal keyboard input. Fled Vippa encounter, returned and restarted it, weakened it with two neutral attacks and captured it with one capsule. Journal shows1/3 and team contains Knopp/Vippa; local save preserves rescued=[reed]. Journal scene/client scroll heights both550 at390px document width, no horizontal overflow. Capture screenshot `screenshots/journal.png` is retained for subsequent visual review; no visual acceptance claimed here.
+
+Browser visibility limitation: bringing another tab to front through the provider still leaves target document.hidden=false. Therefore this action did not exercise visibilitychange or establish hidden-tab audio stopping. Gesture-start and mute are verified separately; the visibility handler is implemented but the actual browser-hidden transition remains uncovered by this provider. No listening verdict is claimed.
