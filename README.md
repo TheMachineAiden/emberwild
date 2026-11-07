@@ -29,3 +29,5 @@ Local saves use a versioned, validated browser-storage record. Saving is availab
 - `docs/brief.md`: chapter, art and audio direction
 
 Static files need no backend, accounts or network services.
+
+Build a clean reviewed checkout with `npm run build`. The `dist/` output contains only runtime files and `version.json` with the exact source revision. Serve that bundle with `EMBERWILD_ROOT=dist EMBERWILD_PORT=4388 npm start`. The build rejects uncommitted changes so the revision cannot silently describe a different tree.
