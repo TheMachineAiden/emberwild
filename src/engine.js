@@ -1,4 +1,4 @@
-import {species, starters, maps} from './data.js';
+import {species, starters, maps, trainers} from './data.js';
 export const SAVE_KEY = 'emberwild.save.v1';
 export function creature(id, level=3) {
   const base = species[id];
@@ -6,7 +6,7 @@ export function creature(id, level=3) {
 }
 export function newGame() {
   return {version:1,mode:'starter',map:'village',x:4,y:8,facing:[0,-1],team:[],active:0,
-    items:{capsules:6,tonics:3},flags:{captured:false,rival:false},steps:0,battle:null,
+    items:{capsules:6,tonics:3},flags:{captured:false,rival:false,trainer:false,puzzle:false,complete:false},bowlStep:0,steps:0,battle:null,
     message:'Fyren har slocknat. Välj en följeslagare och sök efter glöden på Sävstigen.'};
 }
 export function chooseStarter(s,id) {
@@ -18,11 +18,12 @@ export function walk(s,dx,dy,rng=Math.random) {
   s.facing=[dx,dy];
   const map=maps[s.map],x=s.x+dx,y=s.y+dy,tile=map.rows[y]?.[x];
   if(!tile||'#TH'.includes(tile)||map.npcs.some(n=>n.x===x&&n.y===y))return false;
-  s.x=x;s.y=y;s.steps++;
   const exit=map.exits.find(e=>e.x===x&&e.y===y);
+  if(exit?.requires&&!s.flags[exit.requires]){s.message=exit.locked;return false;}
+  s.x=x;s.y=y;s.steps++;
   if(exit){s.map=exit.map;[s.x,s.y]=exit.to;s.message=maps[s.map].name;return true;}
   if(tile==='g'&&s.steps%4===0&&rng()<0.65){
-    const pool=['vippa','daggla','tuvling'];startBattle(s,pool[Math.floor(rng()*pool.length)],false);
+    const pool=map.encounters||['vippa','daggla','tuvling'];startBattle(s,pool[Math.floor(rng()*pool.length)],false);
   }
   return true;
 }
@@ -30,22 +31,41 @@ export function interact(s) {
   if(s.mode!=='world')return;
   const npc=maps[s.map].npcs.find(n=>n.x===s.x+s.facing[0]&&n.y===s.y+s.facing[1]);
   if(!npc){s.message='Gå fram till någon och vänd dig mot dem för att prata.';return;}
-  if(npc.id==='healer'){
+  if(npc.id==='healer'||npc.id==='rest'){
     heal(s);s.items.capsules=Math.max(6,s.items.capsules);s.items.tonics=Math.max(3,s.items.tonics);
     s.message='Hela laget är utvilat. Här får du fler glödkapslar och läkebrygder. Kom tillbaka när du vill.';
   }
   if(npc.id==='neighbor')s.message='Bo: Varelserna på Sävstigen bär på glöd. Försvaga en och använd en glödkapsel. Läkaren hjälper dig gratis.';
-  if(npc.id==='liv'){
-    if(s.flags.rival)s.message='Liv: Du och ditt lag är redo för Vindryggen. Den vägen öppnas i nästa byggsteg.';
-    else startBattle(s,'knopp',true);
+  if(npc.id==='neighbor'&&s.flags.complete)s.message='Bo: Ljuset är tillbaka! Varelsernas glöd syns ända hit. Tack för att du lyssnade på dem.';
+  if(trainers[npc.id]){
+    const trainer=trainers[npc.id];
+    if(s.flags[trainer.flag])s.message=trainer.reward;
+    else startBattle(s,trainer.team[0][0],npc.id);
   }
+  if(npc.id==='lookout')s.message='Utkiken: Signe stängde luckorna när glöden försvann. Men se — varelserna skyddar ljuset från vinden.';
+  if(npc.id==='inscription')s.message='Inskriften: Från havet växer mossan. Ur mossan stiger glöden. Tänd skålarna: vatten, mossa, glöd. Varelserna har hållit glöden levande här nere.';
+  if(npc.id==='reset'){s.bowlStep=0;s.message='Skålarna är släckta. Börja med vattnet.';}
+  if(npc.id.startsWith('bowl-')){
+    if(s.flags.puzzle){s.message='Skålarna lyser tillsammans. Trappan i nordost är öppen.';return;}
+    const order=['tide','moss','ember'];
+    if(npc.id==='bowl-'+order[s.bowlStep]){
+      s.bowlStep++;
+      if(s.bowlStep===3){s.flags.puzzle=true;s.message='Glöden förenas! Trappan i nordost öppnas. Varelserna bär ljuset uppåt.';}
+      else s.message=`Skålen lyser. ${s.bowlStep} av 3 tända.`;
+    }else{s.bowlStep=0;s.message='Glöden falnar. Försök igen: vatten, mossa, glöd. Inget har förbrukats.';}
+  }
+  if(npc.id==='beacon')s.message=s.flags.complete?'Fyren lyser över Glödvik. Glöden räcker när alla delar den.':'Fyrlinsen är mörk. Signe väntar söder om ljuset.';
+
 }
 export function heal(s){for(const c of s.team)c.hp=c.maxHp;s.active=0;}
 export function startBattle(s,id,trainer=false){
   if(s.mode!=='world')return;
-  s.active=s.team.findIndex(c=>c.hp>0);
+  if(!s.team[s.active]||s.team[s.active].hp<=0)s.active=s.team.findIndex(c=>c.hp>0);
   if(s.active<0){lose(s);return;}
-  s.mode='battle';s.battle={enemy:creature(id,trainer?4:2),trainer,guard:false,result:null,log:[trainer?'Liv vill utmana dig!':`En vild ${species[id].name} dök upp!`]};
+  const trainerId=trainer===true?'liv':trainer||null;
+  const definition=trainers[trainerId];
+  const queue=definition?definition.team.map(([kind,level])=>creature(kind,level)):[];
+  s.mode='battle';s.battle={enemy:queue.shift()||creature(id,2),queue,trainer:!!trainerId,trainerId,name:definition?.name,guard:false,result:null,log:[definition?`${definition.name} vill utmana dig!`:`En vild ${species[id].name} dök upp!`]};
 }
 export function effectiveness(attack,defense){
   const beats={ember:'moss',moss:'tide',tide:'ember'};
@@ -67,8 +87,9 @@ function lose(s){
 function win(s){
   const b=s.battle,c=s.team[s.active];c.xp+=b.trainer?3:2;
   if(c.xp>=4){c.xp-=4;c.level++;c.maxHp+=4;c.hp=Math.min(c.maxHp,c.hp+8);b.log.push(`${species[c.species].name} nådde nivå ${c.level}!`);}
-  if(b.trainer){s.flags.rival=true;s.items.capsules+=3;}
-  b.result='win';b.log.push(b.trainer?'Liv: Du lyssnar verkligen på ditt lag. Ta de här kapslarna!':'Ni vann striden!');
+  if(b.queue.length){b.enemy=b.queue.shift();b.log.push(`${b.name} skickar fram ${species[b.enemy.species].name}!`);return;}
+  if(b.trainer){s.flags[trainers[b.trainerId].flag]=true;s.items.capsules=Math.min(9999,s.items.capsules+3);}
+  b.result='win';b.log.push(b.trainer?trainers[b.trainerId].reward:'Ni vann striden!');
 }
 export function battleAction(s,action,index,rng=Math.random){
   if(s.mode!=='battle'||s.battle.result)return false;
@@ -109,7 +130,8 @@ export function battleAction(s,action,index,rng=Math.random){
 }
 export function finishBattle(s){
   if(s.mode!=='battle'||!s.battle.result)return false;
-  s.message=s.battle.log.join(' ');s.battle=null;s.mode='world';return true;
+  const ending=s.battle.trainerId==='keeper'&&s.battle.result==='win';
+  s.message=s.battle.log.join(' ');s.battle=null;s.mode=ending?'ending':'world';return true;
 }
 export function encodeSave(s){
   if(s.mode==='starter'||s.mode==='battle')throw new Error('Spara när du är ute och går.');
@@ -122,6 +144,6 @@ export function decodeSave(raw){
   if(!s.items||!validInt(s.items.capsules,0,9999)||!validInt(s.items.tonics,0,9999)||!s.flags||typeof s.flags.captured!=='boolean'||typeof s.flags.rival!=='boolean'||!validInt(s.steps,0,1e9)||!validInt(s.active,0,s.team.length-1))throw new Error('Sparfilen är skadad.');
   if('#TH'.includes(maps[s.map].rows[s.y][s.x])||maps[s.map].npcs.some(n=>n.x===s.x&&n.y===s.y))throw new Error('Positionen kunde inte läsas.');
   // Reconstruct only known fields, including a safe facing; never trust arbitrary saved UI data.
-  const clean=newGame();Object.assign(clean,{mode:'world',map:s.map,x:s.x,y:s.y,team:s.team.map(c=>({species:c.species,level:c.level,hp:c.hp,maxHp:c.maxHp,xp:c.xp})),active:s.active,items:{capsules:s.items.capsules,tonics:s.items.tonics},flags:{captured:s.flags.captured,rival:s.flags.rival},steps:s.steps,message:'Sparningen är inläst. Välkommen tillbaka!'});
+  const clean=newGame();Object.assign(clean,{mode:'world',map:s.map,x:s.x,y:s.y,team:s.team.map(c=>({species:c.species,level:c.level,hp:c.hp,maxHp:c.maxHp,xp:c.xp})),active:s.active,items:{capsules:s.items.capsules,tonics:s.items.tonics},flags:{captured:s.flags.captured,rival:s.flags.rival,trainer:s.flags.trainer===true,puzzle:s.flags.puzzle===true,complete:s.flags.complete===true},bowlStep:s.flags.puzzle?3:validInt(s.bowlStep,0,2)?s.bowlStep:0,steps:s.steps,message:'Sparningen är inläst. Välkommen tillbaka!'});
   if(clean.team.every(c=>c.hp===0))lose(clean);return clean;
 }

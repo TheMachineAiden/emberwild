@@ -45,3 +45,33 @@ test('save validation rejects malformed, unsupported and unsafe positions',()=>{
   const valid=ready();valid.team[0].hp=-1;assert.throws(()=>decodeSave(encodeSave(valid)));
   startBattle(s,'daggla');assert.throws(()=>encodeSave(s));
 });
+
+test('chapter gates, wrong bowl retry and solved puzzle persist without item requirements',()=>{
+  const s=ready();s.map='route';s.x=18;s.y=8;
+  assert.equal(walk(s,1,0),false);assert.equal(s.map,'route');
+  s.flags.rival=true;walk(s,1,0);assert.equal(s.map,'ridge');
+  s.x=16;s.y=5;assert.equal(walk(s,0,-1),false);
+  s.flags.trainer=true;walk(s,0,-1);assert.equal(s.map,'cellar');
+  const bowl=x=>{s.x=x;s.y=7;s.facing=[0,-1];interact(s);};
+  bowl(10);assert.equal(s.bowlStep,0);assert.equal(s.flags.puzzle,false);
+  bowl(6);bowl(10);bowl(14);assert.equal(s.flags.puzzle,true);
+  const loaded=decodeSave(encodeSave(s));assert.equal(loaded.flags.trainer,true);assert.equal(loaded.flags.puzzle,true);
+  loaded.x=16;loaded.y=3;walk(loaded,0,-1);assert.equal(loaded.map,'summit');
+});
+test('multi-creature trainer unlocks only after final opponent and keeper ending is saveable',()=>{
+  const s=ready();s.team[0]=creature('strila',30);startBattle(s,'vippa','edda');
+  battleAction(s,'typed');assert.equal(s.battle.enemy.species,'kolkrabb');assert.equal(s.flags.trainer,false);assert.equal(s.battle.result,null);
+  battleAction(s,'typed');assert.equal(s.flags.trainer,true);finishBattle(s);
+  s.map='summit';s.x=9;s.y=5;startBattle(s,'tuvling','keeper');
+  for(let i=0;i<20&&!s.battle.result;i++)battleAction(s,'attack');
+  assert.equal(s.flags.complete,true);finishBattle(s);assert.equal(s.mode,'ending');
+  const loaded=decodeSave(encodeSave(s));assert.equal(loaded.mode,'world');assert.equal(loaded.flags.complete,true);
+});
+test('every map exit and NPC has a reachable adjacent walkable tile',async()=>{
+  const {maps}=await import('../src/data.js');
+  for(const [id,map] of Object.entries(maps)){
+    assert.equal(map.rows.length,13,id);assert.ok(map.rows.every(row=>row.length===20),id);
+    for(const exit of map.exits){assert.ok(maps[exit.map],id);assert.ok(!'#TH'.includes(map.rows[exit.y][exit.x]),id);}
+    for(const npc of map.npcs)assert.ok([[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>{const tile=map.rows[npc.y+dy]?.[npc.x+dx];return tile&&!"#TH".includes(tile);}),id+':'+npc.id);
+  }
+});
