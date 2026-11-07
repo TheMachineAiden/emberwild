@@ -17,7 +17,7 @@ import {
   decodeSave,
   SAVE_KEY,
 } from "./engine.js";
-import { TileTravel } from "./travel.js";
+import { TileTravel, directionKey } from "./travel.js";
 import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 let state = newGame(),
@@ -843,7 +843,9 @@ const directions = {
   ArrowRight: [1, 0],
   d: [1, 0],
 };
-document.addEventListener("keyup", (event) => travel.release(event.key));
+document.addEventListener("keyup", (event) =>
+  travel.release(directionKey(event.key)),
+);
 window.addEventListener("blur", () => travel.clear());
 document.addEventListener("keydown", (event) => {
   if (
@@ -915,10 +917,11 @@ document.addEventListener("keydown", (event) => {
     return;
   }
   if (state.mode !== "world" || panel) return;
-  const dir = directions[event.key];
+  const key = directionKey(event.key),
+    dir = directions[key];
   if (dir) {
     event.preventDefault();
-    if (!event.repeat) travel.press(event.key, dir);
+    if (!event.repeat) travel.press(key, dir);
   }
   if (
     (event.key === "Enter" || event.key === " ") &&

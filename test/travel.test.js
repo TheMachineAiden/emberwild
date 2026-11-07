@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { TileTravel } from "../src/travel.js";
+import { TileTravel, directionKey } from "../src/travel.js";
 import { newGame, chooseStarter } from "../src/engine.js";
 function harness() {
   let state = newGame(),
@@ -96,4 +96,17 @@ test("map changes commit only on arrival and encounters clear held movement", ()
   assert.equal(h.travel.held.size, 0);
   h.advance(500);
   assert.equal(h.state.steps, 4);
+});
+
+test("changing letter case between press and release does not leave movement held", () => {
+  const h = harness();
+  h.travel.press(directionKey("W"), [0, -1]);
+  h.advance(50);
+  h.travel.release(directionKey("w"));
+  h.advance(100);
+  h.advance(300);
+  assert.equal(h.state.y, 7);
+  assert.equal(h.state.steps, 1);
+  assert.equal(h.travel.held.size, 0);
+  assert.equal(directionKey("ArrowUp"), "ArrowUp");
 });

@@ -2,6 +2,9 @@ import { walk } from "./engine.js";
 
 // A tile is planned once, then committed at arrival. Rendering can interpolate
 // freely without moving collisions, rolling encounters twice or saving mid-step.
+export const directionKey = (key) =>
+  key.length === 1 ? key.toLowerCase() : key;
+
 export class TileTravel {
   constructor({
     getState,
