@@ -4,7 +4,10 @@ let state=newGame(),panel=null;
 const $=id=>document.getElementById(id),scene=$('scene'),canvas=$('world'),ctx=canvas.getContext('2d');
 function node(tag,text,className){const el=document.createElement(tag);if(text)el.textContent=text;if(className)el.className=className;return el;}
 function button(text,fn,disabled=false){const el=node('button',text);el.type='button';el.disabled=disabled;el.addEventListener('click',fn);return el;}
-function marker(id){const el=node('span',null,'marker');el.style.setProperty('--creature-color',species[id].color);el.setAttribute('aria-hidden','true');return el;}
+function marker(id,pose='front'){
+  if(id==='glimra'){const el=node('img',null,'creature-sprite');el.src=`assets/creatures/${id}-${pose}.png`;el.alt='';el.width=64;el.height=64;return el;}
+  const el=node('span',null,'marker');el.style.setProperty('--creature-color',species[id].color);el.setAttribute('aria-hidden','true');return el;
+}
 function store(announce=false){
   try{localStorage.setItem(SAVE_KEY,encodeSave(state));if(announce)state.message='Sparat på den här enheten.';}
   catch{state.message='Kunde inte spara här. Kontrollera webbläsarens lagringsinställningar. Spelet kan fortsätta.';}
@@ -27,7 +30,7 @@ function renderTeam(inBattle=false){
   state.team.forEach((c,i)=>{const row=node('div',null,'team-row');row.append(node('span',`${species[c.species].name} · Nv ${c.level} · ${typeNames[species[c.species].type]}\nHP ${c.hp}/${c.maxHp}${i===state.active?' · Aktiv':''}`));row.append(button(i===state.active?'Aktiv':'Välj',()=>{if(inBattle){panel=null;act('switch',i);}else{state.active=i;render();}},c.hp===0||i===state.active));list.append(row);});scene.append(list);
   scene.append(button('Tillbaka',()=>{panel=null;render();}));
 }
-function fighter(c,side){const el=node('div',null,`fighter ${side}`);el.append(marker(c.species));const stat=node('div',null,'stats');stat.append(node('strong',`${species[c.species].name} · Nv ${c.level}`));const hp=node('progress');hp.max=c.maxHp;hp.value=c.hp;hp.setAttribute('aria-label',`HP ${c.hp} av ${c.maxHp}`);stat.append(hp,node('span',`${c.hp}/${c.maxHp} HP · ${typeNames[species[c.species].type]}`));el.append(stat);return el;}
+function fighter(c,side){const el=node('div',null,`fighter ${side}`);el.append(marker(c.species,side==='ally'?'back':'front'));const stat=node('div',null,'stats');stat.append(node('strong',`${species[c.species].name} · Nv ${c.level}`));const hp=node('progress');hp.max=c.maxHp;hp.value=c.hp;hp.setAttribute('aria-label',`HP ${c.hp} av ${c.maxHp}`);stat.append(hp,node('span',`${c.hp}/${c.maxHp} HP · ${typeNames[species[c.species].type]}`));el.append(stat);return el;}
 function act(action,index){if(battleAction(state,action,index)){if(state.mode==='world')store();}render();if(state.mode==='battle'){scene.classList.remove('impact');void scene.offsetWidth;scene.classList.add('impact');}}
 function renderBattle(){
   const b=state.battle,c=state.team[state.active];scene.append(node('h2',b.trainer?'Utmanare · Liv':'Vild varelse'));
@@ -43,6 +46,8 @@ function renderBattle(){
   scene.append(actions);
 }
 function render(){
+  $('stage').classList.toggle('has-scene',state.mode!=='world'||panel!==null);
+  document.body.classList.toggle('in-battle',state.mode==='battle');
   world();scene.replaceChildren();$('location').textContent=maps[state.map].name;$('message').textContent=state.message;
   $('save').disabled=state.mode!=='world';$('load').disabled=state.mode==='battle';$('team-toggle').disabled=state.mode==='starter';$('interact').disabled=state.mode!=='world'||panel!==null;
   document.querySelectorAll('[data-dir]').forEach(b=>b.disabled=state.mode!=='world'||panel!==null);
