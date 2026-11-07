@@ -7,8 +7,7 @@ const $=id=>document.getElementById(id),scene=$('scene'),canvas=$('world'),ctx=c
 function node(tag,text,className){const el=document.createElement(tag);if(text)el.textContent=text;if(className)el.className=className;return el;}
 function button(text,fn,disabled=false){const el=node('button',text);el.type='button';el.disabled=disabled;el.addEventListener('click',fn);return el;}
 function marker(id,pose='front'){
-  if(['glimra','strila','knopp','tuvling','vippa','kolkrabb','ljuskron'].includes(id)){const el=node('img',null,'creature-sprite');el.src=`assets/creatures/${id}-${pose}.png`;el.alt='';el.width=64;el.height=64;return el;}
-  const el=node('span',null,'marker');el.style.setProperty('--creature-color',species[id].color);el.setAttribute('aria-hidden','true');return el;
+  const el=node('img',null,'creature-sprite');el.src=`assets/creatures/${id}-${pose}.png`;el.alt='';el.dataset.species=id;el.width=64;el.height=64;return el;
 }
 function store(announce=false){
   try{localStorage.setItem(SAVE_KEY,encodeSave(state));if(announce)state.message='Sparat på den här enheten.';}
