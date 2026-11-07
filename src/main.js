@@ -623,7 +623,7 @@ function renderBattle() {
       : state.team.length >= 6
         ? "Team full (6/6)"
         : !state.items.capsules
-          ? "Restock at Mira"
+          ? "Restock with Mira"
           : "";
     actions.append(
       command("Fight", "Choose a move", () => openBattleMenu("moves")),
@@ -967,6 +967,23 @@ document.addEventListener("keydown", (event) => {
       const columns = grid
         ? getComputedStyle(grid).gridTemplateColumns.split(" ").length
         : 1;
+      if (grid?.classList.contains("primary-commands") &&
+          ["ArrowDown", "ArrowUp"].includes(event.key)) {
+        // Follow visible rows, including the spanning Run button and disabled
+        // slots. Counting enabled buttons loses the grid's spatial order.
+        const rows = choices.map(button => ({button, rect: button.getBoundingClientRect()}));
+        const current = rows[index].rect;
+        const down = event.key === "ArrowDown";
+        const ahead = rows.filter(({rect}) => down
+          ? rect.top > current.top + 1 : rect.top < current.top - 1);
+        const candidates = ahead.length ? ahead : rows;
+        const top = (down ? Math.min : Math.max)(...candidates.map(({rect}) => rect.top));
+        const center = (current.left + current.right) / 2;
+        candidates.filter(({rect}) => Math.abs(rect.top - top) < 1)
+          .sort((a,b) => Math.abs((a.rect.left + a.rect.right) / 2 - center) -
+            Math.abs((b.rect.left + b.rect.right) / 2 - center))[0].button.focus();
+        return;
+      }
       const delta =
         event.key === "ArrowRight"
           ? 1
