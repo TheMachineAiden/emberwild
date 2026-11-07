@@ -571,6 +571,7 @@ function renderBattle() {
   for (const line of b.log.slice(-2)) log.append(node("p", line));
   scene.append(log);
   const actions = node("div", null, "actions command-grid");
+  actions.classList.toggle("primary-commands", battleMenu === "commands");
   actions.setAttribute("aria-busy", String(sequence.busy));
   if (b.result && !sequence.busy) {
     actions.append(
@@ -608,20 +609,6 @@ function renderBattle() {
       ),
     );
   } else if (battleMenu === "bag") {
-    const noCapture =
-      b.trainer || !state.items.capsules || state.team.length >= 6;
-    actions.append(
-      command(
-        `Spark Vessel · ${state.items.capsules}`,
-        b.trainer
-          ? "Wild creatures only"
-          : state.team.length >= 6
-            ? "Your team is full"
-            : "Catch a creature · weaken it first",
-        () => act("capture"),
-        noCapture,
-      ),
-    );
     actions.append(
       command(
         `Mending Draught · ${state.items.tonics}`,
@@ -631,11 +618,24 @@ function renderBattle() {
       ),
     );
   } else {
+    const captureReason = b.trainer
+      ? "Wild creatures only"
+      : state.team.length >= 6
+        ? "Team full (6/6)"
+        : !state.items.capsules
+          ? "Restock at Mira"
+          : "";
     actions.append(
       command("Fight", "Choose a move", () => openBattleMenu("moves")),
       command(
+        "Catch",
+        `${quantity(state.items.capsules, "vessel")} · ${captureReason || "Weaken first"}`,
+        () => act("capture"),
+        !!captureReason,
+      ),
+      command(
         "Bag",
-        `${quantity(state.items.capsules, "vessel")} · ${quantity(state.items.tonics, "draught")}`,
+        `${quantity(state.items.tonics, "draught")} · Restore HP`,
         () => openBattleMenu("bag"),
       ),
       command(

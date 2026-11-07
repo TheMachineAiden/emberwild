@@ -141,6 +141,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
 .command-grid strong { color: #f5d18a; font-size: .88rem; }
 .command-grid small { margin-top: 5px; color: #c6d4c7; font-size: .7rem; line-height: 1.4; }
 .command-grid button[data-focus="back"] { min-height: 44px; grid-column: 1 / -1; text-align: center; }
+.primary-commands button[data-focus="Run"] { min-height: 44px; grid-column: 1 / -1; text-align: center; }
 #game-menu { width: min(540px, calc(100% - 32px)); max-height: calc(100dvh - 24px); padding: 16px; border: 2px solid #b6b48b; background: #203239; color: #f2e9cc; overflow: auto; overscroll-behavior: contain; touch-action: pan-y; }
 #game-menu::backdrop { background: #08151cbb; }
 #game-menu .panel-heading { top: -16px; padding-top: 8px; }
