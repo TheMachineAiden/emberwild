@@ -27,6 +27,7 @@ const sequence = new BattleSequence();
 let battleMenu = "commands",
   presentation = null,
   previousFrame = null;
+const journalOpen = new Set();
 const reducedMotion = () =>
   matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (id) => document.getElementById(id),
@@ -267,11 +268,31 @@ function world() {
     if (n.id === "reset" || n.id === "inscription") id = "seal";
     draw(id, n.x * 24 + (actor ? 4 : 0), n.y * 24, actor ? 16 : 24, 24);
     ctx.font = "9px monospace";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#20323b";
-    ctx.fillText(n.label, n.x * 24 + 13, n.y * 24 - 2);
-    ctx.fillStyle = "#f5e7c0";
-    ctx.fillText(n.label, n.x * 24 + 12, n.y * 24 - 3);
+    if (actor) {
+      if (Math.abs(px - n.x) + Math.abs(py - n.y) > 2) continue;
+      // An approach label sits beside the actor, clear of roofs and either
+      // approach direction. It is UI, not part of the sprite silhouette.
+      const width = Math.ceil(ctx.measureText(n.label).width) + 8;
+      const proposed = px > n.x ? n.x * 24 - width - 2 : (n.x + 1) * 24 + 2;
+      const left = Math.max(
+        cameraX * 24 + 4,
+        Math.min((cameraX + columns) * 24 - width - 4, proposed),
+      );
+      const top = n.y * 24 + 5;
+      ctx.fillStyle = "#203239";
+      ctx.fillRect(left, top, width, 15);
+      ctx.strokeStyle = "#b1ad81";
+      ctx.strokeRect(left + 0.5, top + 0.5, width - 1, 14);
+      ctx.fillStyle = "#f5e7c0";
+      ctx.textAlign = "left";
+      ctx.fillText(n.label, left + 4, top + 11);
+    } else {
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#20323b";
+      ctx.fillText(n.label, n.x * 24 + 13, n.y * 24 - 2);
+      ctx.fillStyle = "#f5e7c0";
+      ctx.fillText(n.label, n.x * 24 + 12, n.y * 24 - 3);
+    }
   }
   const direction =
     state.facing[0] === 1
@@ -323,10 +344,7 @@ function renderTeam(inBattle = false) {
     details.append(
       node("strong", species[c.species].name),
       node("small", `Lv. ${c.level} · ${typeNames[species[c.species].type]}`),
-      node(
-        "span",
-        `HP ${c.hp}/${c.maxHp}${i === state.active ? " · Lead" : ""}`,
-      ),
+      node("span", `HP ${c.hp}/${c.maxHp}`),
     );
     row.append(marker(c.species), details);
     row.append(
@@ -360,12 +378,28 @@ function renderTeam(inBattle = false) {
       node("h3", "Field journal"),
       node("p", `${state.rescued.length} of 3 sparks found`, "journal-count"),
     );
+    const titles = {
+      reed: "Sedge shelter",
+      shore: "Dew cradle",
+      cliff: "Stone hearth",
+    };
     for (const [id, rescue] of Object.entries(rescues)) {
-      const entry = node("article", null, "journal-entry");
-      entry.append(
-        node("h4", rescue.title),
-        node("p", state.rescued.includes(id) ? rescue.clue : "Not yet found."),
+      const found = state.rescued.includes(id);
+      const entry = node(found ? "details" : "div", null, "journal-entry");
+      const heading = node(found ? "summary" : "div", null, "journal-row");
+      heading.append(
+        node("span", titles[id]),
+        node("small", found ? "Found" : "Unexplored", "journal-status"),
       );
+      entry.append(heading);
+      if (found) {
+        entry.open = journalOpen.has(id);
+        entry.append(node("p", rescue.clue));
+        entry.addEventListener("toggle", () => {
+          if (entry.open) journalOpen.add(id);
+          else journalOpen.delete(id);
+        });
+      }
       scene.append(entry);
     }
   }
@@ -615,6 +649,7 @@ function render() {
     state.mode !== "world" || panel !== null || sequence.busy,
   );
   document.body.classList.toggle("in-battle", state.mode === "battle");
+  document.body.classList.toggle("playing", state.mode !== "starter");
   document.body.classList.toggle(
     "in-menu",
     panel !== null || state.mode === "starter",
@@ -817,6 +852,16 @@ document.addEventListener("keydown", (event) => {
       event.preventDefault();
     return;
   }
+  if (event.target.closest?.("#field-guide")) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      $("field-guide").open = false;
+      if (state.mode === "world" && !panel)
+        $("interact").focus({ preventScroll: true });
+      else focusScene("back");
+    }
+    return;
+  }
   if (
     scene.contains(event.target) &&
     ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
@@ -867,7 +912,7 @@ document.addEventListener("keydown", (event) => {
   }
   if (
     (event.key === "Enter" || event.key === " ") &&
-    event.target.tagName !== "BUTTON"
+    !event.target.closest?.("button, summary, a, input, select, textarea")
   ) {
     event.preventDefault();
     if (event.repeat) return;

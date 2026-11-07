@@ -668,3 +668,100 @@ footer {
   font-size: 0.72rem;
   color: #c6d4c7;
 }
+/* Keep routine play ahead of chapter chrome and reference material. */
+.playing header {
+  margin-bottom: 6px;
+}
+.playing .eyebrow {
+  display: none;
+}
+.playing h1 {
+  font-size: 1.35rem;
+  margin: 0;
+  letter-spacing: -0.04em;
+}
+.playing .toolbar {
+  padding: 6px 0;
+}
+.in-battle #objective,
+.in-battle #save,
+.in-battle #load,
+.in-battle #team-toggle,
+.in-battle footer {
+  display: none;
+}
+footer {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+#field-guide {
+  flex: 1;
+  max-width: 600px;
+}
+#field-guide summary {
+  min-height: 44px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+#field-guide p {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+#field-guide summary:focus-visible,
+.journal-entry summary:focus-visible {
+  outline: 3px solid #ffcd72;
+  outline-offset: 2px;
+}
+.journal-entry {
+  padding: 0;
+}
+.journal-row {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+}
+summary.journal-row {
+  cursor: pointer;
+}
+summary.journal-row > span:first-child::before {
+  content: "▸ ";
+  color: #efc977;
+}
+details[open] > summary.journal-row > span:first-child::before {
+  content: "▾ ";
+}
+.journal-status {
+  color: #c6d4c7;
+  font-size: 0.7rem;
+}
+#scene .journal-entry p {
+  padding: 0 0 12px;
+}
+@media (max-width: 600px) {
+  .playing {
+    padding-top: 8px;
+  }
+  .playing h1 {
+    font-size: 1.2rem;
+  }
+  .playing header {
+    margin-bottom: 5px;
+  }
+  .playing .objective {
+    margin-bottom: 8px;
+  }
+  footer {
+    margin-top: 14px;
+    padding-top: 8px;
+  }
+}
+.in-menu #objective,
+.at-ending #objective,
+.at-ending footer {
+  display: none;
+}

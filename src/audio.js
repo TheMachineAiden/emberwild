@@ -22,6 +22,7 @@ export class Music {
     this.nodes = new Set();
     this.timer = null;
     this.context = null;
+    this.bus = null;
     this.hidden = false;
   }
   async toggle() {
@@ -46,9 +47,20 @@ export class Music {
   stop() {
     clearTimeout(this.timer);
     this.timer = null;
+    const bus = this.bus;
+    this.bus = null;
+    const now = this.context?.currentTime || 0,
+      end = now + 0.035;
+    if (bus) {
+      bus.retiring = true;
+      bus.node.gain.cancelScheduledValues(now);
+      bus.node.gain.setValueAtTime(bus.node.gain.value, now);
+      bus.node.gain.linearRampToValueAtTime(0, end);
+      if (!bus.voices.size) bus.node.disconnect();
+    }
     for (const oscillator of this.nodes) {
       try {
-        oscillator.stop();
+        oscillator.stop(end);
       } catch {}
     }
     this.nodes.clear();
@@ -69,6 +81,14 @@ export class Music {
     const cue = scores[this.current],
       seconds = 60 / cue.bpm,
       start = this.context.currentTime + 0.04;
+    if (!this.bus) {
+      const node = this.context.createGain();
+      node.gain.setValueAtTime(0, start);
+      node.gain.linearRampToValueAtTime(1, start + 0.025);
+      node.connect(this.context.destination);
+      this.bus = { node, voices: new Set(), retiring: false };
+    }
+    const bus = this.bus;
     for (const event of eventsFor(cue)) {
       const match = /^([A-G])([#b]?)(\d)$/.exec(event.note),
         pitch =
@@ -88,12 +108,15 @@ export class Music {
       gain.gain.setValueAtTime(level, Math.max(at + 0.006, end - 0.04));
       gain.gain.linearRampToValueAtTime(0, end - 0.025);
       oscillator.connect(gain);
-      gain.connect(this.context.destination);
+      gain.connect(bus.node);
       oscillator.start(at);
       oscillator.stop(end);
       this.nodes.add(oscillator);
+      bus.voices.add(oscillator);
       oscillator.onended = () => {
         this.nodes.delete(oscillator);
+        bus.voices.delete(oscillator);
+        if (bus.retiring && !bus.voices.size) bus.node.disconnect();
         gain.disconnect();
         oscillator.disconnect();
       };

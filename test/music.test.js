@@ -33,3 +33,103 @@ test("audio routing follows gameplay and muted construction creates no context o
   music.stop();
   assert.equal(music.nodes.size, 0);
 });
+
+test("gesture start, cue replacement, hide/resume and mute retire voices after a short fade", async () => {
+  const previous = globalThis.AudioContext;
+  const gains = [],
+    voices = [];
+  class Param {
+    constructor() {
+      this.value = 1;
+      this.events = [];
+    }
+    setValueAtTime(value, time) {
+      this.events.push(["set", value, time]);
+      this.value = value;
+    }
+    linearRampToValueAtTime(value, time) {
+      this.events.push(["ramp", value, time]);
+    }
+    cancelScheduledValues(time) {
+      this.events.push(["cancel", time]);
+    }
+  }
+  class Context {
+    constructor() {
+      this.currentTime = 10;
+      this.destination = {};
+      this.resumes = 0;
+    }
+    async resume() {
+      this.resumes++;
+    }
+    createGain() {
+      const gain = {
+        gain: new Param(),
+        connect() {},
+        disconnect() {
+          this.disconnected = true;
+        },
+      };
+      gains.push(gain);
+      return gain;
+    }
+    createOscillator() {
+      const voice = {
+        frequency: {},
+        starts: [],
+        stops: [],
+        connect() {},
+        disconnect() {},
+        start(t) {
+          this.starts.push(t);
+        },
+        stop(t) {
+          this.stops.push(t);
+        },
+      };
+      voices.push(voice);
+      return voice;
+    }
+  }
+  globalThis.AudioContext = Context;
+  const music = new Music();
+  try {
+    music.setCue("village");
+    assert.equal(voices.length, 0);
+    assert.equal(await music.toggle(), true);
+    assert.equal(music.context.resumes, 1);
+    const firstBus = music.bus,
+      firstVoices = [...music.nodes],
+      count = voices.length;
+    music.setCue("village");
+    assert.equal(voices.length, count);
+    music.setCue("battle");
+    assert.notEqual(music.bus, firstBus);
+    assert.ok(
+      firstBus.node.gain.events.some(
+        ([kind, value]) => kind === "ramp" && value === 0,
+      ),
+    );
+    for (const voice of firstVoices) {
+      assert.equal(voice.stops.at(-1), 10.035);
+      voice.onended();
+    }
+    assert.equal(firstBus.node.disconnected, true);
+    assert.ok(music.nodes.size > 0);
+    music.setHidden(true);
+    assert.equal(music.nodes.size, 0);
+    assert.equal(music.timer, null);
+    music.setCue("route");
+    assert.equal(music.nodes.size, 0);
+    music.setHidden(false);
+    assert.ok(music.nodes.size > 0);
+    assert.equal(await music.toggle(), false);
+    assert.equal(music.nodes.size, 0);
+    assert.equal(music.timer, null);
+    assert.equal(music.bus, null);
+  } finally {
+    music.stop();
+    globalThis.AudioContext = previous;
+  }
+});

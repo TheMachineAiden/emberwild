@@ -48,13 +48,24 @@
         <p class="keys">Arrows / WASD: move<br />Enter: interact · Esc: team</p>
       </div>
       <footer>
-        Ember beats Moss · Moss beats Tide · Tide beats Ember<br />Neutral
-        attacks work against every type. Mira heals your team for free.<br /><button
-          id="restart"
-          type="button"
-        >
-          New adventure
-        </button>
+        <details id="field-guide">
+          <summary>Field guide</summary>
+          <p>
+            Ember beats Moss. Moss beats Tide. Tide beats Ember. Move cards show
+            the damage for the current matchup.
+          </p>
+          <p>
+            Weaken wild creatures before using a Spark Vessel. A Mending Draught
+            restores up to 22 HP. Mira and the camps heal your whole team and
+            refill supplies for free.
+          </p>
+          <p>
+            Arrows or WASD move. Enter talks or inspects. Escape opens your team
+            while exploring and goes back in battle menus. Tab or arrow keys
+            move between commands.
+          </p>
+        </details>
+        <button id="restart" type="button">New adventure</button>
       </footer>
     </main>
     <script type="module" src="src/main.js"></script>
