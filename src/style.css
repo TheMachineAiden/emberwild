@@ -11,16 +11,20 @@ body, #game, #rotate-gate {
   user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
 }
 #game {
-  position: relative;
-  width: 100%; height: 100vh; height: 100dvh;
-  padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-  display: grid; grid-template-rows: 48px auto minmax(0, 1fr) auto; gap: 6px;
-  overflow: hidden; touch-action: none;
+  position: relative; width: 100%; height: 100vh; height: 100dvh;
+  padding: 0; overflow: hidden; touch-action: none;
 }
-.game-hud { display: flex; align-items: center; gap: 20px; min-width: 0; }
-h1 { margin: 0; font-size: 1.2rem; color: #efc977; letter-spacing: -0.05em; }
-#location { font-size: .8rem; color: #c5d2b5; }
-.game-hud nav { margin-left: auto; display: flex; gap: 6px; }
+#menu-toggle {
+  position: absolute; z-index: 8;
+  top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right));
+  min-width: 64px; background: #192f36e8;
+}
+.location-hud {
+  position: absolute; z-index: 2; top: max(18px, env(safe-area-inset-top));
+  left: max(18px, env(safe-area-inset-left)); pointer-events: none;
+  font-size: .8rem; color: #fff2cc; text-shadow: 1px 1px #132329, -1px -1px #132329;
+}
+.in-menu #location, .in-battle #location, .at-ending #location { display: none; }
 button, summary { font: inherit; cursor: pointer; }
 button {
   font-size: .8rem; min-height: 44px; padding: 8px 12px;
@@ -32,29 +36,33 @@ button:disabled { opacity: .45; cursor: default; }
 button:focus-visible, summary:focus-visible { outline: 3px solid #ffcd72; outline-offset: -3px; }
 img, canvas { -webkit-user-drag: none; }
 .objective { margin: 0; font-size: .72rem; line-height: 1.4; color: #c6d2b9; padding: 2px 0; }
-#stage { position: relative; min-width: 0; min-height: 0; background: #253b39; border: 2px solid #949b77; overflow: hidden; }
-#world { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+#stage { position: absolute; inset: 0; background: #253b39; overflow: hidden; }
+#world { display: block; width: 100%; height: 100%; object-fit: fill; image-rendering: pixelated; }
 #scene:empty { display: none; }
 #scene {
-  position: absolute; inset: 0; padding: 22px max(22px, calc((100% - 1000px) / 2));
+  position: absolute; inset: 0; padding: max(22px, env(safe-area-inset-top)) max(22px, calc((100% - 1000px) / 2));
   overflow: auto; overscroll-behavior: contain; touch-action: pan-y;
   background: #203239; scrollbar-gutter: stable;
 }
-#scene h2 { margin: 0 0 12px; color: #f4ce81; font-size: 1.15rem; }
+#scene h2 { padding-right: 80px; margin: 0 0 12px; color: #f4ce81; font-size: 1.15rem; }
 #scene h3 { font-size: 1rem; color: #f4ce81; margin: 20px 0 6px; }
 #scene p { line-height: 1.55; }
+#scene > h2 + p { padding-right: 80px; }
 .has-scene #world { visibility: hidden; }
-.in-battle #objective, .in-menu #objective, .at-ending #objective { display: none; }
-.in-battle #stage, .in-menu #stage, .at-ending #stage { grid-row: 2 / 5; }
-#message {
-  /* This is a real grid row below the map, never a world overlay. */
-  position: relative; grid-row: 4; justify-self: center;
-  width: min(580px, calc(100% - 292px)); min-width: 0;
-  max-height: 100px; overflow: auto; touch-action: pan-y; overscroll-behavior: contain;
-  margin: 0; padding: 12px 16px; font-size: .8rem; line-height: 1.5;
-  color: #233334; background: #f0e7c9; border-left: 4px solid #d99b58; box-shadow: 0 3px 0 #101c23;
+#dialogue {
+  position: absolute; z-index: 5;
+  left: max(18px, env(safe-area-inset-left)); right: max(18px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  width: min(720px, calc(100% - 36px)); margin: 0 auto;
+  max-height: 44dvh; padding: 12px 16px;
+  overflow: auto; overscroll-behavior: contain; touch-action: pan-y;
+  color: #233334; background: #f0e7c9; border: 2px solid #c9b87f;
+  box-shadow: 0 4px 0 #101c2380;
 }
-#message:empty { display: none; }
+#dialogue[hidden] { display: none; }
+#message { margin: 0 0 10px; font-size: .83rem; line-height: 1.5; }
+#dialogue-close { display: block; margin-left: auto; min-width: 110px; }
+.in-dialogue .bottom { display: none; }
 .bottom { position: absolute; inset: auto 0 0; pointer-events: none; z-index: 3; }
 .bottom > * { pointer-events: auto; }
 #joystick {
@@ -75,7 +83,7 @@ img, canvas { -webkit-user-drag: none; }
 }
 kbd { display: block; font: inherit; font-size: .65rem; margin-top: 5px; color: #bccabb; }
 .in-menu .bottom, .in-battle .bottom, .at-ending .bottom,
-.in-menu #message, .in-battle #message, .at-ending #message { display: none; }
+.in-menu #dialogue, .in-battle #dialogue, .at-ending #dialogue { display: none; }
 .starter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .starter-grid button { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px; }
 .starter-grid small { font-size: .72rem; }
@@ -84,7 +92,8 @@ kbd { display: block; font: inherit; font-size: .65rem; margin-top: 5px; color: 
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   position: sticky; top: -22px; z-index: 4; background: #203239; padding: 8px 0; margin: -8px 0 8px;
 }
-#scene .panel-heading h2 { margin: 0; }
+#scene .panel-heading h2 { margin: 0; padding-right: 0; }
+#scene .panel-heading { padding-right: 80px; }
 .panel-heading button { flex-shrink: 0; }
 .team-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .team-row { display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid #607467; }
@@ -130,7 +139,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
 #game-menu::backdrop { background: #08151cbb; }
 #game-menu .panel-heading { top: -16px; padding-top: 8px; }
 #game-menu h2 { font-size: 1.05rem; color: #f4ce81; }
-.menu-actions { display: flex; gap: 8px; }
+.menu-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 #display-status:empty { display: none; }
 #display-status, .guide { font-size: .8rem; line-height: 1.6; }
 .guide summary { min-height: 44px; padding: 12px 0; }
@@ -140,7 +149,6 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
 #rotate-gate p { line-height: 1.5; margin: 6px 0; max-width: 280px; }
 .rotate-symbol { display: block; font-size: 4rem; color: #c6d3a7; }
 @media (min-width: 1100px) and (min-height: 650px) {
-  #game { padding: 12px 20px; }
   .in-battle:not(.in-menu) #scene { padding: 28px; gap: 18px 28px; }
   .fighter .creature-sprite { width: 160px; height: 160px; }
   .stats { width: 200px; font-size: .9rem; }
@@ -150,11 +158,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .command-grid small { font-size: .8rem; }
 }
 @media (max-height: 450px) {
-  #game { grid-template-rows: 44px auto minmax(0, 1fr) auto; padding-top: max(2px, env(safe-area-inset-top)); padding-bottom: max(4px, env(safe-area-inset-bottom)); gap: 3px; }
-  .game-hud { gap: 12px; }
-  .game-hud h1 { font-size: 1rem; }
-  .game-hud button { font-size: .7rem; padding: 6px 8px; }
-  #scene { padding: 12px 18px; }
+  #scene { padding: max(14px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-left)); }
   #scene h2 { font-size: 1rem; margin-bottom: 6px; }
   #scene p { font-size: .8rem; margin: 8px 0; }
   .starter-grid .creature-sprite { width: 64px; height: 64px; }
@@ -169,20 +173,16 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .command-grid button { min-height: 66px; padding: 8px; }
   .command-grid strong { font-size: .8rem; }
   .command-grid small { font-size: .67rem; }
-  #message { font-size: .72rem; max-height: 82px; padding: 10px 12px; }
+  #message { font-size: .78rem; }
   .panel-heading { top: -12px; }
 }
 @media (max-width: 720px) {
-  #game { padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
-  #location { font-size: .7rem; }
-  .game-hud { gap: 8px; }
-  .game-hud nav { gap: 4px; }
+  #location { font-size: .75rem; }
   .in-battle:not(.in-menu) #scene { grid-template-columns: minmax(0, 1.1fr) minmax(265px, 1fr); }
   .team-row { gap: 6px; padding: 6px; }
   .team-row .creature-sprite { width: 40px; height: 40px; }
   .team-details { font-size: .72rem; }
   .team-row button { padding: 7px; }
-  #message { width: calc(100% - 264px); }
   #joystick { left: 18px; }
   #interact { right: 18px; }
 }
