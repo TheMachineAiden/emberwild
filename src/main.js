@@ -128,6 +128,7 @@ const worldIds = [
   "flowers",
   "pebbles",
   "cottage",
+  "camp",
   "perrin",
   "rowan",
   "maren",
@@ -189,16 +190,16 @@ function world() {
       0,
       Math.min(20 - columns, px - Math.floor(columns / 2)),
     ),
-    cameraY =
-      narrow && ["ridge", "summit"].includes(state.map) && state.y <= 6
-        ? 0
-        : Math.max(
-            0,
-            Math.min(
-              13 - rows,
-              py - (state.map === "village" ? 7 : Math.floor(rows / 2)),
-            ),
-          );
+    cameraY = Math.max(
+      0,
+      Math.min(
+        13 - rows,
+        py -
+          (["village", "ridge", "summit"].includes(state.map)
+            ? 7
+            : Math.floor(rows / 2)),
+      ),
+    );
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.imageSmoothingEnabled = false;
   ctx.translate(-Math.round(cameraX * 24), -Math.round(cameraY * 24));
@@ -243,7 +244,7 @@ function world() {
     const actor =
       !n.id.startsWith("rescue-") &&
       !n.id.startsWith("bowl-") &&
-      !["reset", "inscription", "beacon"].includes(n.id);
+      !["reset", "inscription", "beacon", "rest"].includes(n.id);
     if (n.id.startsWith("rescue-"))
       id = state.rescued.includes(n.id.slice(7)) ? "bowl" : "flame";
     if (n.id.startsWith("bowl-")) {
@@ -318,13 +319,16 @@ function renderTeam(inBattle = false) {
   const list = node("div", null, "team-list");
   state.team.forEach((c, i) => {
     const row = node("div", null, "team-row");
-    row.append(
-      marker(c.species),
+    const details = node("div", null, "team-details");
+    details.append(
+      node("strong", species[c.species].name),
+      node("small", `Lv. ${c.level} · ${typeNames[species[c.species].type]}`),
       node(
         "span",
-        `${species[c.species].name} · Lv. ${c.level} · ${typeNames[species[c.species].type]}\nHP ${c.hp}/${c.maxHp}${i === state.active ? " · Lead" : ""}`,
+        `HP ${c.hp}/${c.maxHp}${i === state.active ? " · Lead" : ""}`,
       ),
     );
+    row.append(marker(c.species), details);
     row.append(
       button(
         i === state.active ? "Lead" : "Choose",
@@ -342,22 +346,28 @@ function renderTeam(inBattle = false) {
         `team-${i}`,
       ),
     );
+    row
+      .querySelector("button")
+      .setAttribute(
+        "aria-label",
+        `${i === state.active ? "Lead" : "Choose"} ${species[c.species].name}`,
+      );
     list.append(row);
   });
   scene.append(list);
   if (!inBattle) {
     scene.append(
-      node("h3", `Field journal · ${state.rescued.length}/3 sheltered sparks`),
+      node("h3", "Field journal"),
+      node("p", `${state.rescued.length} of 3 sparks found`, "journal-count"),
     );
-    for (const [id, rescue] of Object.entries(rescues))
-      scene.append(
-        node(
-          "p",
-          state.rescued.includes(id)
-            ? rescue.title + ": " + rescue.clue
-            : rescue.title + ": not yet found.",
-        ),
+    for (const [id, rescue] of Object.entries(rescues)) {
+      const entry = node("article", null, "journal-entry");
+      entry.append(
+        node("h4", rescue.title),
+        node("p", state.rescued.includes(id) ? rescue.clue : "Not yet found."),
       );
+      scene.append(entry);
+    }
   }
   if (!forced)
     scene.append(
@@ -455,6 +465,9 @@ function openBattleMenu(menu) {
   panel = menu === "team" ? "team" : null;
   render();
   focusScene();
+}
+function quantity(value, word) {
+  return `${value} ${word}${value === 1 ? "" : "s"}`;
 }
 function command(title, detail, fn, disabled = false, key = title) {
   const el = button("", fn, disabled, key);
@@ -564,7 +577,7 @@ function renderBattle() {
       command("Fight", "Choose a move", () => openBattleMenu("moves")),
       command(
         "Bag",
-        `${state.items.capsules} vessels · ${state.items.tonics} draughts`,
+        `${quantity(state.items.capsules, "vessel")} · ${quantity(state.items.tonics, "draught")}`,
         () => openBattleMenu("bag"),
       ),
       command(
@@ -619,7 +632,10 @@ function render() {
           ? "Enter Stillglass. Read the inscription and light the three bowls."
           : "The stairs are open. Rest, then meet Alder at the Lantern Crown.";
   $("location").textContent = maps[state.map].name;
-  $("message").textContent = state.message;
+  $("message").textContent =
+    state.mode === "world" && !worldLoaded
+      ? "Loading the coast…"
+      : state.message;
   $("save").disabled = state.mode !== "world" || sequence.busy || travel.busy;
   $("load").disabled = state.mode === "battle" || sequence.busy || travel.busy;
   $("restart").disabled = sequence.busy || travel.busy;
@@ -631,13 +647,20 @@ function render() {
     (state.mode === "battle" &&
       (!state.team[state.active].hp || !!state.battle.result));
   $("interact").disabled =
-    state.mode !== "world" || panel !== null || sequence.busy || travel.busy;
+    state.mode !== "world" ||
+    panel !== null ||
+    sequence.busy ||
+    travel.busy ||
+    !worldLoaded;
   document
     .querySelectorAll("[data-dir]")
     .forEach(
       (b) =>
         (b.disabled =
-          state.mode !== "world" || panel !== null || sequence.busy),
+          state.mode !== "world" ||
+          panel !== null ||
+          sequence.busy ||
+          !worldLoaded),
     );
   if (presentation?.kind === "loss") {
     scene.append(node("h2", "Safe at home"), node("p", state.message));

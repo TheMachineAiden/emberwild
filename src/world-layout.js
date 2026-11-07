@@ -48,6 +48,7 @@ export const decorations = {
   ],
 };
 export const npcArt = {
+  rest: "camp",
   neighbor: "perrin",
   liv: "rowan",
   edda: "maren",

@@ -149,7 +149,7 @@ export function interact(s) {
         s.flags.puzzle = true;
         s.message =
           "The sparks join! The northeast stairs open. The creatures carry their light toward the lantern.";
-      } else s.message = `The bowl is lit. ${s.bowlStep} of 3 are glowing.`;
+      } else s.message = `${s.bowlStep}/3 bowls lit.`;
     } else {
       s.bowlStep = 0;
       s.message =

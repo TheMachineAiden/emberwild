@@ -630,3 +630,41 @@ footer {
   margin-left: 6px;
   color: #c6d4c7;
 }
+#scene h3 {
+  font-size: 1rem;
+  margin: 20px 0 4px;
+  color: #f4ce81;
+}
+#scene .journal-count {
+  margin: 0 0 12px;
+  color: #c6d4c7;
+  font-size: 0.75rem;
+}
+.journal-entry {
+  padding: 12px 0;
+  border-top: 1px solid #52645b;
+}
+.journal-entry h4 {
+  margin: 0;
+  font-size: 0.85rem;
+}
+#scene .journal-entry p {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+}
+.team-details {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.team-details strong,
+.team-details small {
+  display: block;
+}
+.team-details small {
+  font-size: 0.72rem;
+  color: #c6d4c7;
+}
