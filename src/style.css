@@ -3,3 +3,4 @@
 .creature-sprite{width:64px;height:64px;object-fit:contain;image-rendering:pixelated;flex-shrink:0}.fighter .creature-sprite{width:96px;height:96px}.fighter{max-width:100%}@media(max-width:600px){.fighter .creature-sprite{width:80px;height:80px}.battlefield{height:180px}}
 .objective{font-size:.75rem;line-height:1.5;margin:0 0 12px;color:#c7d1b8}.fighter.enemy .creature-sprite{transform:scaleX(-1)}
 .at-ending .bottom,.at-ending #message{display:none}
+#stage:not(.has-scene){min-height:0}#world{min-height:0}

@@ -23,3 +23,9 @@ First acceptance sample: Glimra, a small ember fox with charcoal legs, cream muz
 ## Creature source batch review
 
 Seven sheets retained; contact sheet in `qa/screenshots/creature-source-review.png`. Silhouettes are varied and front/rear anatomy is readable for Strila, Knopp and Tuvling. Vippa and Kolkrabb contain visible cell borders; Ljuskrön has a border and its rear is too close to the front silhouette. Daggla has an opaque pale background despite the transparency request. These are unapproved sources pending extraction/cleanup or regeneration. Do not export those defects as final sprites. Inspect all 64px derivatives on the actual battle background before acceptance.
+
+## Integrated raster revision
+
+Added a closer 12×9-tile camera on narrow screens and reduced stone-floor contrast. `qa/screenshots/raster-summit-v2.png` shows clearer actors and a calmer floor than the preceding capture. Desktop village capture at 1000×900 shows intact roof/wall footprints, free-healer marker and east exit, with no horizontal clipping; controls below the map may require ordinary document scrolling at that height. A tall authored lighthouse and separate dark/lit lenses now identify the landmark; its full in-game exterior still needs capture.
+
+The v2 Vippa/Kolkrabb sheets remove cell borders, and Ljuskrön now has a true rear pose. Seven exported species are inspected at 96px display size against the battle surface in `qa/screenshots/creature-exports-review.png`: broad snail/newt/crab/moth and tall bird silhouettes remain distinct; no cell frame survives. The v2 Daggla edit remains rejected (background alpha minimum 142); a fresh v3 generation awaits retention and review. `assets/source/creatures.json` identifies active sources for deterministic exports. Final battle composition and every species in live scenes still require review.

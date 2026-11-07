@@ -7,7 +7,7 @@ const $=id=>document.getElementById(id),scene=$('scene'),canvas=$('world'),ctx=c
 function node(tag,text,className){const el=document.createElement(tag);if(text)el.textContent=text;if(className)el.className=className;return el;}
 function button(text,fn,disabled=false){const el=node('button',text);el.type='button';el.disabled=disabled;el.addEventListener('click',fn);return el;}
 function marker(id,pose='front'){
-  if(id==='glimra'){const el=node('img',null,'creature-sprite');el.src=`assets/creatures/${id}-${pose}.png`;el.alt='';el.width=64;el.height=64;return el;}
+  if(['glimra','strila','knopp','tuvling','vippa','kolkrabb','ljuskron'].includes(id)){const el=node('img',null,'creature-sprite');el.src=`assets/creatures/${id}-${pose}.png`;el.alt='';el.width=64;el.height=64;return el;}
   const el=node('span',null,'marker');el.style.setProperty('--creature-color',species[id].color);el.setAttribute('aria-hidden','true');return el;
 }
 function store(announce=false){
@@ -17,11 +17,14 @@ function store(announce=false){
 function load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw){state.message='Det finns ingen sparning på den här enheten.';}else{state=decodeSave(raw);panel=null;}}catch{state.message='Sparningen kunde inte läsas. Ditt pågående spel är kvar.';}render();}
 const worldAssets={};
 let worldLoaded=false;
-const worldIds=['sand','ground','water','reeds','tree','roof','house','floor','wall','stairs','seal','bowl','flame','player','player-back','healer','trainer'];
+const worldIds=['sand','ground','water','reeds','tree','roof','house','floor','wall','stairs','seal','bowl','flame','player','player-back','healer','trainer','lighthouse','door','lens','lens-lit'];
 const worldReady=Promise.all(worldIds.map(id=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>{worldAssets[id]=image;resolve();};image.onerror=reject;image.src=`assets/world/${id}.png`;})));
 function world(){
   const map=maps[state.map],inside=['cellar','summit'].includes(state.map);
-  ctx.clearRect(0,0,480,312);ctx.imageSmoothingEnabled=false;
+  const narrow=innerWidth<=600,columns=narrow?12:20,rows=narrow?9:13;
+  canvas.width=columns*24;canvas.height=rows*24;
+  const cameraX=Math.max(0,Math.min(20-columns,state.x-Math.floor(columns/2))),cameraY=Math.max(0,Math.min(13-rows,state.y-Math.floor(rows/2)));
+  ctx.clearRect(0,0,canvas.width,canvas.height);ctx.imageSmoothingEnabled=false;ctx.translate(-cameraX*24,-cameraY*24);
   if(!worldLoaded)return;
   const draw=(id,x,y,width=24,height=24)=>ctx.drawImage(worldAssets[id],x,y,width,height);
   map.rows.forEach((row,y)=>[...row].forEach((tile,x)=>{
@@ -32,12 +35,14 @@ function world(){
     draw(id,x*24,y*24);
     if(tile==='T')draw('tree',x*24,y*24);
     if(tile==='g')draw('reeds',x*24,y*24);
+    if(tile==='h')draw('door',x*24,y*24);
   }));
+  if(state.map==='ridge')draw('lighthouse',15*24,0,72,96);
   for(const exit of map.exits)draw(exit.requires&&!state.flags[exit.requires]?'seal':'stairs',exit.x*24,exit.y*24);
   for(const n of map.npcs){
     let id=n.id==='healer'||n.id==='rest'?'healer':'trainer';
     if(n.id.startsWith('bowl-')){const order=['bowl-tide','bowl-moss','bowl-ember'];id=state.flags.puzzle||order.indexOf(n.id)<state.bowlStep?'flame':'bowl';}
-    if(n.id==='beacon')id=state.flags.complete?'flame':'bowl';
+    if(n.id==='beacon'){draw(state.flags.complete?'lens-lit':'lens',n.x*24-12,n.y*24-24,48,48);continue;}
     if(n.id==='reset'||n.id==='inscription')id='seal';
     draw(id,n.x*24+(id==='trainer'||id==='healer'?4:0),n.y*24,id==='trainer'||id==='healer'?16:24,24);
     ctx.font='9px monospace';ctx.textAlign='center';ctx.fillStyle='#20323b';ctx.fillText(n.label,n.x*24+13,n.y*24-2);ctx.fillStyle='#f5e7c0';ctx.fillText(n.label,n.x*24+12,n.y*24-3);
@@ -100,3 +105,5 @@ document.addEventListener('keydown',event=>{
 });
 render();
 worldReady.then(()=>{worldLoaded=true;render();}).catch(()=>{state.message='Världsgrafiken kunde inte laddas. Försök ladda om sidan.';render();});
+
+window.addEventListener('resize',()=>render());
