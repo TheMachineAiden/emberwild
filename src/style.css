@@ -14,7 +14,7 @@ body, #game, #rotate-gate {
   position: relative;
   width: 100%; height: 100vh; height: 100dvh;
   padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-  display: grid; grid-template-rows: 48px auto minmax(0, 1fr); gap: 6px;
+  display: grid; grid-template-rows: 48px auto minmax(0, 1fr) auto; gap: 6px;
   overflow: hidden; touch-action: none;
 }
 .game-hud { display: flex; align-items: center; gap: 20px; min-width: 0; }
@@ -45,11 +45,12 @@ img, canvas { -webkit-user-drag: none; }
 #scene p { line-height: 1.55; }
 .has-scene #world { visibility: hidden; }
 .in-battle #objective, .in-menu #objective, .at-ending #objective { display: none; }
-.in-battle #stage, .in-menu #stage, .at-ending #stage { grid-row: 2 / 4; }
+.in-battle #stage, .in-menu #stage, .at-ending #stage { grid-row: 2 / 5; }
 #message {
-  position: absolute; z-index: 2; bottom: max(18px, env(safe-area-inset-bottom));
-  left: max(158px, calc(50% - 290px)); right: max(158px, calc(50% - 290px));
-  max-height: 116px; overflow: auto; touch-action: pan-y; overscroll-behavior: contain;
+  /* This is a real grid row below the map, never a world overlay. */
+  position: relative; grid-row: 4; justify-self: center;
+  width: min(580px, calc(100% - 292px)); min-width: 0;
+  max-height: 100px; overflow: auto; touch-action: pan-y; overscroll-behavior: contain;
   margin: 0; padding: 12px 16px; font-size: .8rem; line-height: 1.5;
   color: #233334; background: #f0e7c9; border-left: 4px solid #d99b58; box-shadow: 0 3px 0 #101c23;
 }
@@ -149,7 +150,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .command-grid small { font-size: .8rem; }
 }
 @media (max-height: 450px) {
-  #game { grid-template-rows: 44px auto minmax(0, 1fr); padding-top: max(2px, env(safe-area-inset-top)); padding-bottom: max(4px, env(safe-area-inset-bottom)); gap: 3px; }
+  #game { grid-template-rows: 44px auto minmax(0, 1fr) auto; padding-top: max(2px, env(safe-area-inset-top)); padding-bottom: max(4px, env(safe-area-inset-bottom)); gap: 3px; }
   .game-hud { gap: 12px; }
   .game-hud h1 { font-size: 1rem; }
   .game-hud button { font-size: .7rem; padding: 6px 8px; }
@@ -168,7 +169,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .command-grid button { min-height: 66px; padding: 8px; }
   .command-grid strong { font-size: .8rem; }
   .command-grid small { font-size: .67rem; }
-  #message { font-size: .72rem; max-height: 112px; padding: 10px 12px; }
+  #message { font-size: .72rem; max-height: 82px; padding: 10px 12px; }
   .panel-heading { top: -12px; }
 }
 @media (max-width: 720px) {
@@ -181,7 +182,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .team-row .creature-sprite { width: 40px; height: 40px; }
   .team-details { font-size: .72rem; }
   .team-row button { padding: 7px; }
-  #message { left: 140px; right: 140px; }
+  #message { width: calc(100% - 264px); }
   #joystick { left: 18px; }
   #interact { right: 18px; }
 }
