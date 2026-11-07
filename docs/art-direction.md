@@ -19,3 +19,7 @@ First acceptance sample: Glimra, a small ember fox with charcoal legs, cream muz
 ## Prototype review
 
 390×844 world capture retained in `qa/screenshots/mobile-world.png`: controls and parchment feedback are readable, no horizontal clipping. World markers are visibly tiny and generic. Final sprites plus a closer mobile camera should address identity and legibility. No final-art acceptance is implied by the greybox functional proof.
+
+## Creature source batch review
+
+Seven sheets retained; contact sheet in `qa/screenshots/creature-source-review.png`. Silhouettes are varied and front/rear anatomy is readable for Strila, Knopp and Tuvling. Vippa and Kolkrabb contain visible cell borders; Ljuskrön has a border and its rear is too close to the front silhouette. Daggla has an opaque pale background despite the transparency request. These are unapproved sources pending extraction/cleanup or regeneration. Do not export those defects as final sprites. Inspect all 64px derivatives on the actual battle background before acceptance.
