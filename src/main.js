@@ -15,18 +15,37 @@ function store(announce=false){
   catch{state.message='Kunde inte spara här. Kontrollera webbläsarens lagringsinställningar. Spelet kan fortsätta.';}
 }
 function load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw){state.message='Det finns ingen sparning på den här enheten.';}else{state=decodeSave(raw);panel=null;}}catch{state.message='Sparningen kunde inte läsas. Ditt pågående spel är kvar.';}render();}
+const worldAssets={};
+let worldLoaded=false;
+const worldIds=['sand','ground','water','reeds','tree','roof','house','floor','wall','stairs','seal','bowl','flame','player','player-back','healer','trainer'];
+const worldReady=Promise.all(worldIds.map(id=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>{worldAssets[id]=image;resolve();};image.onerror=reject;image.src=`assets/world/${id}.png`;})));
 function world(){
-  const map=maps[state.map];ctx.clearRect(0,0,480,312);
+  const map=maps[state.map],inside=['cellar','summit'].includes(state.map);
+  ctx.clearRect(0,0,480,312);ctx.imageSmoothingEnabled=false;
+  if(!worldLoaded)return;
+  const draw=(id,x,y,width=24,height=24)=>ctx.drawImage(worldAssets[id],x,y,width,height);
   map.rows.forEach((row,y)=>[...row].forEach((tile,x)=>{
-    ctx.fillStyle=tile==='#'?'#233b3e':tile==='T'?'#41634d':tile==='H'?'#8c6c53':tile==='g'?'#7e985e':'#b0ad7a';ctx.fillRect(x*24,y*24,24,24);
-    if(tile==='g'){ctx.fillStyle='#42654c';ctx.fillRect(x*24+5,y*24+8,3,12);ctx.fillRect(x*24+14,y*24+4,3,16);}
-    if(tile==='T'){ctx.fillStyle='#294b40';ctx.fillRect(x*24+3,y*24+3,18,16);}
+    let id=inside?'floor':'sand';
+    if(tile==='#')id=inside?'wall':'water';
+    if(tile==='T'||tile==='g')id='ground';
+    if(tile==='H')id=map.rows[y-1]?.[x]==='H'?'house':'roof';
+    draw(id,x*24,y*24);
+    if(tile==='T')draw('tree',x*24,y*24);
+    if(tile==='g')draw('reeds',x*24,y*24);
   }));
-  for(const exit of map.exits){ctx.fillStyle=exit.requires&&!state.flags[exit.requires]?'#ac7757':'#f2d28b';ctx.fillRect(exit.x*24+3,exit.y*24+3,18,18);ctx.fillStyle='#20323b';ctx.font='16px monospace';ctx.textAlign='center';ctx.fillText('↟',exit.x*24+12,exit.y*24+18);}
-  for(const n of map.npcs){ctx.fillStyle=n.id==='healer'?'#d8e2b5':'#b88364';ctx.fillRect(n.x*24+5,n.y*24+5,14,18);ctx.fillStyle='#1d2d32';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText(n.label,n.x*24+12,n.y*24-3);}
-  ctx.fillStyle='#2a333d';ctx.fillRect(state.x*24+4,state.y*24+7,16,17);ctx.fillStyle='#efc77d';ctx.fillRect(state.x*24+5,state.y*24+2,14,9);ctx.fillStyle='#fff0ce';ctx.fillRect(state.x*24+10+state.facing[0]*6,state.y*24+12+state.facing[1]*6,4,4);
+  for(const exit of map.exits)draw(exit.requires&&!state.flags[exit.requires]?'seal':'stairs',exit.x*24,exit.y*24);
+  for(const n of map.npcs){
+    let id=n.id==='healer'||n.id==='rest'?'healer':'trainer';
+    if(n.id.startsWith('bowl-')){const order=['bowl-tide','bowl-moss','bowl-ember'];id=state.flags.puzzle||order.indexOf(n.id)<state.bowlStep?'flame':'bowl';}
+    if(n.id==='beacon')id=state.flags.complete?'flame':'bowl';
+    if(n.id==='reset'||n.id==='inscription')id='seal';
+    draw(id,n.x*24+(id==='trainer'||id==='healer'?4:0),n.y*24,id==='trainer'||id==='healer'?16:24,24);
+    ctx.font='9px monospace';ctx.textAlign='center';ctx.fillStyle='#20323b';ctx.fillText(n.label,n.x*24+13,n.y*24-2);ctx.fillStyle='#f5e7c0';ctx.fillText(n.label,n.x*24+12,n.y*24-3);
+  }
+  draw(state.facing[1]===-1?'player-back':'player',state.x*24+4,state.y*24,16,24);
   canvas.setAttribute('aria-label',`${map.name}. Position ${state.x}, ${state.y}.`);
 }
+
 function renderTeam(inBattle=false){
   scene.append(node('h2',inBattle?'Välj följeslagare':'Ditt lag'));
   const list=node('div',null,'team-list');
@@ -80,3 +99,4 @@ document.addEventListener('keydown',event=>{
   if((event.key==='Enter'||event.key===' ')&&event.target.tagName!=='BUTTON'){event.preventDefault();if(event.repeat)return;interact(state);if(state.mode==='world')store();render();}
 });
 render();
+worldReady.then(()=>{worldLoaded=true;render();}).catch(()=>{state.message='Världsgrafiken kunde inte laddas. Försök ladda om sidan.';render();});

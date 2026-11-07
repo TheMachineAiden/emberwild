@@ -1,0 +1,23 @@
+{
+ "palette":{".":"#00000000","o":"#20323b","d":"#3e5c54","g":"#6e8860","l":"#a1ad70","s":"#ded2a1","p":"#c2b67f","w":"#365767","b":"#577d89","f":"#8fb2ad","c":"#a56343","r":"#d68e58","a":"#efb765","h":"#f5e7c0"},
+ "tiles":{
+ "sand":["pppppppppppp","pppspppppppp","ppsspppppppp","pppppppppppp","ppppppppsppp","ppppppppsspp","pppppppppppp","ppsppppppppp","pssppppppppp","pppppppppppp","ppppppppsppp","pppppppppppp"],
+ "ground":["gggggggggggg","ggglgggggggg","gggggggggggg","ggggggggglgg","gggggggggggg","ggggglgggggg","gggggggggggg","gglggggggggg","gggggggggggg","ggggggggglgg","gggggglggggg","gggggggggggg"],
+ "water":["wwwwwwwwwwww","wwbbwwwwwwww","wbbfbbwwwwww","wwwwwwwwwwww","wwwwwwwwwwww","wwwwwwwbbwww","wwwwwwbbfbbw","wwwwwwwwwwww","wwwwwwwwwwww","wwbbwwwwwwww","wbbfbbwwwwww","wwwwwwwwwwww"],
+ "reeds":["............","...l....l...","..gl...lg...","..gl..gl....","...l..gl..l.","...l...l.lg.",".l.l...l.lg.",".gll.l.l.l..","..gllglll...","...ggggg....","..ddddddd...","............"],
+ "tree":[".....oo.....","....oddo....","...odggdo...","..odglggdo..",".odgllgggdo.","odgllglgggdo","odggggggggdo",".oddggggddo.","..ooddddoo..","....occ.....","....occ.....","...odddo...."],
+ "roof":["oooooooooooo","rrrrrrrrrrrr","cccccccccccc","ccrcccrcccrc","rrrrrrrrrrrr","cccccccccccc","rcccrcccrccc","rrrrrrrrrrrr","cccccccccccc","ccrcccrcccrc","cccccccccccc","oooooooooooo"],
+ "house":["ssssssssssss","pppppppppppp","ssssssssssss","ssooooosssss","ssowhwosssss","ssowhwosssss","ssowhwosssss","ssooooosssss","ssssssssssss","pppppppppppp","pppppppppppp","oooooooooooo"],
+ "floor":["dddddddddddd","dpppppdppppp","dpppppdppppp","dpppppdppppp","dddddddddddd","pppdpppppdpp","pppdpppppdpp","pppdpppppdpp","dddddddddddd","dpppppdppppp","dpppppdppppp","dpppppdppppp"],
+ "wall":["oooooooooooo","dgggggdggggg","dgggggdggggg","dddddddddddd","gggdgggggdgg","gggdgggggdgg","dddddddddddd","dgggggdggggg","dgggggdggggg","dddddddddddd","oooooooooooo","oooooooooooo"],
+ "stairs":["............","..oooooooo..","..oppppppo..","..oshhhhso..","..osppppso..","..oshhhhso..","..osppppso..","..oshhhhso..","..osppppso..","..oshhhhso..","..oooooooo..","............"],
+ "seal":["............","....oooo....","...oaaaoo...","..oaassaoo..","..oashhaoo..","..oashhaoo..","..oaassaoo..","...oaaaoo...","....oooo....","............","............","............"],
+ "bowl":["............","............","............","............","............","............","..oooooooo..","..obbbbbbo..","...oddddo...","....occo....","...occcco...","...oooooo..."],
+ "flame":["............","......a.....",".....ara....","....arrra...","...arrsrra..","...arhhrra..","..oarssrao..","..obbbbbbo..","...oddddo...","....occo....","...occcco...","...oooooo..."]
+ },
+ "characters":{
+ "player":["..oooo..",".oaaaao.","oaaaaaao","oossssoo",".ososo..","..occo..",".obbbbo.","obbbbbbo","osbbbbso",".obbbbo.",".oo..oo.",".oo..oo."],
+ "healer":["..oooo..",".ohhhho.","ohhahhho","oossssoo",".ososo..","..occo..",".ohhhho.","ohhahhho","oshahhso",".ohhhho.",".oo..oo.",".oo..oo."],
+ "trainer":["..oooo..",".occcco.","occcccco","oossssoo",".ososo..","..occo..",".oggggo.","oggggggo","osggggso",".oggggo.",".oo..oo.",".oo..oo."]
+ }
+}
