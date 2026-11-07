@@ -1,5 +1,12 @@
 import { Music, cueFor } from "./audio.js";
-import { species, starters, typeNames, typedMoves, maps } from "./data.js";
+import {
+  species,
+  starters,
+  typeNames,
+  typedMoves,
+  maps,
+  rescues,
+} from "./data.js";
 import {
   newGame,
   chooseStarter,
@@ -136,12 +143,19 @@ function world() {
   if (state.map === "ridge") draw("lighthouse", 15 * 24, 0, 72, 96);
   for (const exit of map.exits)
     draw(
-      exit.requires && !state.flags[exit.requires] ? "seal" : "stairs",
+      (exit.requires && !state.flags[exit.requires]) ||
+        (exit.rescues &&
+          !state.flags.complete &&
+          state.rescued.length < exit.rescues)
+        ? "seal"
+        : "stairs",
       exit.x * 24,
       exit.y * 24,
     );
   for (const n of map.npcs) {
     let id = n.id === "healer" || n.id === "rest" ? "healer" : "trainer";
+    if (n.id.startsWith("rescue-"))
+      id = state.rescued.includes(n.id.slice(7)) ? "bowl" : "flame";
     if (n.id.startsWith("bowl-")) {
       const order = ["bowl-tide", "bowl-moss", "bowl-ember"];
       id =
@@ -216,6 +230,18 @@ function renderTeam(inBattle = false) {
     list.append(row);
   });
   scene.append(list);
+  scene.append(
+    node("h3", `Fältanteckningar · ${state.rescued.length}/3 glödspår`),
+  );
+  for (const [id, rescue] of Object.entries(rescues))
+    scene.append(
+      node(
+        "p",
+        state.rescued.includes(id)
+          ? rescue.title + ": " + rescue.clue
+          : rescue.title + ": ännu inte undersökt.",
+      ),
+    );
   scene.append(
     button("Tillbaka", () => {
       panel = null;
@@ -334,6 +360,9 @@ function render() {
         : !state.flags.puzzle
           ? "Gå in i fyren. Läs inskriften och tänd de tre skålarna."
           : "Trappan är öppen. Vila och möt Signe på fyrens krön.";
+  if (state.flags.trainer && !state.flags.puzzle && state.rescued.length < 2)
+    $("objective").textContent =
+      "Sök två glödspår: norra vassen och södra stranden på Sävstigen, eller Vindryggens klipphylla.";
   $("location").textContent = maps[state.map].name;
   $("message").textContent = state.message;
   $("save").disabled = state.mode !== "world";

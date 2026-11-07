@@ -132,6 +132,7 @@ test("chapter gates, wrong bowl retry and solved puzzle persist without item req
   s.y = 5;
   assert.equal(walk(s, 0, -1), false);
   s.flags.trainer = true;
+  s.rescued = ["reed", "shore"];
   walk(s, 0, -1);
   assert.equal(s.map, "cellar");
   const bowl = (x) => {
@@ -204,4 +205,29 @@ test("every map exit and NPC has a reachable adjacent walkable tile", async () =
         id + ":" + npc.id,
       );
   }
+});
+
+test("ember rescue supports retreat and capture, rewards once, and survives legacy saves", () => {
+  const s = ready();
+  s.map = "route";
+  s.x = 10;
+  s.y = 3;
+  s.facing = [0, -1];
+  interact(s);
+  assert.equal(s.battle.rescueId, "reed");
+  battleAction(s, "flee");
+  finishBattle(s);
+  assert.deepEqual(s.rescued, []);
+  interact(s);
+  battleAction(s, "capture", undefined, () => 0);
+  assert.deepEqual(s.rescued, ["reed"]);
+  finishBattle(s);
+  const capsules = s.items.capsules;
+  interact(s);
+  assert.equal(s.mode, "world");
+  assert.equal(s.items.capsules, capsules);
+  assert.deepEqual(decodeSave(encodeSave(s)).rescued, ["reed"]);
+  const legacy = JSON.parse(encodeSave(s));
+  delete legacy.rescued;
+  assert.deepEqual(decodeSave(JSON.stringify(legacy)).rescued, []);
 });

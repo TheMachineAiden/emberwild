@@ -101,7 +101,7 @@ export const trainers = {
     flag: "rival",
     team: [["knopp", 4]],
     reward:
-      "Liv: Varelserna bär glöden mot fyren. Jag öppnar vägen till Vindryggen!",
+      "Liv: Jag öppnar Vindryggen! Undersök två glödspår längs rutterna. Varelserna där kan visa varför fyren slocknat.",
   },
   edda: {
     name: "Edda",
@@ -237,3 +237,27 @@ maps.summit = {
     { id: "beacon", label: "Fyrljus", x: 9, y: 2 },
   ],
 };
+
+export const rescues = {
+  reed: {
+    species: "vippa",
+    title: "Vassens glöd",
+    clue: "Vippa håller vingarna över en ensam gnista. När vinden lägger sig följer glöden med dig. Den behöver skydd, inte ett lås.",
+  },
+  shore: {
+    species: "daggla",
+    title: "Strandens glöd",
+    clue: "I Dagglas skal vilar en varm gnista, skyddad av dagg. Varelserna har räddat fyrens glöd från havsvinden.",
+  },
+  cliff: {
+    species: "kolkrabb",
+    title: "Klippans glöd",
+    clue: "Kolkrabb öppnar klon. Där ligger en gnista som aldrig slocknat. Fyrens ljus kan återvända om någon vågar släppa det fritt.",
+  },
+};
+maps.route.npcs.push(
+  { id: "rescue-reed", label: "Glödspår", x: 10, y: 2 },
+  { id: "rescue-shore", label: "Glödspår", x: 17, y: 10 },
+);
+maps.ridge.npcs.push({ id: "rescue-cliff", label: "Glödspår", x: 12, y: 3 });
+maps.ridge.exits.find((exit) => exit.map === "cellar").rescues = 2;

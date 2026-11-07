@@ -23,3 +23,7 @@ Keeper Signe fears the wandering embers will burn out. Her mixed team uses two c
 Starter chosen → route capture optional → Liv victory persists → ridge exit open → Edda victory persists → cellar accessible → all three bowls correctly lit → stairs open → keeper victory → beacon lit and ending available. Walking away before winning a battle or completing the bowl sequence does not falsely set the next flag. Returning after loss retains only already-earned flags. Wrong bowl input resets only the current sequence. Chapter completion does not remove healing or save controls.
 
 Session length remains a 20–30 minute design target pending timed ordinary play. Adjust encounter density, trainer teams and dialogue based on measured experience; avoid padding travel or forcing grind to meet a duration claim.
+
+## Ember rescue revision
+
+Three fixed encounters provide discoverable evidence: northern reed bed and southern shore on Sävstigen, cliff shelf on Vindryggen. Capture or defeat grants the field observation exactly once; flee/loss leaves it available and no particular species is required. The field journal lives in the team menu. Any two observations plus Edda's trust open the cellar. Completed legacy saves retain free access. These encounters add original evidence and collection opportunities before the cellar revelation; duration still needs measurement.

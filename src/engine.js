@@ -1,4 +1,4 @@
-import { species, starters, maps, trainers } from "./data.js";
+import { species, starters, maps, trainers, rescues } from "./data.js";
 export const SAVE_KEY = "emberwild.save.v1";
 export function creature(id, level = 3) {
   const base = species[id];
@@ -28,6 +28,7 @@ export function newGame() {
       puzzle: false,
       complete: false,
     },
+    rescued: [],
     bowlStep: 0,
     steps: 0,
     battle: null,
@@ -61,6 +62,11 @@ export function walk(s, dx, dy, rng = Math.random) {
     s.message = exit.locked;
     return false;
   }
+  if (exit?.rescues && !s.flags.complete && s.rescued.length < exit.rescues) {
+    s.message =
+      "Två glödspår behövs för att öppna fyren. Leta i Sävstigens norra vass och södra strand, eller på Vindryggens klipphylla.";
+    return false;
+  }
   s.x = x;
   s.y = y;
   s.steps++;
@@ -85,6 +91,21 @@ export function interact(s) {
     s.message = "Gå fram till någon och vänd dig mot dem för att prata.";
     return;
   }
+  if (npc.id.startsWith("rescue-")) {
+    const id = npc.id.slice(7),
+      rescue = rescues[id];
+    if (s.rescued.includes(id)) {
+      s.message = rescue.clue;
+      return;
+    }
+    startBattle(s, rescue.species);
+    s.battle.enemy = creature(rescue.species, 3);
+    s.battle.rescueId = id;
+    s.battle.log = [
+      `${rescue.title}: en ${species[rescue.species].name} skyddar en gnista. Lugna den genom strid eller fånga den. Du kan återvända om du flyr.`,
+    ];
+    return;
+  }
   if (npc.id === "healer" || npc.id === "rest") {
     heal(s);
     s.items.capsules = Math.max(6, s.items.capsules);
@@ -94,7 +115,7 @@ export function interact(s) {
   }
   if (npc.id === "neighbor")
     s.message =
-      "Bo: Varelserna på Sävstigen bär på glöd. Försvaga en och använd en glödkapsel. Läkaren hjälper dig gratis.";
+      "Bo: Följ glödspåren på Sävstigen och Vindryggen. Lugna eller fånga varelserna där. Försvaga dem först — läkaren hjälper dig gratis.";
   if (npc.id === "neighbor" && s.flags.complete)
     s.message =
       "Bo: Ljuset är tillbaka! Varelsernas glöd syns ända hit. Tack för att du lyssnade på dem.";
@@ -202,6 +223,15 @@ function lose(s) {
   s.message =
     "Läkaren tog hand om er. Hela laget är utvilat och väskan är påfylld. Du kan försöka igen.";
 }
+function completeRescue(s) {
+  const id = s.battle.rescueId;
+  if (!id || s.rescued.includes(id)) return;
+  s.rescued.push(id);
+  s.battle.log.push(
+    rescues[id].clue,
+    `Glödspår: ${s.rescued.length}/3. Två räcker för att öppna fyren.`,
+  );
+}
 function win(s) {
   const b = s.battle,
     c = s.team[s.active];
@@ -223,6 +253,7 @@ function win(s) {
     s.flags[trainers[b.trainerId].flag] = true;
     s.items.capsules = Math.min(9999, s.items.capsules + 3);
   }
+  completeRescue(s);
   b.result = "win";
   b.log.push(b.trainer ? trainers[b.trainerId].reward : "Ni vann striden!");
 }
@@ -274,6 +305,7 @@ export function battleAction(s, action, index, rng = Math.random) {
       s.team.push({ ...enemy, hp: Math.max(1, enemy.hp) });
       s.flags.captured = true;
       b.result = "capture";
+      completeRescue(s);
       b.log.push(`${species[enemy.species].name} ansluter till ditt lag!`);
       return true;
     }
@@ -397,6 +429,9 @@ export function decodeSave(raw) {
       puzzle: s.flags.puzzle === true,
       complete: s.flags.complete === true,
     },
+    rescued: Array.isArray(s.rescued)
+      ? [...new Set(s.rescued.filter((id) => Object.hasOwn(rescues, id)))]
+      : [],
     bowlStep: s.flags.puzzle ? 3 : validInt(s.bowlStep, 0, 2) ? s.bowlStep : 0,
     steps: s.steps,
     message: "Sparningen är inläst. Välkommen tillbaka!",
