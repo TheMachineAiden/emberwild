@@ -17,6 +17,8 @@ import {
   decodeSave,
   SAVE_KEY,
 } from "./engine.js";
+import { bindJoystick } from "./joystick.js";
+import { portraitGate, toggleFullscreen } from "./display.js";
 import { TileTravel, directionKey } from "./travel.js";
 import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
@@ -35,10 +37,13 @@ const $ = (id) => document.getElementById(id),
   canvas = $("world"),
   ctx = canvas.getContext("2d");
 let queuedInteraction = null;
+let inputSuspended = false;
+const canExplore = () => !inputSuspended && !$("game-menu").open &&
+  state.mode === "world" && !panel && !sequence.busy && worldLoaded;
 const travel = new TileTravel({
   getState: () => state,
   canMove: () =>
-    state.mode === "world" && !panel && !sequence.busy && worldLoaded,
+    canExplore(),
   draw: (pose) => {
     if (pose.progress === 0) render();
     else world();
@@ -64,6 +69,7 @@ function sceneTransition() {
   $("stage").classList.add("scene-enter");
 }
 function afterTravel(action) {
+  joystick.reset();
   travel.clear();
   if (travel.busy)
     queuedInteraction = () => {
@@ -182,9 +188,9 @@ function world() {
     py = pose?.y ?? state.y;
   const map = maps[state.map],
     inside = ["cellar", "summit"].includes(state.map);
-  const narrow = innerWidth <= 600,
-    columns = narrow ? 12 : 20,
-    rows = narrow ? 9 : 13;
+  // Keep the complete authored map in frame. Landscape side gutters give thumbs
+  // room without hiding the avatar, paths or tall beacon behind touch controls.
+  const columns = 20, rows = 13;
   canvas.width = columns * 24;
   canvas.height = rows * 24;
   const cameraX = Math.max(
@@ -660,7 +666,8 @@ function render() {
   document.body.classList.toggle("playing", state.mode !== "starter");
   document.body.classList.toggle(
     "in-menu",
-    panel !== null || state.mode === "starter",
+    panel !== null || state.mode === "starter" ||
+      (state.mode === "battle" && !state.team[state.active].hp && !sequence.busy),
   );
   document.body.classList.toggle("at-ending", state.mode === "ending");
   world();
@@ -693,18 +700,9 @@ function render() {
     state.mode !== "world" ||
     panel !== null ||
     sequence.busy ||
-    travel.busy ||
     !worldLoaded;
-  document
-    .querySelectorAll("[data-dir]")
-    .forEach(
-      (b) =>
-        (b.disabled =
-          state.mode !== "world" ||
-          panel !== null ||
-          sequence.busy ||
-          !worldLoaded),
-    );
+  $("joystick").setAttribute("aria-disabled", String(!canExplore()));
+  if (!canExplore()) joystick.reset();
   if (presentation?.kind === "loss") {
     scene.append(node("h2", "Safe at home"), node("p", state.message));
   } else if (state.mode === "starter") {
@@ -764,28 +762,59 @@ function render() {
   else if (state.mode === "battle") renderBattle();
   if (!sequence.busy && (focusKey || (!wasBattle && state.mode === "battle")))
     focusScene(focusKey);
-  if (enteringTeam)
-    scene.querySelector(".panel-heading")?.scrollIntoView({ block: "nearest" });
+  if (enteringTeam) scene.scrollTop = 0;
   scene.setAttribute("aria-busy", String(sequence.busy));
 }
-document.querySelectorAll("[data-dir]").forEach((button) => {
-  const direction = button.dataset.dir.split(",").map(Number);
-  button.addEventListener("pointerdown", (event) => {
-    if (button.disabled || event.button !== 0) return;
-    event.preventDefault();
-    button.setPointerCapture(event.pointerId);
-    travel.press(`pointer-${event.pointerId}`, direction);
-  });
-  const release = (event) => travel.release(`pointer-${event.pointerId}`);
-  button.addEventListener("pointerup", release);
-  button.addEventListener("pointercancel", release);
-  button.addEventListener("lostpointercapture", release);
-  // Keyboard activation has no pointer event; keep native accessible buttons.
-  button.addEventListener("click", (event) => {
-    if (event.detail === 0 && !button.disabled) travel.tap(direction);
-  });
+const joystick = bindJoystick($("joystick"), {
+  enabled: canExplore,
+  change: (direction) => {
+    travel.release("joystick");
+    if (direction) travel.press("joystick", direction);
+  },
 });
+function clearInput() {
+  joystick.reset();
+  travel.clear();
+  queuedInteraction = null;
+}
+function updateDisplay() {
+  clearInput();
+  inputSuspended = portraitGate(innerWidth, innerHeight,
+    matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0);
+  $("rotate-gate").hidden = !inputSuspended;
+  $("game").inert = inputSuspended;
+  if (inputSuspended && $("game-menu").open) $("game-menu").close();
+  $("fullscreen").textContent = document.fullscreenElement ? "Exit screen" : "Full screen";
+  render();
+}
+$("fullscreen").addEventListener("click", async () => {
+  clearInput();
+  const result = await toggleFullscreen(document.documentElement, document, screen.orientation);
+  $("display-status").textContent = ['denied', 'unavailable'].includes(result)
+    ? "Full screen is unavailable here. The game still fills your browser window."
+    : "";
+  if (['denied', 'unavailable'].includes(result)) {
+    $("game-menu").showModal();
+    $("menu-close").focus();
+  }
+  updateDisplay();
+});
+document.addEventListener("fullscreenchange", updateDisplay);
+$("menu-toggle").addEventListener("click", () => {
+  clearInput();
+  $("game-menu").showModal();
+  $("menu-close").focus();
+});
+$("menu-close").addEventListener("click", () => $("game-menu").close());
+$("game-menu").addEventListener("close", () => {
+  clearInput();
+  render();
+  $("menu-toggle").focus({preventScroll:true});
+});
+for (const name of ["contextmenu", "selectstart", "dragstart"])
+  $("game").addEventListener(name, (event) => event.preventDefault());
 function talk() {
+  if (!canExplore()) return;
   afterTravel(() => {
     interact(state);
     if (state.mode === "world") store();
@@ -798,16 +827,18 @@ $("interact").addEventListener("click", () => {
 });
 $("team-toggle").addEventListener("click", () => {
   if (sequence.busy) return;
+  clearInput();
   battleMenu = "commands";
   panel = panel ? null : "team";
   render();
   if (panel) focusScene();
 });
 $("save").addEventListener("click", () => {
+  $("game-menu").close();
   store(true);
   render();
 });
-$("load").addEventListener("click", load);
+$("load").addEventListener("click", () => { $("game-menu").close(); load(); });
 $("restart").addEventListener("click", () => {
   if (sequence.busy) return;
   if (
@@ -815,6 +846,8 @@ $("restart").addEventListener("click", () => {
       "Start a new adventure? Your current save will be replaced when you choose a companion.",
     )
   ) {
+    $("game-menu").close();
+    clearInput();
     state = newGame();
     panel = null;
     render();
@@ -831,7 +864,7 @@ $("sound").addEventListener("click", async () => {
 });
 document.addEventListener("visibilitychange", () => {
   music.setHidden(document.hidden);
-  if (document.hidden) travel.clear();
+  if (document.hidden) clearInput();
 });
 const directions = {
   ArrowUp: [0, -1],
@@ -846,8 +879,10 @@ const directions = {
 document.addEventListener("keyup", (event) =>
   travel.release(directionKey(event.key)),
 );
-window.addEventListener("blur", () => travel.clear());
+window.addEventListener("blur", clearInput);
 document.addEventListener("keydown", (event) => {
+  if (inputSuspended) { event.preventDefault(); return; }
+  if ($("game-menu").open) return;
   if (
     (event.key === "Enter" || event.key === " ") &&
     (event.repeat || sequence.busy)
@@ -950,4 +985,7 @@ worldReady
     render();
   });
 
-window.addEventListener("resize", () => render());
+window.addEventListener("resize", updateDisplay);
+window.visualViewport?.addEventListener("resize", updateDisplay);
+screen.orientation?.addEventListener("change", updateDisplay);
+updateDisplay();
