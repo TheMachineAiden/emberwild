@@ -52,6 +52,7 @@ function render(){
   music.setCue(cueFor(state));
   $('stage').classList.toggle('has-scene',state.mode!=='world'||panel!==null);
   document.body.classList.toggle('in-battle',state.mode==='battle');
+  document.body.classList.toggle('at-ending',state.mode==='ending');
   world();scene.replaceChildren();
   $('objective').textContent=state.flags.complete?'Fyren lyser igen. Återvänd till Glödvik eller fortsätt utforska.':!state.flags.rival?'Sök glöd på Sävstigen. Prata med Liv vid stigens östra ände.':!state.flags.trainer?'Följ vägen österut till Vindryggen. Sök upp Edda vid fyren.':!state.flags.puzzle?'Gå in i fyren. Läs inskriften och tänd de tre skålarna.':'Trappan är öppen. Vila och möt Signe på fyrens krön.';$('location').textContent=maps[state.map].name;$('message').textContent=state.message;
   $('save').disabled=state.mode!=='world';$('load').disabled=state.mode==='battle';$('team-toggle').disabled=state.mode==='starter'||state.mode==='ending';$('interact').disabled=state.mode!=='world'||panel!==null;
