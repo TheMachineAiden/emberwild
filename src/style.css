@@ -765,3 +765,16 @@ details[open] > summary.journal-row > span:first-child::before {
 .at-ending footer {
   display: none;
 }
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+#scene .panel-heading h2 {
+  margin: 0;
+}
+.panel-heading button {
+  flex-shrink: 0;
+}

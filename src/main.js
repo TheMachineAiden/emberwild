@@ -318,7 +318,8 @@ function world() {
 
 function renderTeam(inBattle = false) {
   const forced = inBattle && state.team[state.active].hp === 0;
-  scene.append(
+  const heading = node("div", null, "panel-heading");
+  heading.append(
     node(
       "h2",
       forced
@@ -328,6 +329,22 @@ function renderTeam(inBattle = false) {
           : "Your team",
     ),
   );
+  if (!forced)
+    heading.append(
+      button(
+        "Back",
+        () => {
+          panel = null;
+          battleMenu = "commands";
+          render();
+          if (state.mode === "world")
+            $("team-toggle").focus({ preventScroll: true });
+        },
+        false,
+        "back",
+      ),
+    );
+  scene.append(heading);
   if (inBattle)
     scene.append(
       node(
@@ -403,21 +420,6 @@ function renderTeam(inBattle = false) {
       scene.append(entry);
     }
   }
-  if (!forced)
-    scene.append(
-      button(
-        "Back",
-        () => {
-          panel = null;
-          battleMenu = "commands";
-          render();
-          if (state.mode === "world")
-            $("team-toggle").focus({ preventScroll: true });
-        },
-        false,
-        "back",
-      ),
-    );
 }
 function fighter(c, side) {
   const el = node("div", null, `fighter ${side}`);
@@ -490,7 +492,11 @@ async function act(action, index) {
 }
 function focusScene(key) {
   const buttons = [...scene.querySelectorAll("button:not(:disabled)")];
-  (buttons.find((b) => b.dataset.focus === key) || buttons[0])?.focus({
+  (
+    buttons.find((b) => b.dataset.focus === key) ||
+    buttons.find((b) => b.dataset.focus !== "back") ||
+    buttons[0]
+  )?.focus({
     preventScroll: true,
   });
 }
@@ -639,6 +645,8 @@ function renderBattle() {
   scene.append(actions);
 }
 function render() {
+  const enteringTeam =
+    panel === "team" && !document.body.classList.contains("in-menu");
   const focusKey = scene.contains(document.activeElement)
     ? document.activeElement.dataset.focus
     : null;
@@ -756,6 +764,8 @@ function render() {
   else if (state.mode === "battle") renderBattle();
   if (!sequence.busy && (focusKey || (!wasBattle && state.mode === "battle")))
     focusScene(focusKey);
+  if (enteringTeam)
+    scene.querySelector(".panel-heading")?.scrollIntoView({ block: "nearest" });
   scene.setAttribute("aria-busy", String(sequence.busy));
 }
 document.querySelectorAll("[data-dir]").forEach((button) => {
