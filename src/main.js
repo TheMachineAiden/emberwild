@@ -571,6 +571,7 @@ function renderBattle() {
   for (const line of b.log.slice(-2)) log.append(node("p", line));
   scene.append(log);
   const actions = node("div", null, "actions command-grid");
+  actions.classList.toggle("primary-commands", battleMenu === "commands");
   actions.setAttribute("aria-busy", String(sequence.busy));
   if (b.result && !sequence.busy) {
     actions.append(
@@ -608,20 +609,6 @@ function renderBattle() {
       ),
     );
   } else if (battleMenu === "bag") {
-    const noCapture =
-      b.trainer || !state.items.capsules || state.team.length >= 6;
-    actions.append(
-      command(
-        `Spark Vessel · ${state.items.capsules}`,
-        b.trainer
-          ? "Wild creatures only"
-          : state.team.length >= 6
-            ? "Your team is full"
-            : "Catch a creature · weaken it first",
-        () => act("capture"),
-        noCapture,
-      ),
-    );
     actions.append(
       command(
         `Mending Draught · ${state.items.tonics}`,
@@ -631,11 +618,24 @@ function renderBattle() {
       ),
     );
   } else {
+    const captureReason = b.trainer
+      ? "Wild creatures only"
+      : state.team.length >= 6
+        ? "Team full (6/6)"
+        : !state.items.capsules
+          ? "Restock with Mira"
+          : "";
     actions.append(
       command("Fight", "Choose a move", () => openBattleMenu("moves")),
       command(
+        "Catch",
+        `${quantity(state.items.capsules, "vessel")} · ${captureReason || "Weaken first"}`,
+        () => act("capture"),
+        !!captureReason,
+      ),
+      command(
         "Bag",
-        `${quantity(state.items.capsules, "vessel")} · ${quantity(state.items.tonics, "draught")}`,
+        `${quantity(state.items.tonics, "draught")} · Restore HP`,
         () => openBattleMenu("bag"),
       ),
       command(
@@ -967,6 +967,23 @@ document.addEventListener("keydown", (event) => {
       const columns = grid
         ? getComputedStyle(grid).gridTemplateColumns.split(" ").length
         : 1;
+      if (grid?.classList.contains("primary-commands") &&
+          ["ArrowDown", "ArrowUp"].includes(event.key)) {
+        // Follow visible rows, including the spanning Run button and disabled
+        // slots. Counting enabled buttons loses the grid's spatial order.
+        const rows = choices.map(button => ({button, rect: button.getBoundingClientRect()}));
+        const current = rows[index].rect;
+        const down = event.key === "ArrowDown";
+        const ahead = rows.filter(({rect}) => down
+          ? rect.top > current.top + 1 : rect.top < current.top - 1);
+        const candidates = ahead.length ? ahead : rows;
+        const top = (down ? Math.min : Math.max)(...candidates.map(({rect}) => rect.top));
+        const center = (current.left + current.right) / 2;
+        candidates.filter(({rect}) => Math.abs(rect.top - top) < 1)
+          .sort((a,b) => Math.abs((a.rect.left + a.rect.right) / 2 - center) -
+            Math.abs((b.rect.left + b.rect.right) / 2 - center))[0].button.focus();
+        return;
+      }
       const delta =
         event.key === "ArrowRight"
           ? 1
