@@ -121,7 +121,10 @@ function world() {
       0,
       Math.min(20 - columns, state.x - Math.floor(columns / 2)),
     ),
-    cameraY = Math.max(0, Math.min(13 - rows, state.y - Math.floor(rows / 2)));
+    cameraY =
+      narrow && state.map === "ridge" && state.y <= 6
+        ? 0
+        : Math.max(0, Math.min(13 - rows, state.y - Math.floor(rows / 2)));
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.imageSmoothingEnabled = false;
   ctx.translate(-cameraX * 24, -cameraY * 24);
@@ -133,7 +136,13 @@ function world() {
       let id = inside ? "floor" : "sand";
       if (tile === "#") id = inside ? "wall" : "water";
       if (tile === "T" || tile === "g") id = "ground";
-      if (tile === "H") id = map.rows[y - 1]?.[x] === "H" ? "house" : "roof";
+      if (tile === "H")
+        id =
+          state.map === "ridge"
+            ? "wall"
+            : map.rows[y - 1]?.[x] === "H"
+              ? "house"
+              : "roof";
       draw(id, x * 24, y * 24);
       if (tile === "T") draw("tree", x * 24, y * 24);
       if (tile === "g") draw("reeds", x * 24, y * 24);
@@ -343,6 +352,10 @@ function render() {
     state.mode !== "world" || panel !== null,
   );
   document.body.classList.toggle("in-battle", state.mode === "battle");
+  document.body.classList.toggle(
+    "in-menu",
+    panel !== null || state.mode === "starter",
+  );
   document.body.classList.toggle("at-ending", state.mode === "ending");
   world();
   scene.replaceChildren();

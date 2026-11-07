@@ -403,3 +403,7 @@ footer {
 .fighter.enemy .creature-sprite[data-species="daggla"] {
   transform: none;
 }
+.in-menu #message,
+.in-menu .bottom {
+  display: none;
+}
