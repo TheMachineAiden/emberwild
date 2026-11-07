@@ -808,6 +808,7 @@ $("menu-toggle").addEventListener("click", () => {
 $("menu-close").addEventListener("click", () => $("game-menu").close());
 $("game-menu").addEventListener("close", () => {
   clearInput();
+  render();
   $("menu-toggle").focus({preventScroll:true});
 });
 for (const name of ["contextmenu", "selectstart", "dragstart"])

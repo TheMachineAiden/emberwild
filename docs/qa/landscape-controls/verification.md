@@ -1,0 +1,37 @@
+# Landscape and thumb-control verification
+
+Build before final menu-resume correction:c063b8659f63a424b00db0f4f4b88a84965ce2dd at127.0.0.1:4393. The correction adds a render after the adventure dialog closes so the joystick's disabled styling follows the resumed world. It was tested on source4392. No rules, creature art, scores or save fields changed.
+
+## Ordinary input
+
+- Fresh starter→village→Sedgeway→grass→wild battle→two Bumps→Spark Vessel→Continue→team→Menu Save→reload passed with keyboard and normal button input. Wickit/Dewshell, HP16/28 and6/24, position7,5, five vessels and capture flag survived. This is a short regression loop, not a fresh complete chapter replay.
+- Ordinary element-to-element pointer drag moved village4,8→6,8; release outside the stick left the knob centered and movement stopped. Repeated after denied-fullscreen fallback and closing Back: controls resumed,4,8→6,8 then remained still. This found and verified the dialog-close correction.
+- Ordinary Talk beside Mira produced the full healing dialogue. Normal text drag across that message left no selection and scroll0,0. The full shell disables selection/callout, image drag and overscroll; internal menu/dialogue panes explicitly allow vertical touch scrolling.
+- Portrait390×844 showed only the rotation gate. ArrowRight there did not move the avatar. Landscape844×390 resumed at5,6; portrait→landscape repeated safely. Native fullscreen entered from the explicit button, exited and re-entered. Rotation while native fullscreen was active still displayed the gate because the fullscreen root includes it. Browser orientation-lock availability is not inferred from successful fullscreen.
+- A released Swedish v1 fixture was seeded, then loaded with ordinary Menu/Load. Rillfin(strila) and Brambleboar(tuvling), HP13/31 and12/28, position5,5, five vessels and capture progress were preserved; displayed names/message were English.
+- Seeded keeper approach with a strong team is explicitly diagnostic setup. Ordinary Fight/Bump commands defeated all three keeper creatures and Continue reached the ending at667×375 and separately on desktop1280×800 with reduced motion. End text and Return button fit; ordinary return/reload preserves completion. These runs do not establish chapter balance or full-journey completion time.
+
+## Pointer and platform diagnostics
+
+30 Node tests pass, including vector bounds/dead zone/cardinal direction, single pointer ownership, direction changes without lifting, stale-gesture suppression after reset, DOM capture binding, cancel/lost capture/release outside, orientation gate and fullscreen success/denied/unsupported paths. Existing battle sequencing and original-save tests remain passing.
+
+Browser integration used synthetic touch IDs with only setPointerCapture stubbed, since synthetic IDs are not native active touches. A separate action pointer during a northward step5,7→5,6 queued Talk and healed; the first gesture could not resume afterward. Cancel and lost capture stopped at6,6 and7,6 respectively, with no later movement and knob0,0. Blur stopped at6,6 and ignored the stale move. Direction changed east→south without lifting; returning to center stopped at8,7. Rotation cleared another held gesture, displayed the gate and ignored that stale ID after landscape resumed. These are labelled diagnostics, not physical multi-finger input.
+
+Denied fullscreen and an absent requestFullscreen method were separately stubbed; ordinary button clicks showed the fallback explanation in the adventure menu, Back returned to the usable viewport. The denied path exposed the stale disabled joystick styling; the corrected source passed ordinary drag afterward. No unsupported API promise rejection escaped to the console.
+
+## Rendered inventory
+
+Personally reopened retained PNGs at actual sizes:
+
+| Viewport | Retained states |
+| --- | --- |
+|844×390 touch emulation|draft-starter, draft-world-full, wide-dialogue, draft-battle-wide, moves-wide, fullteam-wide, dense-wide-expanded, ending-wide, draft-menu, fullscreen-fallback|
+|667×375 touch emulation|small-world, small-dialogue, keeper-small, draft-moves-small, fullteam-small, dense-small-expanded, ending-small|
+|1280×800 desktop, reduced motion|desktop-world, desktop-battle, desktop-fullteam, desktop-ending, desktop-summit-after-reload|
+|390×844 phone portrait|draft-portrait, fullscreen-portrait|
+
+Measured document bounds equal the viewport at844×390,667×375 and1280×800. In667×375 all six team rows fit between y123 and328; Back is y63–107. After internal journal scrolling Back remained at y59–103. Battle field and command regions fit within the stage; essential controls do not need document scrolling. Dense journal text scrolls intentionally beneath the pinned heading. Screenshots show the complete map/lantern silhouette, clear creature/HP hierarchy and readable actions; no accidental clipping, control overlap or horizontal overflow was found in the retained states. Desktop mobile-emulation mode changes reload the page; the save correctly restores world mode, which is why desktop-summit-after-reload is a world capture rather than ending text.
+
+Browser console checks after interaction and diagnostics showed no warnings/errors. Two screenshot calls returned preview_browser_unavailable; only successful captures were retained/reopened, with fresh filenames for retries.
+
+Limits:no physical iPhone or notch test, no real multi-finger or freely routed multi-segment normal gesture (the configured browser exposes element-to-element drag), no universal orientation-lock/native chrome-removal claim. Safe-area insets and dynamic viewport units are implemented and source-reviewed; emulated rectangular viewport fit does not establish notch behavior. No new listening assessment. Original full chapter evidence remains in the earlier English-polish QA; this pass targets presentation and input lifecycle.
