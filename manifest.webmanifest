@@ -1,0 +1,19 @@
+{
+  "id": "/emberwild/",
+  "name": "Emberwild · The Sheltered Flame",
+  "short_name": "Emberwild",
+  "description": "A pixel-art creature-collecting adventure on a coast of hidden sparks.",
+  "lang": "en",
+  "start_url": "/emberwild/",
+  "scope": "/emberwild/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#203239",
+  "theme_color": "#203239",
+  "icons": [
+    {"src":"assets/app/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"assets/app/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"assets/app/maskable-192.png","sizes":"192x192","type":"image/png","purpose":"maskable"},
+    {"src":"assets/app/maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}

@@ -10,6 +10,7 @@ html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; overscroll-
 body, #game, #rotate-gate {
   user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
 }
+#launch-status { position: fixed; inset: 0; z-index: 200; margin: 0; display: grid; place-items: center; padding: 24px; background: #203239; text-align: center; }
 #game {
   position: relative; width: 100%; height: 100vh; height: 100dvh;
   padding: 0; overflow: hidden; touch-action: none;
@@ -321,6 +322,34 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
 }
 .scene-enter { animation: coast-arrival 200ms ease-out; }
 @keyframes coast-arrival { from { opacity: .45; } to { opacity: 1; } }
+/* One encounter takes the whole viewport, before the familiar duel layout.
+   Individual translate preserves each sprite's authored facing transform. */
+.encounter-overlay { position: absolute; inset: 0; z-index: 7; overflow: hidden; pointer-events: none; background: #122027; }
+.encounter-world { width: 100%; height: 100%; image-rendering: pixelated; animation: encounter-turn var(--takeover-ms) cubic-bezier(.55,.05,.8,.55) both; }
+.encounter-overlay::after {
+  content: ''; position: absolute; width: 180vmax; height: 180vmax;
+  left: calc(50% - 90vmax); top: calc(50% - 90vmax);
+  background: conic-gradient(from 30deg, #122027 0deg 50deg, transparent 50deg 90deg, #284744 90deg 140deg, transparent 140deg 180deg, #122027 180deg 230deg, transparent 230deg 270deg, #284744 270deg 320deg, transparent 320deg);
+  animation: encounter-spiral var(--takeover-ms) ease-in both;
+}
+.encounter-overlay[data-phase="entrances"] { animation: encounter-reveal 140ms ease-out both; }
+[data-entry="takeover"] #scene { visibility: hidden; }
+[data-entry] #scene .actions, [data-entry] #scene .battle-log { visibility: hidden; }
+[data-entry="entrances"] .battlefield { overflow: hidden; }
+[data-entry="entrances"] .fighter.ally .creature-sprite { animation: encounter-ally var(--entrance-ms) cubic-bezier(.2,.65,.3,1) both; }
+[data-entry="entrances"] .fighter.enemy .creature-sprite { animation: encounter-enemy var(--entrance-ms) cubic-bezier(.2,.65,.3,1) both; }
+[data-entry="entrances"] .fighter .stats { animation: encounter-stats var(--entrance-ms) linear both; }
+@keyframes encounter-turn { from { transform: scale(1) rotate(0); } to { transform: scale(.08) rotate(210deg); opacity: 0; } }
+@keyframes encounter-spiral { from { transform: rotate(0) scale(.15); opacity: .25; } to { transform: rotate(240deg) scale(1.2); opacity: 1; } }
+@keyframes encounter-reveal { to { opacity: 0; visibility: hidden; } }
+@keyframes encounter-ally { from { translate: -180% 0; } to { translate: 0 0; } }
+@keyframes encounter-enemy { from { translate: 180% 0; } to { translate: 0 0; } }
+@keyframes encounter-stats { 0%, 35% { opacity: 0; } 75%, 100% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .encounter-overlay::after { display: none; }
+  .encounter-world { animation: encounter-reveal 140ms ease-out both !important; }
+  .encounter-overlay[data-phase="entrances"] { opacity: 0; visibility: hidden; }
+  [data-entry="entrances"] .fighter { animation: encounter-fade 140ms ease-out both !important; }
 }
+@keyframes encounter-fade { from { opacity: 0; } to { opacity: 1; } }

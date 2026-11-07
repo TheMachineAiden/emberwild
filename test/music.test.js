@@ -133,3 +133,85 @@ test("gesture start, cue replacement, hide/resume and mute retire voices after a
     globalThis.AudioContext = previous;
   }
 });
+
+test("encounter opening, exact loop clocks and interruptions never replay the warning", async () => {
+  const oldSet = globalThis.setTimeout, oldClear = globalThis.clearTimeout;
+  const timers = new Map(), voices = [], gains = [];
+  let timerId = 0;
+  const param = () => ({value:1, setValueAtTime(){}, linearRampToValueAtTime(){}, cancelScheduledValues(){}});
+  const context = {
+    currentTime:10, destination:{},
+    createGain() { const g = {gain:param(),connect(){},disconnect(){}}; gains.push(g); return g; },
+    createOscillator() { const v = {frequency:{}, connect(){},disconnect(){}, start(at){this.at=at;},stop(at){this.end=at;}}; voices.push(v); return v; },
+  };
+  globalThis.setTimeout = (fn,ms) => {timers.set(++timerId,{fn,ms});return timerId;};
+  globalThis.clearTimeout = id => timers.delete(id);
+  const music = new Music();
+  try {
+    music.context = context;
+    music.setCue("battle", {intro:true});
+    assert.equal(voices.length,0); // Sound off schedules nothing, including the opening.
+    music.enabled = true;
+    music.play();
+    const a4 = 440, e5 = 440 * 2 ** (7/12);
+    assert.equal(voices[0].frequency.value,a4); // Late enable starts the main section.
+    music.setCue("route");
+    const before = voices.length;
+    music.setCue("battle", {intro:true});
+    const entry = voices.slice(before);
+    assert.equal(entry[0].frequency.value,e5);
+    assert.equal(entry[0].at,10.04);
+    assert.ok(entry.some(v => v.frequency.value === a4 && Math.abs(v.at-11.24)<1e-9));
+    const bus = music.bus, count = voices.length;
+    music.setCue("battle", {intro:true});
+    assert.equal(voices.length,count); // Command renders do not retrigger.
+    for (let cycle=0; cycle<2; cycle++) {
+      const timer = timers.get(music.timer);
+      const previousCount = voices.length;
+      context.currentTime = 10.04 + (35 + cycle*32)*0.4 - 0.15;
+      timer.fn();
+      assert.equal(music.bus,bus); // No track/bus restart at the join or repeat.
+      const next = voices[previousCount];
+      assert.equal(next.frequency.value,a4);
+      assert.ok(Math.abs(next.at-(10.04+(35+cycle*32)*0.4))<1e-9);
+    }
+    music.setHidden(true);
+    assert.equal(music.nodes.size,0);
+    music.setHidden(false);
+    assert.equal(voices.at(-eventsFor(scores.battle,{includeIntro:false}).length).frequency.value,a4);
+    music.setCue("route");
+    music.setCue("boss", {intro:true});
+    const openingBus = music.bus;
+    music.finishIntro(true);
+    assert.notEqual(music.bus,openingBus);
+    assert.equal(voices.at(-eventsFor(scores.boss,{includeIntro:false}).length).frequency.value,a4);
+    music.setCue("capture");
+    assert.equal(music.timer,null);
+    assert.equal(await music.toggle(),false);
+    assert.equal(music.nodes.size,0);
+  } finally {
+    music.stop();
+    globalThis.setTimeout = oldSet;
+    globalThis.clearTimeout = oldClear;
+  }
+});
+
+test("intro and two-loop event spans retain three monophonic channels, release gaps and musical joins", () => {
+  for (const name of ["battle","boss"]) {
+    const cue = scores[name], events = eventsFor(cue,{loops:3});
+    const ends = {};
+    for (const event of events) {
+      assert.ok(event.beat >= (ends[event.part] || 0));
+      ends[event.part] = event.beat + event.duration;
+      assert.ok(event.duration*60/cue.bpm > 0.04);
+    }
+    assert.equal(cue.intro.beats,cue.loopStart);
+    for (const boundary of [3,35,67]) {
+      const leadBefore = events.filter(e => e.part==='lead' && e.beat<boundary).at(-1);
+      const leadAfter = events.find(e => e.part==='lead' && e.beat===boundary);
+      assert.equal(leadBefore.note,'G#4');
+      assert.equal(leadAfter.note,'A4');
+      assert.equal(events.find(e => e.part==='bass' && e.beat===boundary).note,'A2');
+    }
+  }
+});
