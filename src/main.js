@@ -1,6 +1,8 @@
+import {Music,cueFor} from './audio.js';
 import {species,starters,typeNames,typedMoves,maps} from './data.js';
 import {newGame,chooseStarter,walk,interact,battleAction,finishBattle,encodeSave,decodeSave,SAVE_KEY} from './engine.js';
 let state=newGame(),panel=null;
+const music=new Music();
 const $=id=>document.getElementById(id),scene=$('scene'),canvas=$('world'),ctx=canvas.getContext('2d');
 function node(tag,text,className){const el=document.createElement(tag);if(text)el.textContent=text;if(className)el.className=className;return el;}
 function button(text,fn,disabled=false){const el=node('button',text);el.type='button';el.disabled=disabled;el.addEventListener('click',fn);return el;}
@@ -47,6 +49,7 @@ function renderBattle(){
   scene.append(actions);
 }
 function render(){
+  music.setCue(cueFor(state));
   $('stage').classList.toggle('has-scene',state.mode!=='world'||panel!==null);
   document.body.classList.toggle('in-battle',state.mode==='battle');
   world();scene.replaceChildren();
@@ -64,6 +67,8 @@ function move(dx,dy){if(panel)return;const previousMap=state.map;walk(state,dx,d
 document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>move(...b.dataset.dir.split(',').map(Number))));
 $('interact').addEventListener('click',()=>{interact(state);if(state.mode==='world')store();render();});
 $('team-toggle').addEventListener('click',()=>{panel=panel?null:'team';render();});$('save').addEventListener('click',()=>{store(true);render();});$('load').addEventListener('click',load);
+$('sound').addEventListener('click',async()=>{try{const enabled=await music.toggle();$('sound').textContent=enabled?'Ljud på':'Ljud av';$('sound').setAttribute('aria-pressed',String(enabled));}catch{$('sound').textContent='Ljud saknas';}});
+document.addEventListener('visibilitychange',()=>music.setHidden(document.hidden));
 let lastMove=0;
 document.addEventListener('keydown',event=>{
   // Preserve native activation and tab navigation in all menus.
