@@ -1,0 +1,2321 @@
+{
+  "battle": {
+    "seconds": 26.9,
+    "sampleRate": 44100,
+    "peak": 0.10409926623106003,
+    "rms": 0.03940462458522686,
+    "bpm": 150,
+    "loopStart": 3,
+    "events": [
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 0,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 0,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 0.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 1,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 1,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "B4",
+        "beat": 1,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 1.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 1.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 2,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 2,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G#4",
+        "beat": 2.5,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 2.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 3,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 3,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 3.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 4,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 4,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 4.5,
+        "duration": 1.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 4.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 5,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 6,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 6,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 6.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 7,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 7,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 7.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 8,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 8,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C4",
+        "beat": 8.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 9,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 9,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 10,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 10,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 10.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 11,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 11,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 11.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 12,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 12,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 12.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 12.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 13,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 13,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 14,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 14,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 15,
+        "duration": 1.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 15,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 16,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 16.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 17,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 17,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 18,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 18,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 18.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 19,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 19,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 20,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 20,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 20.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "F3",
+        "beat": 20.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 21,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 21,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 22,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 22,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 23,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 23,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 23.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 24,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 24,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 25,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 25,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 25.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 26,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 26,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 26.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 27,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 27,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 27.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 28,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 28,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 28.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "B5",
+        "beat": 29,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 29,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 30,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 30,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 31,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 31,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 32,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 32,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 33,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 33,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 33.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G#4",
+        "beat": 34,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 34,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 34,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 34.5,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "B3",
+        "beat": 34.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 35,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 35,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 35.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 36,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 36,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 36.5,
+        "duration": 1.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 36.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 37,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 38,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 38,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 38.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 39,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 39,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 39.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 40,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 40,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C4",
+        "beat": 40.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 41,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 41,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 42,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 42,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 42.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 43,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 43,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 43.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 44,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 44,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 44.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 44.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 45,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 45,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 46,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 46,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 47,
+        "duration": 1.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 47,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 48,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 48.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 49,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 49,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 50,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 50,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 50.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 51,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 51,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 52,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 52,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 52.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "F3",
+        "beat": 52.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 53,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 53,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 54,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 54,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 55,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 55,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 55.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 56,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 56,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 57,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 57,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 57.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 58,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 58,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 58.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 59,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 59,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 59.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 60,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 60,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 60.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "B5",
+        "beat": 61,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 61,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 62,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 62,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 63,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 63,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 64,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 64,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 65,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 65,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 65.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G#4",
+        "beat": 66,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 66,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 66,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 66.5,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "B3",
+        "beat": 66.5,
+        "duration": 0.5
+      }
+    ],
+    "wavSha256": "854df7c38d3bed3ff8b566ccd93e3a569cfc17aa715484aa15f12ed33c498592",
+    "wavFrames": 1186290,
+    "wavChannels": 1,
+    "wavSampleWidth": 2
+  },
+  "boss": {
+    "seconds": 25.22501133786848,
+    "sampleRate": 44100,
+    "peak": 0.10584157705307007,
+    "rms": 0.03895927337882117,
+    "bpm": 160,
+    "loopStart": 3,
+    "events": [
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 0,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 0,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 0.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 0.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 1,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 1,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "B4",
+        "beat": 1,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 1.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 1.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 2,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 2,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G#4",
+        "beat": 2.5,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 2.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 3,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 3,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 3.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 3.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 4,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 4,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 4.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 5,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 5.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 6,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 6,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "A4",
+        "beat": 6.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 7,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 7,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 7.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 8,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C4",
+        "beat": 8,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 8.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 9,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 9,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 9.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 10,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 10,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 10.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 11,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 11,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 11.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 11.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 12,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "F3",
+        "beat": 12,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 12.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 13,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 13,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 13.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 14,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 14,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 15,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 15,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 16,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 16,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 16.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G#5",
+        "beat": 17,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 17,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 18,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "B4",
+        "beat": 18,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E5",
+        "beat": 18.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 19,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 19,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 19.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 20,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "D4",
+        "beat": 20,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 20.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 21,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 21,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 21.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 22,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F3",
+        "beat": 22,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 23,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 23,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 23.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 24,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 24,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 24.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 25,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 25,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 25.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 26,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 26,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "A4",
+        "beat": 26.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 27,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 27,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 27.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 27.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 28,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 28,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B5",
+        "beat": 29,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 29,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 29.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 30,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 30,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 31,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 31,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 32,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 32,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 32.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 33,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 33,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 33.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G#4",
+        "beat": 34,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 34,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 34,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "B3",
+        "beat": 34.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 35,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 35,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 35.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 35.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 36,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 36,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 36.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 37,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 37,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 37.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 38,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 38,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "A4",
+        "beat": 38.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 39,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 39,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 39.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 40,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C4",
+        "beat": 40,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 40.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 41,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 41,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 41.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 42,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "G4",
+        "beat": 42,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 42.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 43,
+        "duration": 0.75
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 43,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 43.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 43.75,
+        "duration": 0.25
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 44,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "F3",
+        "beat": 44,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 44.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A4",
+        "beat": 45,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 45,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 45.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 46,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 46,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 47,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 47,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 48,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 48,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 48.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G#5",
+        "beat": 49,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 49,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 50,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "B4",
+        "beat": 50,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "E5",
+        "beat": 50.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 51,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 51,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 51.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 52,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "D4",
+        "beat": 52,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 52.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "F5",
+        "beat": 53,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 53,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 53.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 54,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F3",
+        "beat": 54,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 55,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 55,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 55.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "C5",
+        "beat": 56,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A3",
+        "beat": 56,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 56.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 57,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 57,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "A2",
+        "beat": 57.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "C3",
+        "beat": 58,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 58,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "A4",
+        "beat": 58.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 59,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 59,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 59.5,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 59.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 60,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "G3",
+        "beat": 60,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B5",
+        "beat": 61,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "D3",
+        "beat": 61,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "G2",
+        "beat": 61.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "A5",
+        "beat": 62,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "F2",
+        "beat": 62,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "G5",
+        "beat": 63,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "E2",
+        "beat": 63,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "E5",
+        "beat": 64,
+        "duration": 1
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 64,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 64.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "D5",
+        "beat": 65,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "B2",
+        "beat": 65,
+        "duration": 1
+      },
+      {
+        "part": "lead",
+        "note": "B4",
+        "beat": 65.5,
+        "duration": 0.5
+      },
+      {
+        "part": "lead",
+        "note": "G#4",
+        "beat": 66,
+        "duration": 0.5
+      },
+      {
+        "part": "bass",
+        "note": "E3",
+        "beat": 66,
+        "duration": 1
+      },
+      {
+        "part": "answer",
+        "note": "E4",
+        "beat": 66,
+        "duration": 0.5
+      },
+      {
+        "part": "answer",
+        "note": "B3",
+        "beat": 66.5,
+        "duration": 0.5
+      }
+    ],
+    "wavSha256": "eb96e1e6856a0dd2ccd9cbef94524b629c8d5cc1e7905134e198cfbf1a19780e",
+    "wavFrames": 1112423,
+    "wavChannels": 1,
+    "wavSampleWidth": 2
+  },
+  "sourceHashes": {
+    "music/scores.js": "210962018b8f912ce6f75ddd82ce91dda9a4219838a90c1e02d726b2b723378b",
+    "src/audio.js": "8a2498ed9a4bf6f86baaa2779127f6cae365f5ad5ce89ad9da2fceb5186b3eff",
+    "scripts/export-music-browser.js": "dbd56ecf09b4872264aec805aec4aa89ec88af4e3ecd5be92c8292d04440b39e"
+  }
+}

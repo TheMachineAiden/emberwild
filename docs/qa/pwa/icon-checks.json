@@ -1,0 +1,56 @@
+{
+  "apple-touch-icon.png": {
+    "size": [
+      180,
+      180
+    ],
+    "mode": "RGB",
+    "warmFeatureMaxRadius": 0.482870148432178,
+    "sha256": "708da83f6ede3e2e1da029a162e6b5c730a63631230d9e6ecd0399241e52a723"
+  },
+  "favicon-32.png": {
+    "size": [
+      32,
+      32
+    ],
+    "mode": "RGB",
+    "warmFeatureMaxRadius": 0.4661385590680093,
+    "sha256": "0f459684b0dd4616bd905f748867f441ba34312e246d7a5eaab704954a3096ea"
+  },
+  "icon-192.png": {
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGB",
+    "warmFeatureMaxRadius": 0.48284649062299756,
+    "sha256": "848f9da4d48f4e82d49691bfd3e806372f30b6fc267ecde91af232e17b6a0349"
+  },
+  "icon-512.png": {
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGB",
+    "warmFeatureMaxRadius": 0.48426669971225084,
+    "sha256": "213051849b2bbac812ade2518d68fdcdb55537c4a6900750e1db94b4dcb97e8b"
+  },
+  "maskable-192.png": {
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGB",
+    "warmFeatureMaxRadius": 0.36727060229822367,
+    "sha256": "b9c121fdcf29748d663cd3a5f68e3e7114e76b2272cf771d84c3ceabaa2aa6b9"
+  },
+  "maskable-512.png": {
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGB",
+    "warmFeatureMaxRadius": 0.3674393459792144,
+    "sha256": "211322f423fc53dcac32e41fe42543021b4b540cd745db2417eb773d15e9fe9b"
+  }
+}

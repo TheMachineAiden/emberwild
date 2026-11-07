@@ -1,0 +1,26 @@
+# Emberwild installable/offline build
+
+Baseline:9ef1c12a6e37a597ada5a339bc564e18a507748c. The Catch release is already merged and verified; its source, runtime bundles, rollback and public smoke evidence remain intact. This pass adds installation/offline support and a coordinated audiovisual battle entrance to the existing static game, without game-rule, chapter or save changes. The encounter brief and exact-score exports are in ../encounter/.
+
+## Current platform evidence
+
+- [MDN installability](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable): manifest name,192/512 icons,start URL and standalone display support browser installation promotion; HTTPS/loopback is required. Installation UI is browser-dependent.
+- [MDN icon guidance](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/How_to/Define_app_icons): maskable artwork needs an opaque full background; essential details belong within the central80%-diameter safe circle. PNG variants and an apple-touch-icon will be retained with their source.
+- [Service worker lifecycle](https://web.dev/articles/service-worker-lifecycle): an installed update normally waits for controlled windows to close. Refresh alone may keep the old controller. Avoid skipWaiting/client claiming during an adventure.
+- [MDN install prompt](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeinstallprompt_event): limited availability; use a real deferred prompt only from a button, with ordinary browser-menu guidance as fallback.
+- [WebKit storage evidence](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/): Safari web-app creation does not universally copy localStorage from the browser. The Menu therefore explains that browser/app saves may be separate; no migration promise is made.
+
+## Build and update contract
+
+Manifest id/scope/start_url are /emberwild/, display standalone, landscape preference, English identity and existing dark-teal palette. Main remains the same game module. Build-generated URLs qualify JS/CSS/music by exact revision. Legacy module/stylesheet aliases and artwork URLs stay available for cached pre-PWA HTML and already-open adventures; the new entry uses only revision-qualified code. A generated worker verifies every runtime byte before publishing its revision cache. Cache lookup pins that complete build; missing known entries fail explicitly instead of falling through to a newer server version. Cleanup targets only the Emberwild namespace for this scope, never localStorage or other apps.
+
+A small launch module prepares the first offline package before game/save code starts, then performs the initial control reload if needed. This avoids an uncontrolled first adventure being stranded across a later deployment. Once play starts, updates never force reload or skip waiting. Menu status explains Save→close all Emberwild windows→reopen when an update is ready. The source preview remains an ordinary page; PWA QA uses a clean built game mounted at the actual /emberwild/ subpath.
+
+## Finite QA inventory
+
+1. Real manifest URLs/MIME, standard and maskable192/512 PNGs,apple180,favicon32; dimensions, opacity, safe masks and small-size silhouette. Distinctive subject tied to the existing creature/coastal-beacon world. The Wickit ember-tail emblem is authored and personally inspected at32/48/192px and circle/squircle masks. assets/source/app retains its master; export-app-icons.py reproduces six opaque PNGs. icon-checks.json records dimensions/hashes and warm-feature radii below.368 of the maskable side (safe-circle radius.4). The mask board also verifies the dark outline visually.
+2. Build inventory hashes every runtime resource and excludes artwork sources/docs. Worker scope and unrelated-cache preservation.49 tests currently pass, including four build/worker checks and real icon PNG dimensions/opacity checks; these use labelled fixtures rather than claiming actual browser offline coverage.
+3. First successful online visit becomes controlled before starting; disable network and cold reload. Normal travel, battle/Catch, Team and Save/reload must work. Test landscape, portrait gate, Menu/install help and desktop fit.
+4. Cache actual buildA, continue an adventure while online host changes to buildB, observe waiting update without reload/mixed code; Save, leave all scoped windows and reopenB. Check preserved save, version-qualified module URLs and offlineB reload. Unit checks separately cover corrupt/missing package rejection.
+5. Installation prompt/fallback and actual standalone view where tools support it. The current browser capability inventory exposes neither app-window installation nor display-mode emulation. Responsive gameplay and real install prompt/fallback, manifest and worker inspection are supported; actual installed-window verification is unavailable in this environment. This is a documented evidence limit, not a substitute claim based on fullscreen or CSS. CSS/matchMedia stubs will not count as installed-app evidence. Physical iPhone installation remains outside emulation coverage.
+6. Exact clean PR build and icon review before authorized merge/Pages deployment. Verify public manifest/icons/worker identity, scoped offline reload and existing v1 save compatibility. Stop after this finite outcome.
