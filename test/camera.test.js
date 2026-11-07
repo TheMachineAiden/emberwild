@@ -30,3 +30,13 @@ test('dialogue shifts the avatar above the paused conversation overlay', () => {
     assert.ok(center+24<height*.56-16,'avatar clears the tallest conversation pane');
   }
 });
+
+test('landmark approach reveals the crown without snapping between tiles', () => {
+  assert.equal(worldCamera(667,375,9,5,{touch:true,landmarkTop:1}).y,0);
+  let previous=worldCamera(667,375,9,5,{touch:true,landmarkTop:1}).y;
+  for(let y=5.1;y<=7.01;y+=.1) {
+    const next=worldCamera(667,375,9,y,{touch:true,landmarkTop:1}).y;
+    assert.ok(Math.abs(next-previous)<=8); previous=next;
+  }
+  assert.ok(worldCamera(667,375,9,5,{touch:true,landmarkTop:1,dialogue:true}).y>0);
+});

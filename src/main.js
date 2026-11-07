@@ -26,6 +26,7 @@ import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 let state = newGame(),
   panel = null,
   dialogue = null;
+const SAVE_FAILURE_MESSAGE = "Could not save on this device. Check your browser storage settings. You can keep playing.";
 const music = new Music();
 const sequence = new BattleSequence();
 let battleMenu = "commands",
@@ -109,13 +110,13 @@ function marker(id, pose = "front") {
 function store(announce = false) {
   try {
     localStorage.setItem(SAVE_KEY, encodeSave(state));
+    if (dialogue === SAVE_FAILURE_MESSAGE) dialogue = null;
     if (announce) {
       state.message = "Saved on this device.";
       $("display-status").textContent = state.message;
     }
   } catch {
-    state.message =
-      "Could not save on this device. Check your browser storage settings. You can keep playing.";
+    state.message = SAVE_FAILURE_MESSAGE;
     $("display-status").textContent = state.message;
     if (state.mode === "world") dialogue = state.message;
     else if (!$("game-menu").open) $("game-menu").showModal();
@@ -202,6 +203,7 @@ function world() {
   const camera = worldCamera($("stage").clientWidth, $("stage").clientHeight, px, py, {
     touch: matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0,
     dialogue: !!dialogue,
+    landmarkTop: state.map === "summit" ? 1 : state.map === "ridge" ? Math.min(1, Math.max(0, (px - 10) / 3)) : 0,
   });
   const cameraX = camera.x / 24, cameraY = camera.y / 24,
     columns = camera.width / 24;

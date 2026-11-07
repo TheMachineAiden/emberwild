@@ -47,6 +47,7 @@ img, canvas { -webkit-user-drag: none; }
 #scene h2 { padding-right: 80px; margin: 0 0 12px; color: #f4ce81; font-size: 1.15rem; }
 #scene h3 { font-size: 1rem; color: #f4ce81; margin: 20px 0 6px; }
 #scene p { line-height: 1.55; }
+#scene > h2 + p { padding-right: 80px; }
 .has-scene #world { visibility: hidden; }
 #dialogue {
   position: absolute; z-index: 5;

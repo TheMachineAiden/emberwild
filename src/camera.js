@@ -3,7 +3,7 @@ const clamp = (n, low, high) => Math.min(high, Math.max(low, n));
 // Logical world pixels keep the authored 24px tiles at an approximately integer
 // display scale. The camera may show a little authored boundary terrain beyond
 // the collision map to keep a cornered avatar clear of the touch controls.
-export function worldCamera(width, height, playerX, playerY, { mapWidth = 480, mapHeight = 312, touch = false, dialogue = false } = {}) {
+export function worldCamera(width, height, playerX, playerY, { mapWidth = 480, mapHeight = 312, touch = false, dialogue = false, landmarkTop = 0 } = {}) {
   const scale = Math.max(2, Math.ceil(width / mapWidth), Math.ceil(height / mapHeight));
   const viewWidth = Math.ceil(width / scale), viewHeight = Math.ceil(height / scale);
   const actorX = playerX * 24 + 12, actorY = playerY * 24 + 12;
@@ -14,5 +14,8 @@ export function worldCamera(width, height, playerX, playerY, { mapWidth = 480, m
   const screenX = (actorX - x) * scale, screenY = (actorY - y) * scale;
   x += (screenX - clamp(screenX, side, width - side)) / scale;
   y += (screenY - clamp(screenY, top, Math.max(top, height - bottom))) / scale;
+  // Approach framing reveals the beacon/tower crown gradually. Dialogue uses
+  // its own actor clearance, and ordinary travel retains the following camera.
+  if (!dialogue) y *= 1 - clamp((7 - playerY) / 2, 0, 1) * landmarkTop;
   return { x: Math.round(x), y: Math.round(y), width: viewWidth, height: viewHeight, scale };
 }
