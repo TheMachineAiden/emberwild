@@ -252,7 +252,15 @@ function win(s) {
   b.result = "win";
   b.log.push(b.trainer ? trainers[b.trainerId].reward : "Ni vann striden!");
 }
-export function battleAction(s, action, index, rng = Math.random) {
+export function battleAction(
+  s,
+  action,
+  index,
+  rng = Math.random,
+  onFrame = () => {},
+) {
+  const emit = (kind, details = {}) =>
+    onFrame({ kind, ...details, state: structuredClone(s) });
   if (s.mode !== "battle" || s.battle.result) return false;
   const b = s.battle,
     enemy = b.enemy;
@@ -268,14 +276,17 @@ export function battleAction(s, action, index, rng = Math.random) {
     b.log.push(
       `${species[c.species].name} gör ${damage} skada.${mult > 1 ? " Mycket effektivt!" : mult < 1 ? " Svag effekt." : ""}`,
     );
+    emit("player-hit", { actor: "ally", target: "enemy", damage, mult });
     if (enemy.hp === 0) {
       win(s);
+      emit(b.result ? "victory" : "sendout", { actor: "enemy" });
       return true;
     }
   } else if (action === "guard") {
     b.guard = true;
     b.log.push("Du tar skydd och samlar kraft.");
     c.hp = Math.min(c.maxHp, c.hp + 3);
+    emit("guard", { actor: "ally" });
   } else if (action === "tonic") {
     if (!s.items.tonics || c.hp === c.maxHp) {
       b.log = ["Ingen brygd behövs, eller så är de slut."];
@@ -284,6 +295,7 @@ export function battleAction(s, action, index, rng = Math.random) {
     s.items.tonics--;
     c.hp = Math.min(c.maxHp, c.hp + 22);
     b.log.push("Läkebrygden återställer upp till 22 HP.");
+    emit("heal", { actor: "ally", target: "ally" });
   } else if (action === "capture") {
     if (b.trainer || s.team.length >= 6 || !s.items.capsules) {
       b.log = [
@@ -302,9 +314,11 @@ export function battleAction(s, action, index, rng = Math.random) {
       b.result = "capture";
       completeRescue(s);
       b.log.push(`${species[enemy.species].name} ansluter till ditt lag!`);
+      emit("capture", { target: "enemy" });
       return true;
     }
     b.log.push("Varelsen tog sig ur kapseln. Försvaga den mer!");
+    emit("capture-miss", { target: "enemy" });
   } else if (action === "switch") {
     if (
       !Number.isInteger(index) ||
@@ -318,6 +332,7 @@ export function battleAction(s, action, index, rng = Math.random) {
     s.active = index;
     c = s.team[index];
     b.log.push(`${species[c.species].name}, din tur!`);
+    emit("switch", { actor: "ally" });
     if (mustSwitch) return true;
   } else if (action === "flee") {
     if (b.trainer) {
@@ -328,17 +343,21 @@ export function battleAction(s, action, index, rng = Math.random) {
     }
     b.result = "flee";
     b.log.push("Ni kommer undan utan problem.");
+    emit("flee");
     return true;
   } else return false;
   const { damage } = hit(enemy, c, rng() > 0.35, b.guard);
   b.guard = false;
   b.log.push(`${species[enemy.species].name} svarar: ${damage} skada.`);
+  emit("enemy-hit", { actor: "enemy", target: "ally", damage });
   if (c.hp === 0) {
     if (s.team.every((m) => m.hp === 0)) {
       lose(s);
+      emit("loss", { target: "ally" });
       return true;
     }
     b.log.push("Din följeslagare behöver vila. Välj en annan i laget.");
+    emit("faint", { target: "ally" });
   }
   return true;
 }

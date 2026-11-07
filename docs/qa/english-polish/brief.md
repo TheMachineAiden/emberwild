@@ -1,0 +1,11 @@
+# English chapter and battle interaction
+
+Baseline: released revision3c9f26c133b6e08171554a080c9dcadc3dda0cc2. Retained `before-mobile-battle.png` from normal-input approach to Liv in the live release,390×844. The original scene applies the attack and reply together, has seven equally weighted commands, and provides no move-effect information. Preserve original raster identity, readable HP, brisk turns, free recovery and chapter content.
+
+New presentation: Fight / Bag / Team / Run command groups; move names, types and useful effect information; consistent Back/Escape and arrow-key navigation; explicit focused command on entry and return. Separate player effect, enemy response, faint/replacement, capture and result feedback. Inputs are locked throughout resolution, with reduced-motion timings and brief targeted effects. No animation is allowed to change battle rules or reroll randomness.
+
+Planning uses the existing rules on a copy and captures snapshots at real effect boundaries. The sequence player reveals those snapshots in order. Saving remains outside battles. The version1 save key, map/species IDs and progress fields stay stable; the fixture in `test/fixtures/swedish-v1-save.json` records a released-format save for regression checks.
+
+English display direction: Emberhaven, Reedpath, Windward Ridge, Lighthouse Cellar, Lantern Room. Emberkit(glimra), Rillfin(strila), Spriglet(knopp), Lunamoth(vippa), Cinderclaw(kolkrabb), Brambleboar(tuvling), Dewshell(daggla), Dawncrest(ljuskron). NPC proper names remain Liv, Edda, Signe and Bo. Items: Ember Capsule and Healing Tonic. Existing internal type IDs remain ember/tide/moss/wind/neutral. Adapt dialogue naturally and keep the creatures-sheltering-light payoff.
+
+Verification inventory: old save load; English starter/world/story/ending/accessibility text; desktop and narrow touch battle/capture/team/save/reload; rapid input during each resolution phase; item use; capture miss/success; defeat and forced replacement; back/cancel; exit and focus restoration; reduced motion; console errors. Targeted tests establish ordering and state compatibility; normal-input evidence establishes the actual interaction. Retain matched rendered before/after states.
