@@ -1,0 +1,73 @@
+# Prototype verification inventory
+
+Target: local development server, port 4387. Rule tests cover state transitions separately from browser input. Temporary geometry is not final art acceptance.
+
+| State/control | Functional evidence needed | Rendered evidence needed |
+| --- | --- | --- |
+| Starter | Three choices; select once | Desktop and narrow touch layout |
+| Walking | Arrow/WASD and touch buttons, collision, route transition | World and location label |
+| Interaction | Neighbor guidance and free healer | Dialogue readability |
+| Battle | Neutral/typed attack, guard, item, capture, switch, flee | HP, logs and menu fit |
+| Team | Updated after capture, change active, close/reopen | Long team and fainted member |
+| Save/load | Save, reload browser, load same team and position | Feedback and restored scene |
+| Rival | Invalid capture/flee, victory persists | Trainer identity and result |
+| Loss | Return healed to village, retry supplies | Clear recovery message |
+| Exploratory | Blocked movement; unavailable/malformed save | No broken or misleading state |
+
+Initial rule suite: 7 passing tests. JavaScript syntax, map dimensions, HTML/module/CSS HTTP responses pass. Hidden `.git` paths return 404. Ordinary-input, viewport and visual results are recorded below as performed; unrecorded inventory entries remain unverified.
+
+## Ordinary-input pass
+
+Desktop Chrome: chose Glimra, walked east with arrow keys to Sävstigen, entered grass and encountered Tuvling. A typed attack reduced its HP from 28 to 14 with effective-type feedback and one enemy response (Glimra 28 → 23). A capsule captured Tuvling; the result allowed only Continue. The team menu listed Glimra and Tuvling with their current HP. Escape closed the menu. Save → browser reload → Load restored route position 5,5 and the captured team. Walked back to Glödvik and interacted with the healer at position 5,6; full recovery and replenishment feedback appeared. No console warnings/errors during the pass.
+
+Narrow touch emulation (390×844): changing device mode reloaded the page; Load restored the village save. All direction controls measured 48×44 CSS pixels and the interaction control 200×44; document width was 390 (no horizontal document overflow). Touch-control movement was checked separately. These metrics do not establish visual acceptance. Screenshots, dense battle fit, full mobile loop, rival and exploratory cases remain pending.
+
+## Visual mobile review and correction
+
+Retained `screenshots/mobile-world.png`, `mobile-battle-before.png` and `mobile-battle-fixed.png`, each reopened from the workspace. World: readable controls and feedback; tiny generic world markers require final art/camera work. Battle before fix: only two actions visible; internal scene scroll height 512 exceeded its 352px box and hid essential actions. Corrected scene layout to intrinsic document flow and removed disabled exploration controls during battle. At 390×844, revised battle shows all seven actions, both HP displays and log; scene client/scroll heights both 512, last button bottom 674, no horizontal overflow. No clipping found in that revised state. Creature circles remain explicitly temporary.
+
+Normal touch-emulated controls after the fix: selected captured Tuvling through the switch menu; it became active and received exactly one visible enemy response (28→22 HP). Used a healing item and checked the resulting inventory/HP feedback. Full mobile chapter and final visual acceptance remain pending.
+
+Glimra sample: retained RGBA source plus deterministic 64×64 front/back exports. Source and rear derivative inspected; starter integration reopened in `screenshots/glimra-starter.png`. Orange angular ears, curled ember tail and charcoal feet remain distinguishable at 64px, with adequate spacing in the starter card. Other creatures are still placeholders. Back-pose battle integration is implemented but rendered acceptance remains pending. Asset tooling uses Pillow 11.3.0 in a local ignored virtual environment.
+
+Chapter-rule expansion: 10 tests pass, including locked exits, wrong-bowl reset, solved puzzle/save persistence, multi-creature trainer progression and keeper ending/save. The trainer-queue test deliberately uses a high-level fixture to isolate progression; it does not establish balance or ordinary chapter completion. New maps and ending still require normal-input and rendered review.
+
+## First ordinary chapter traversal
+
+Chrome mobile emulation 390×844, continuing the earlier captured-team save: walked to Liv, won with typed attacks, followed unlocked exit to Vindryggen. Used rest point; fought Edda's Vippa and Kolkrabb with neutral attacks and a tonic; Glimra reached level 5. Entered cellar, read inscription, interacted with water, moss and ember bowls in order, and walked through the newly open stairs. Rested at summit and challenged Signe: defeated Tuvling, Daggla and Ljuskrön using attacks and all three available tonics. Glimra finished with 2 HP before the final blow and levelled to 7 on victory. Captured Tuvling remained available as reserve. This is one successful starter/team path, not all-starter balance proof.
+
+The ending appeared and its Return to world button worked. The completed world loaded from its auto-save. No debug state injection or RNG override was used; navigation/action input went through Chrome keyboard/click tools. The automated test fixture's high level was not used in this browser run. Traversal was performed quickly with known routes; the 20–30 minute first-player target has not been established and the current chapter may be shorter.
+
+Rendered evidence: `screenshots/glimra-battle.png` shows readable rear silhouette and flame gap against the battle surface, complete menu and HP/log at mobile size. `screenshots/ending-prototype.png` shows readable ending and return control; disabled movement and repeated battle feedback are visually redundant and should be removed from the ending presentation. Score/audio inspection: no context before gesture; normal Sound click created a running context and 40 scheduled voices; normal mute click ended all 40. No listening judgment or full transition/visibility lifecycle signoff yet.
+
+## Clean built-version recovery checks
+
+Against revision fe172fe254a714eea22fe7f218d514ed9959613a on port 4388, mobile 390×844: chose Knopp, crossed to Sävstigen, reloaded and automatically resumed the saved route position. Clicked New adventure and dismissed confirmation; game and saved route remained intact. Started Liv's trainer battle; normal double-click on neutral attack produced exactly one 7-damage attack and one 8-damage reply (enemy38→31, ally34→26). Retained `screenshots/knopp-battle.png`: front/back sprites, HP/log and all actions are readable without clipping. Continued attacking without healing until loss; returned to village at5,6 with Knopp34/34, capsules6 and tonics3, and the retry state was auto-saved. No console errors. This deliberate loss does not imply Knopp is unviable; no items, capture or switching were used.
+
+A new exploration pass adds three authored ember rescues and a field journal within the team menu. Two successful rescues plus Edda's trust open the cellar; fleeing leaves a rescue retryable. Thirteen rule/score tests pass. Rescue traversal, journal fit, gate messaging and resulting pacing require a fresh ordinary-input pass before chapter signoff.
+
+Exploration revision: removed the additional two-rescue gate after design review. All three glödspår are optional, retryable and recorded in the journal. The existing trainer/puzzle progression remains sufficient. Thirteen tests still pass. Previous two-rescue requirements above describe a superseded candidate.
+
+## Optional rescue candidate
+
+Revision78756cfd5d571f8b1c72c500a418f47a939ae22c on4388: continued Knopp retry save, walked to northern reed encounter through normal keyboard input. Fled Vippa encounter, returned and restarted it, weakened it with two neutral attacks and captured it with one capsule. Journal shows1/3 and team contains Knopp/Vippa; local save preserves rescued=[reed]. Journal scene/client scroll heights both550 at390px document width, no horizontal overflow. Capture screenshot `screenshots/journal.png` is retained for subsequent visual review; no visual acceptance claimed here.
+
+Browser visibility limitation: bringing another tab to front through the provider still leaves target document.hidden=false. Therefore this action did not exercise visibilitychange or establish hidden-tab audio stopping. Gesture-start and mute are verified separately; the visibility handler is implemented but the actual browser-hidden transition remains uncovered by this provider. No listening verdict is claimed.
+
+## Candidate visual and starter review
+
+Reopened journal.png: field entries and Back control are readable at390×844, but repeated long feedback and disabled movement below the menu add avoidable clutter. Menu mode now hides those redundant regions. Removed the temporary-art badge after raster integration.
+
+Latest built normal-input continuation: Knopp won Liv using healing items, then weakened and captured the optional shore Daggla. Ridge rest healed all three team members and refilled tonics. Knopp subsequently defeated Edda's two creatures with neutral attacks and tonics, reaching level5. Ridge.png revealed a cropped lighthouse roof at its entrance and generic house roof fragments behind it. The revised narrow camera holds the complete northern landmark in view during approach, and the tower now sits on a stone foundation rather than house tiles.
+
+Rule-level balance diagnostic, distinct from ordinary-input proof: each starter plus two normal captured level2 reserves (Daggla and Kolkrabb), healing and three tonics between trainers, and a fixed enemy choice0.7 reached all three trainer victories. No level/HP boosts were injected. Glimra finished keeper in12 turns, Strila13, Knopp17; Knopp required a reserve and forced switch. This supports at least one viable strategy per starter; other random outcomes, first-player pacing and perceived balance remain separate judgments. Actual captured specimens here used default wild level2; this is not a claim about level3 rescue encounters.
+
+Revised presentation inspected from retained `ridge-fixed.png` and `journal-fixed.png`: full lighthouse roof and stone foundation now visible from the entrance at390×844, with the route and trainer positions intact. Three-member journal remains readable in normal document flow; repeated feedback and disabled movement no longer appear beneath it. Longer entries continue below the first viewport and remain reachable by ordinary page scroll/Back or Escape. No console warnings/errors in this pass.
+
+## Final Knopp ending regression
+
+Clean static revisionfceac01266ef3a9d31d7db47d3943e3289c216dc: completed cellar with an intentional wrong bowl choice/reset followed by the correct sequence. Rested at summit; Knopp fought the keeper, became exhausted and was replaced by captured Daggla through normal menu inputs. Daggla won; Continue showed the ending, Return restored exploration and browser reload preserved complete/rival/trainer/puzzle flags. The controlled final cellar-to-reloaded-ending segment took98 seconds of tool-assisted known-route activity (12:18:37–12:20:15 UTC), including a build/reload pause; this is not full chapter duration or a first-player estimate. Earlier journey segments were interrupted and not continuously timed.
+
+Added larger authored dark/lit beacon rasters and corresponding summit presentation. Beacon comparison captures retained for visual review. Dense journal diagnostic uses a deliberately seeded valid six-member/three-observation save, not a normal collection run. Normal End/Back input exercises the document scroll; scene has no internal scroll clipping. Actual rendered acceptance follows separately.
+
+Fresh summit comparison on eb12e2ff93eb78142410c35caf4d61d057cb4273: `summit-before-final.png` uses a labelled diagnostic unlit save at the same summit position9,5; `summit-after-final.png` uses the actual completed Knopp save at9,5 after normal ending and reload. Both390×844 use the revised summit camera. This comparison concerns presentation; the normal victory/save proof is recorded above. `dense-journal-full.png` retains the entire six-member/three-entry diagnostic menu in ordinary document flow. Final image interpretation pending a visual review turn.

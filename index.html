@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#202d34" />
+    <link rel="icon" href="assets/creatures/glimra-front.png" />
+    <title>Emberwild · Glöden i fyren</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">KAPITEL 1 · GLÖDEN I FYREN</span>
+          <h1>Emberwild</h1>
+        </div>
+      </header>
+      <div class="toolbar">
+        <span id="location">Glödvik</span>
+        <div>
+          <button id="sound" type="button" aria-pressed="false">Ljud av</button
+          ><button id="team-toggle" type="button">Laget</button
+          ><button id="save" type="button">Spara</button
+          ><button id="load" type="button">Läs in</button>
+        </div>
+      </div>
+      <p id="objective" class="objective"></p>
+      <section id="stage" aria-label="Spelvärld">
+        <canvas
+          id="world"
+          width="480"
+          height="312"
+          aria-label="Glödvik. Flytta med piltangenterna eller knapparna nedanför."
+        ></canvas>
+        <div id="scene"></div>
+      </section>
+      <p id="message" role="status" aria-live="polite"></p>
+      <div class="bottom">
+        <div class="pad" aria-label="Förflyttning">
+          <button data-dir="0,-1" aria-label="Gå uppåt">↑</button
+          ><button data-dir="-1,0" aria-label="Gå vänster">←</button
+          ><button data-dir="0,1" aria-label="Gå nedåt">↓</button
+          ><button data-dir="1,0" aria-label="Gå höger">→</button>
+        </div>
+        <button id="interact">Prata / undersök <kbd>Enter</kbd></button>
+        <p class="keys">Pilar / WASD: gå<br />Enter: prata · Esc: laget</p>
+      </div>
+      <footer>
+        Glöd slår mossa · Mossa slår vatten · Vatten slår glöd<br />Neutral
+        attack fungerar mot alla. Läkaren i Glödvik hjälper gratis.<br /><button
+          id="restart"
+          type="button"
+        >
+          Nytt äventyr
+        </button>
+      </footer>
+    </main>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
