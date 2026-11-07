@@ -1,33 +1,41 @@
-# Emberwild
+# Emberwild · The Sheltered Flame
 
-A Swedish-language browser creature RPG about a silent lighthouse and creatures carrying embers.
+An original English-language creature-collecting browser RPG about a dark coastal beacon and the small creatures sheltering its missing embers.
+
+Choose Wickit, Rillfin or Buddle in Briarwick, explore Sedgeway and Saltwind Rise, and build a team through wild encounters. Help three optional spark guardians, challenge Rowan and Maren, solve the Stillglass Vault bowls and face Warden Alder at the Lantern Crown. The chapter has an ending, with the coast remaining open afterward. First-player duration has not been measured.
+
+## Play and controls
+
+Use arrows/WASD to walk and Enter to talk or inspect. Hold a direction to keep walking; release finishes the current tile. Touch controls support held directions. Escape opens your team while exploring and goes back in battle menus. Tab or arrow keys navigate commands; Enter/Space activates them. The Field guide contains type, item and recovery help.
+
+Battles separate your move, the enemy reply and the return to commands. Fight shows damage and matchup information. Bag holds Spark Vessels and Mending Draughts. Switching normally gives the opponent a turn; replacing an exhausted companion does not. Inputs lock during brief resolution. Reduced motion removes impact/walk effects and shortens battle feedback.
+
+Saves use the existing version1 browser-storage key and stable creature/map IDs. Adventures from the Swedish release retain their team and progress under the English display names. Saves resume automatically; saving is available outside battle, with automatic saves at transitions and completed battles. Free recovery at Mira and the camps prevents supply exhaustion from trapping a run.
+
+Original raster art has editable sources and deterministic PNG exporters. Seven original chiptune cues share a motif across village, routes, landmark, battles and short victory/capture cues. Sound starts only after its button is pressed; it can be muted at any time. Audio lifecycle checks do not establish a listening verdict.
 
 ## Development
 
-Requires Node.js 22 or newer. No packages to install.
+Requires Node.js 22 or newer; no runtime packages or backend.
 
 ```sh
 npm start
+npm test
 ```
 
-Open `http://127.0.0.1:4387`. Set `EMBERWILD_PORT` to use another port. Run `npm test` for game-rule and save validation tests.
+Open `http://127.0.0.1:4387`. Set `EMBERWILD_PORT` to use another port. Tests cover battle ordering, repeated input, recovery, progression, save compatibility, travel timing and audio lifecycle.
 
-## Current prototype
+Build a clean checkout with `npm run build`. The runtime-only `dist/` includes `version.json` with the exact source revision. Serve it with `EMBERWILD_ROOT=dist EMBERWILD_PORT=4388 npm start`. The build rejects uncommitted changes.
 
-Choose one of three starters, walk east from Glödvik to Sävstigen, enter tall grass, battle and capture a creature, inspect your team, save/load, and return to the free village healer. Liv offers a trainer battle. Use arrows/WASD and Enter, or the on-screen controls. Battle and menu buttons support native keyboard focus and activation.
-
-This is a greybox chapter with authored raster world tiles and eight integrated creature sprite pairs. Defeat Liv to reach Vindryggen, earn Edda’s trust to enter the lighthouse, solve the ember bowls and challenge keeper Signe to restore the beacon. Final raster artwork is still in production. Seven original score-led chiptune cues are integrated behind the Sound control; listening and full playback QA remain pending. The intended 20–30 minute duration has not been measured. See [the game brief](docs/brief.md) and [level progression](docs/levels.md).
-
-Local saves use a versioned, validated browser-storage record. Saving is available outside battles; map transitions and completed battles also save. Invalid storage leaves the current game intact. Losing heals the team and returns it to Glödvik with retry supplies.
+For artwork reproduction, install `requirements-art.txt` in a Python environment, then run `scripts/export_world.py` and `scripts/export_sprites.py`. World matrices live in `assets/source/world/pixels.json`; creature source crops are described by `assets/source/creatures.json`. Independently editable musical events and cue structure live in `music/scores.js`.
 
 ## Structure
 
-- `src/engine.js`: deterministic state transitions with injectable encounter randomness
-- `src/data.js`: creatures, types, maps and fixed collision coordinates
-- `src/main.js`: canvas prototype world, DOM menus and normal input
-- `test/engine.test.js`: progression, battle, recovery and save scenarios
-- `docs/brief.md`: chapter, art and audio direction
+- `src/engine.js`: game rules, deterministic turn snapshots and validated saves
+- `src/battle-sequence.js`: planned turn presentation and resolution locking
+- `src/travel.js`: tile interpolation and held-direction lifecycle
+- `src/world-layout.js`: visual paths and decoration independent of collision
+- `src/main.js`: rendered world, menus, commands and input
+- `docs/qa/english-polish/`: matched comparisons and scoped playtest evidence
 
-Static files need no backend, accounts or network services.
-
-Build a clean reviewed checkout with `npm run build`. The `dist/` output contains only runtime files and `version.json` with the exact source revision. Serve that bundle with `EMBERWILD_ROOT=dist EMBERWILD_PORT=4388 npm start`. The build rejects uncommitted changes so the revision cannot silently describe a different tree.
+No accounts, multiplayer or live services are required. The published chapter and review branches are separate; opening a pull request does not deploy it.

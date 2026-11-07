@@ -407,3 +407,374 @@ footer {
 .in-menu .bottom {
   display: none;
 }
+
+/* Battle commands read like a small field guide: action first, consequence below. */
+.command-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.command-grid button {
+  min-height: 62px;
+  text-align: left;
+}
+.command-grid strong,
+.command-grid small {
+  display: block;
+}
+.command-grid strong {
+  color: #f5d18a;
+  font-size: 0.95rem;
+}
+.command-grid small {
+  margin-top: 5px;
+  color: #c6d4c7;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+.command-grid button[data-focus="back"] {
+  min-height: 44px;
+  grid-column: 1 / -1;
+  text-align: center;
+}
+.turn-label {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #efc977;
+  margin-bottom: 7px;
+}
+.battle-log {
+  border-left: 3px solid #d99b58;
+  padding: 10px 12px;
+  background: #172b31;
+  min-height: 100px;
+  margin: 10px 0 12px;
+}
+.battle-log p {
+  line-height: 1.5 !important;
+}
+.hp-track {
+  height: 10px;
+  margin: 5px 0 3px;
+  border: 1px solid #afc4a4;
+  background: #17262d;
+  overflow: hidden;
+}
+.hp-fill {
+  height: 100%;
+  background: #bad793;
+  transition: width 240ms ease-out;
+}
+.hp-fill.low {
+  background: #ed9b71;
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.damage-number {
+  position: absolute;
+  right: 2px;
+  top: -5px;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 3px 6px;
+  background: #17262d;
+  color: #ffd59b;
+  animation: damage-rise 300ms ease-out;
+}
+.effect-player-hit,
+.effect-enemy-hit {
+  animation: hit-recoil 260ms ease-out;
+}
+.effect-heal,
+.effect-guard {
+  animation: mend-glow 300ms ease-out;
+}
+.effect-switch {
+  animation: companion-enter 280ms ease-out;
+}
+.effect-capture .creature-sprite {
+  animation: capture-spark 600ms ease-in-out;
+}
+.effect-capture-miss .creature-sprite {
+  animation: escape-spark 300ms ease-out;
+}
+.effect-faint {
+  opacity: 0.35;
+}
+@keyframes hit-recoil {
+  35% {
+    translate: 5px 0;
+    filter: brightness(1.7);
+  }
+  65% {
+    translate: -2px 0;
+  }
+}
+@keyframes mend-glow {
+  50% {
+    filter: drop-shadow(0 0 6px #bddd9a);
+  }
+}
+@keyframes companion-enter {
+  from {
+    translate: -12px 0;
+    opacity: 0.2;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes capture-spark {
+  35% {
+    scale: 0.4;
+    filter: brightness(2);
+  }
+  75% {
+    scale: 0.6;
+    filter: drop-shadow(0 0 10px #ffd58d);
+  }
+}
+@keyframes escape-spark {
+  45% {
+    translate: 0 -8px;
+    filter: brightness(1.6);
+  }
+}
+@keyframes damage-rise {
+  from {
+    translate: 0 5px;
+    opacity: 0.4;
+  }
+  to {
+    translate: 0 -3px;
+    opacity: 1;
+  }
+}
+@media (max-width: 600px) {
+  .command-grid button {
+    padding: 10px;
+  }
+  .command-grid strong {
+    font-size: 0.85rem;
+  }
+  .command-grid small {
+    font-size: 0.68rem;
+  }
+  .battlefield {
+    height: 184px;
+  }
+  .battle-log {
+    min-height: 104px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fighter,
+  .fighter .creature-sprite,
+  .damage-number {
+    animation: none !important;
+  }
+  .hp-fill {
+    transition: none;
+  }
+}
+.effect-victory .creature-sprite {
+  opacity: 0.35;
+}
+.effect-sendout {
+  animation: companion-enter 280ms ease-out;
+}
+.team-row > .creature-sprite {
+  width: 48px;
+  height: 48px;
+}
+.team-row > span {
+  flex: 1;
+  white-space: pre-line;
+}
+.pad button {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.scene-enter {
+  animation: coast-arrival 200ms ease-out;
+}
+@keyframes coast-arrival {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-enter {
+    animation: none;
+  }
+}
+.stats .level {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 0.7rem;
+  font-weight: normal;
+  margin-left: 6px;
+  color: #c6d4c7;
+}
+#scene h3 {
+  font-size: 1rem;
+  margin: 20px 0 4px;
+  color: #f4ce81;
+}
+#scene .journal-count {
+  margin: 0 0 12px;
+  color: #c6d4c7;
+  font-size: 0.75rem;
+}
+.journal-entry {
+  padding: 12px 0;
+  border-top: 1px solid #52645b;
+}
+.journal-entry h4 {
+  margin: 0;
+  font-size: 0.85rem;
+}
+#scene .journal-entry p {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+}
+.team-details {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.team-details strong,
+.team-details small {
+  display: block;
+}
+.team-details small {
+  font-size: 0.72rem;
+  color: #c6d4c7;
+}
+/* Keep routine play ahead of chapter chrome and reference material. */
+.playing header {
+  margin-bottom: 6px;
+}
+.playing .eyebrow {
+  display: none;
+}
+.playing h1 {
+  font-size: 1.35rem;
+  margin: 0;
+  letter-spacing: -0.04em;
+}
+.playing .toolbar {
+  padding: 6px 0;
+}
+.in-battle #objective,
+.in-battle #save,
+.in-battle #load,
+.in-battle #team-toggle,
+.in-battle footer {
+  display: none;
+}
+footer {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+#field-guide {
+  flex: 1;
+  max-width: 600px;
+}
+#field-guide summary {
+  min-height: 44px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+#field-guide p {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+#field-guide summary:focus-visible,
+.journal-entry summary:focus-visible {
+  outline: 3px solid #ffcd72;
+  outline-offset: 2px;
+}
+.journal-entry {
+  padding: 0;
+}
+.journal-row {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+}
+summary.journal-row {
+  cursor: pointer;
+}
+summary.journal-row > span:first-child::before {
+  content: "▸ ";
+  color: #efc977;
+}
+details[open] > summary.journal-row > span:first-child::before {
+  content: "▾ ";
+}
+.journal-status {
+  color: #c6d4c7;
+  font-size: 0.7rem;
+}
+#scene .journal-entry p {
+  padding: 0 0 12px;
+}
+@media (max-width: 600px) {
+  .playing {
+    padding-top: 8px;
+  }
+  .playing h1 {
+    font-size: 1.2rem;
+  }
+  .playing header {
+    margin-bottom: 5px;
+  }
+  .playing .objective {
+    margin-bottom: 8px;
+  }
+  footer {
+    margin-top: 14px;
+    padding-top: 8px;
+  }
+}
+.in-menu #objective,
+.at-ending #objective,
+.at-ending footer {
+  display: none;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+#scene .panel-heading h2 {
+  margin: 0;
+}
+.panel-heading button {
+  flex-shrink: 0;
+}

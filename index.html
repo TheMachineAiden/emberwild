@@ -1,59 +1,71 @@
 <!doctype html>
-<html lang="sv">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#202d34" />
     <link rel="icon" href="assets/creatures/glimra-front.png" />
-    <title>Emberwild · Glöden i fyren</title>
+    <title>Emberwild · The Sheltered Flame</title>
     <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
     <main>
       <header>
         <div>
-          <span class="eyebrow">KAPITEL 1 · GLÖDEN I FYREN</span>
+          <span class="eyebrow">CHAPTER ONE · THE SHELTERED FLAME</span>
           <h1>Emberwild</h1>
         </div>
       </header>
       <div class="toolbar">
-        <span id="location">Glödvik</span>
+        <span id="location">Briarwick</span>
         <div>
-          <button id="sound" type="button" aria-pressed="false">Ljud av</button
-          ><button id="team-toggle" type="button">Laget</button
-          ><button id="save" type="button">Spara</button
-          ><button id="load" type="button">Läs in</button>
+          <button id="sound" type="button" aria-pressed="false">
+            Sound off</button
+          ><button id="team-toggle" type="button">Team</button
+          ><button id="save" type="button">Save</button
+          ><button id="load" type="button">Load</button>
         </div>
       </div>
       <p id="objective" class="objective"></p>
-      <section id="stage" aria-label="Spelvärld">
+      <section id="stage" aria-label="World">
         <canvas
           id="world"
           width="480"
           height="312"
-          aria-label="Glödvik. Flytta med piltangenterna eller knapparna nedanför."
+          aria-label="Briarwick. Move with arrow keys or the controls below."
         ></canvas>
         <div id="scene"></div>
       </section>
       <p id="message" role="status" aria-live="polite"></p>
       <div class="bottom">
-        <div class="pad" aria-label="Förflyttning">
-          <button data-dir="0,-1" aria-label="Gå uppåt">↑</button
-          ><button data-dir="-1,0" aria-label="Gå vänster">←</button
-          ><button data-dir="0,1" aria-label="Gå nedåt">↓</button
-          ><button data-dir="1,0" aria-label="Gå höger">→</button>
+        <div class="pad" aria-label="Movement">
+          <button data-dir="0,-1" aria-label="Move north">↑</button
+          ><button data-dir="-1,0" aria-label="Move west">←</button
+          ><button data-dir="0,1" aria-label="Move south">↓</button
+          ><button data-dir="1,0" aria-label="Move east">→</button>
         </div>
-        <button id="interact">Prata / undersök <kbd>Enter</kbd></button>
-        <p class="keys">Pilar / WASD: gå<br />Enter: prata · Esc: laget</p>
+        <button id="interact">Talk / inspect <kbd>Enter</kbd></button>
+        <p class="keys">Arrows / WASD: move<br />Enter: interact · Esc: team</p>
       </div>
       <footer>
-        Glöd slår mossa · Mossa slår vatten · Vatten slår glöd<br />Neutral
-        attack fungerar mot alla. Läkaren i Glödvik hjälper gratis.<br /><button
-          id="restart"
-          type="button"
-        >
-          Nytt äventyr
-        </button>
+        <details id="field-guide">
+          <summary>Field guide</summary>
+          <p>
+            Ember beats Moss. Moss beats Tide. Tide beats Ember. Move cards show
+            the damage for the current matchup.
+          </p>
+          <p>
+            Weaken wild creatures before using a Spark Vessel. A Mending Draught
+            restores up to 22 HP. Mira and the camps heal your whole team and
+            refill supplies for free.
+          </p>
+          <p>
+            Arrows or WASD move. Enter talks or inspects. Escape opens your team
+            while exploring and goes back in battle menus. Tab or arrow keys
+            move between commands.
+          </p>
+        </details>
+        <button id="restart" type="button">New adventure</button>
       </footer>
     </main>
     <script type="module" src="src/main.js"></script>
