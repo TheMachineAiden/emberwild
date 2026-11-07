@@ -17,13 +17,15 @@ import {
   decodeSave,
   SAVE_KEY,
 } from "./engine.js";
+import { worldCamera } from "./camera.js";
 import { bindJoystick } from "./joystick.js";
 import { portraitGate, toggleFullscreen } from "./display.js";
 import { TileTravel, directionKey } from "./travel.js";
 import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 let state = newGame(),
-  panel = null;
+  panel = null,
+  dialogue = null;
 const music = new Music();
 const sequence = new BattleSequence();
 let battleMenu = "commands",
@@ -39,7 +41,7 @@ const $ = (id) => document.getElementById(id),
 let queuedInteraction = null;
 let inputSuspended = false;
 const canExplore = () => !inputSuspended && !$("game-menu").open &&
-  state.mode === "world" && !panel && !sequence.busy && worldLoaded;
+  state.mode === "world" && !panel && !dialogue && !sequence.busy && worldLoaded;
 const travel = new TileTravel({
   getState: () => state,
   canMove: () =>
@@ -50,6 +52,8 @@ const travel = new TileTravel({
   },
   commit: (next, before) => {
     state = next;
+    if (next.mode === "world" && next.map === before.map && next.steps === before.steps && next.message !== before.message)
+      dialogue = next.message;
     if (before.map !== next.map) {
       store();
       sceneTransition();
@@ -105,10 +109,16 @@ function marker(id, pose = "front") {
 function store(announce = false) {
   try {
     localStorage.setItem(SAVE_KEY, encodeSave(state));
-    if (announce) state.message = "Saved on this device.";
+    if (announce) {
+      state.message = "Saved on this device.";
+      $("display-status").textContent = state.message;
+    }
   } catch {
     state.message =
       "Could not save on this device. Check your browser storage settings. You can keep playing.";
+    $("display-status").textContent = state.message;
+    if (state.mode === "world") dialogue = state.message;
+    else if (!$("game-menu").open) $("game-menu").showModal();
   }
 }
 function load() {
@@ -120,6 +130,7 @@ function load() {
     } else {
       state = decodeSave(raw);
       panel = null;
+      dialogue = null;
     }
   } catch {
     state.message =
@@ -188,31 +199,25 @@ function world() {
     py = pose?.y ?? state.y;
   const map = maps[state.map],
     inside = ["cellar", "summit"].includes(state.map);
-  // Keep the complete authored map in frame. Landscape side gutters give thumbs
-  // room without hiding the avatar, paths or tall beacon behind touch controls.
-  const columns = 20, rows = 13;
-  canvas.width = columns * 24;
-  canvas.height = rows * 24;
-  const cameraX = Math.max(
-      0,
-      Math.min(20 - columns, px - Math.floor(columns / 2)),
-    ),
-    cameraY = Math.max(
-      0,
-      Math.min(
-        13 - rows,
-        py -
-          (["village", "ridge", "summit"].includes(state.map)
-            ? 7
-            : Math.floor(rows / 2)),
-      ),
-    );
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const camera = worldCamera($("stage").clientWidth, $("stage").clientHeight, px, py, {
+    touch: matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0,
+    dialogue: !!dialogue,
+  });
+  const cameraX = camera.x / 24, cameraY = camera.y / 24,
+    columns = camera.width / 24;
+  canvas.width = camera.width;
+  canvas.height = camera.height;
+  canvas.dataset.camera = JSON.stringify(camera);
   ctx.imageSmoothingEnabled = false;
-  ctx.translate(-Math.round(cameraX * 24), -Math.round(cameraY * 24));
+  ctx.translate(-camera.x, -camera.y);
   if (!worldLoaded) return;
   const draw = (id, x, y, width = 24, height = 24) =>
     ctx.drawImage(worldAssets[id], x, y, width, height);
+  // Authored boundary tiles fill the view when the camera extends past a map
+  // edge. Collision and map transitions still use the original logical tiles.
+  for (let y = Math.floor(cameraY); y <= Math.ceil((camera.y + camera.height) / 24); y++)
+    for (let x = Math.floor(cameraX); x <= Math.ceil((camera.x + camera.width) / 24); x++)
+      draw(inside ? "wall" : "water", x * 24, y * 24);
   map.rows.forEach((row, y) =>
     [...row].forEach((tile, x) => {
       let id = inside ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
@@ -344,7 +349,7 @@ function renderTeam(inBattle = false) {
           battleMenu = "commands";
           render();
           if (state.mode === "world")
-            $("team-toggle").focus({ preventScroll: true });
+            $("menu-toggle").focus({ preventScroll: true });
         },
         false,
         "back",
@@ -492,9 +497,13 @@ async function act(action, index) {
   presentation = null;
   previousFrame = null;
   battleMenu = "commands";
-  if (state.mode === "world") store();
+  if (state.mode === "world") {
+    store();
+    if (plan.frames.some((frame) => frame.kind === "loss")) dialogue = state.message;
+  }
   render();
-  focusScene();
+  if (dialogue) $("dialogue-close").focus({preventScroll:true});
+  else focusScene();
 }
 function focusScene(key) {
   const buttons = [...scene.querySelectorAll("button:not(:disabled)")];
@@ -682,10 +691,9 @@ function render() {
           ? "Enter Stillglass. Read the inscription and light the three bowls."
           : "The stairs are open. Rest, then meet Alder at the Lantern Crown.";
   $("location").textContent = maps[state.map].name;
-  $("message").textContent =
-    state.mode === "world" && !worldLoaded
-      ? "Loading the coast…"
-      : state.message;
+  $("message").textContent = dialogue || "";
+  $("dialogue").hidden = !dialogue || state.mode !== "world" || panel !== null;
+  document.body.classList.toggle("in-dialogue", !!dialogue && state.mode === "world" && !panel);
   $("save").disabled = state.mode !== "world" || sequence.busy || travel.busy;
   $("load").disabled = state.mode === "battle" || sequence.busy || travel.busy;
   $("restart").disabled = sequence.busy || travel.busy;
@@ -700,7 +708,7 @@ function render() {
     state.mode !== "world" ||
     panel !== null ||
     sequence.busy ||
-    !worldLoaded;
+    !worldLoaded || !!dialogue;
   $("joystick").setAttribute("aria-disabled", String(!canExplore()));
   if (!canExplore()) joystick.reset();
   if (presentation?.kind === "loss") {
@@ -730,7 +738,7 @@ function render() {
       grid,
       node(
         "p",
-        "Returning to the coast? Use Load to restore a saved adventure.",
+        "Returning to the coast? Open Menu, then Load to restore a saved adventure.",
       ),
     );
   } else if (state.mode === "ending") {
@@ -762,6 +770,7 @@ function render() {
   else if (state.mode === "battle") renderBattle();
   if (!sequence.busy && (focusKey || (!wasBattle && state.mode === "battle")))
     focusScene(focusKey);
+  if (dialogue && !panel && state.mode === "world") $("dialogue-close").focus({preventScroll:true});
   if (enteringTeam) scene.scrollTop = 0;
   scene.setAttribute("aria-busy", String(sequence.busy));
 }
@@ -797,6 +806,7 @@ $("fullscreen").addEventListener("click", async () => {
     $("game-menu").showModal();
     $("menu-close").focus();
   }
+  if (["entered", "exited"].includes(result) && $("game-menu").open) $("game-menu").close();
   updateDisplay();
 });
 document.addEventListener("fullscreenchange", updateDisplay);
@@ -809,15 +819,27 @@ $("menu-close").addEventListener("click", () => $("game-menu").close());
 $("game-menu").addEventListener("close", () => {
   clearInput();
   render();
-  $("menu-toggle").focus({preventScroll:true});
+  if (panel) focusScene("back");
+  else if (dialogue) $("dialogue-close").focus({preventScroll:true});
+  else $("menu-toggle").focus({preventScroll:true});
 });
 for (const name of ["contextmenu", "selectstart", "dragstart"])
   $("game").addEventListener(name, (event) => event.preventDefault());
+function closeDialogue() {
+  clearInput();
+  dialogue = null;
+  render();
+  $("interact").focus({preventScroll:true});
+}
+$("dialogue-close").addEventListener("click", closeDialogue);
 function talk() {
   if (!canExplore()) return;
   afterTravel(() => {
     interact(state);
-    if (state.mode === "world") store();
+    if (state.mode === "world") {
+      store();
+      dialogue = state.message;
+    }
     render();
   });
 }
@@ -830,15 +852,18 @@ $("team-toggle").addEventListener("click", () => {
   clearInput();
   battleMenu = "commands";
   panel = panel ? null : "team";
+  if ($("game-menu").open) $("game-menu").close();
   render();
   if (panel) focusScene();
 });
 $("save").addEventListener("click", () => {
-  $("game-menu").close();
   store(true);
   render();
 });
-$("load").addEventListener("click", () => { $("game-menu").close(); load(); });
+$("load").addEventListener("click", () => {
+  load();
+  $("display-status").textContent = state.message;
+});
 $("restart").addEventListener("click", () => {
   if (sequence.busy) return;
   if (
@@ -850,6 +875,7 @@ $("restart").addEventListener("click", () => {
     clearInput();
     state = newGame();
     panel = null;
+    dialogue = null;
     render();
   }
 });
@@ -888,6 +914,13 @@ document.addEventListener("keydown", (event) => {
     (event.repeat || sequence.busy)
   ) {
     event.preventDefault();
+    return;
+  }
+  if (dialogue && state.mode === "world" && !panel) {
+    if (event.key === "Escape") {event.preventDefault();closeDialogue();}
+    else if (["Enter", " "].includes(event.key) && !event.target.closest?.("button")) {
+      event.preventDefault();closeDialogue();
+    } else if (directions[directionKey(event.key)]) event.preventDefault();
     return;
   }
   if (sequence.busy) {
@@ -947,7 +980,7 @@ document.addEventListener("keydown", (event) => {
       panel = panel ? null : "team";
       render();
       if (panel) focusScene();
-      else $("team-toggle").focus({ preventScroll: true });
+      else $("menu-toggle").focus({ preventScroll: true });
     });
     return;
   }
@@ -973,6 +1006,8 @@ try {
 } catch {
   state.message =
     "The previous save could not be read. Choose a companion to begin a new adventure.";
+  $("display-status").textContent = state.message;
+  requestAnimationFrame(() => $("game-menu").showModal());
 }
 render();
 worldReady
@@ -982,6 +1017,9 @@ worldReady
   })
   .catch(() => {
     state.message = "The world artwork could not load. Try reloading the page.";
+    dialogue = state.message;
+    $("display-status").textContent = state.message;
+    if (state.mode !== "world" && !$("game-menu").open) $("game-menu").showModal();
     render();
   });
 

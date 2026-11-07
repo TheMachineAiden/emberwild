@@ -10,17 +10,8 @@
   </head>
   <body>
     <main id="game">
-      <header class="game-hud">
-        <h1>Emberwild</h1>
-        <span id="location">Briarwick</span>
-        <nav aria-label="Game controls">
-          <button id="sound" type="button" aria-pressed="false">Sound off</button>
-          <button id="team-toggle" type="button">Team</button>
-          <button id="fullscreen" type="button">Full screen</button>
-          <button id="menu-toggle" type="button" aria-haspopup="dialog">Menu</button>
-        </nav>
-      </header>
-      <p id="objective" class="objective"></p>
+      <span id="location" class="location-hud">Briarwick</span>
+      <button id="menu-toggle" type="button" aria-haspopup="dialog" aria-label="Open game menu">Menu</button>
       <section id="stage" aria-label="World">
         <canvas
           id="world"
@@ -30,7 +21,10 @@
         ></canvas>
         <div id="scene"></div>
       </section>
-      <p id="message" role="status" aria-live="polite"></p>
+      <section id="dialogue" role="dialog" aria-label="Conversation" hidden>
+        <p id="message" role="status" aria-live="polite"></p>
+        <button id="dialogue-close" type="button">Continue</button>
+      </section>
       <div class="bottom">
         <div id="joystick" role="group" aria-label="Thumb joystick. Drag to move; arrow keys or WASD also move.">
           <span class="stick-ring" aria-hidden="true"></span>
@@ -39,7 +33,13 @@
         <button id="interact">Talk / inspect <kbd>Enter</kbd></button>
       </div>
       <dialog id="game-menu" aria-labelledby="menu-title">
-        <div class="panel-heading"><h2 id="menu-title">Adventure menu</h2><button id="menu-close">Back</button></div>
+        <div class="panel-heading"><h2 id="menu-title">Emberwild</h2><button id="menu-close">Back</button></div>
+        <p id="objective" class="objective"></p>
+        <div class="menu-actions">
+          <button id="sound" type="button" aria-pressed="false">Sound off</button>
+          <button id="team-toggle" type="button">Team</button>
+          <button id="fullscreen" type="button">Full screen</button>
+        </div>
         <div class="menu-actions"><button id="save" type="button">Save</button><button id="load" type="button">Load</button></div>
         <p id="display-status" role="status"></p>
       <div class="guide">
@@ -66,7 +66,7 @@
     </main>
     <section id="rotate-gate" role="dialog" aria-modal="true" aria-labelledby="rotate-title" hidden>
       <span class="rotate-symbol" aria-hidden="true">↻</span>
-      <h2 id="rotate-title">Turn toward the coast</h2>
+      <h2 id="rotate-title">Rotate your phone</h2>
       <p>Rotate your phone to landscape to play.</p>
       <p>Your adventure will be right here.</p>
     </section>
