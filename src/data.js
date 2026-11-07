@@ -1,31 +1,49 @@
 export const species = {
   glimra: {
-    name: "Glimra",
+    name: "Wickit",
     type: "ember",
     color: "#ed9854",
     hp: 28,
     attack: 8,
   },
-  strila: { name: "Strila", type: "tide", color: "#77c5c9", hp: 31, attack: 7 },
-  knopp: { name: "Knopp", type: "moss", color: "#aac379", hp: 34, attack: 6 },
-  vippa: { name: "Vippa", type: "wind", color: "#d9bad7", hp: 22, attack: 6 },
+  strila: {
+    name: "Rillfin",
+    type: "tide",
+    color: "#77c5c9",
+    hp: 31,
+    attack: 7,
+  },
+  knopp: { name: "Buddle", type: "moss", color: "#aac379", hp: 34, attack: 6 },
+  vippa: {
+    name: "Lunamoth",
+    type: "wind",
+    color: "#d9bad7",
+    hp: 22,
+    attack: 6,
+  },
   kolkrabb: {
-    name: "Kolkrabb",
+    name: "Cinderclaw",
     type: "ember",
     color: "#bd735a",
     hp: 30,
     attack: 7,
   },
   tuvling: {
-    name: "Tuvling",
+    name: "Brambleboar",
     type: "moss",
     color: "#8f9f68",
     hp: 32,
     attack: 7,
   },
-  daggla: { name: "Daggla", type: "tide", color: "#89b3d3", hp: 28, attack: 6 },
+  daggla: {
+    name: "Dewshell",
+    type: "tide",
+    color: "#89b3d3",
+    hp: 28,
+    attack: 6,
+  },
   ljuskron: {
-    name: "Ljuskrön",
+    name: "Dawncrest",
     type: "ember",
     color: "#edd58b",
     hp: 36,
@@ -33,23 +51,23 @@ export const species = {
   },
 };
 export const typeNames = {
-  ember: "Glöd",
-  tide: "Vatten",
-  moss: "Mossa",
-  wind: "Vind",
+  ember: "Ember",
+  tide: "Tide",
+  moss: "Moss",
+  wind: "Gale",
   neutral: "Neutral",
 };
 export const starters = ["glimra", "strila", "knopp"];
 export const typedMoves = {
-  ember: "Glödstänk",
-  tide: "Vattenstöt",
-  moss: "Rotgrepp",
-  wind: "Vindpust",
+  ember: "Wickflare",
+  tide: "Rill Rush",
+  moss: "Briarbind",
+  wind: "Draftlash",
 };
 // Fixed coordinates persist when final raster artwork replaces prototype geometry.
 export const maps = {
   village: {
-    name: "Glödvik",
+    name: "Briarwick",
     start: [4, 8],
     rows: [
       "####################",
@@ -68,12 +86,12 @@ export const maps = {
     ],
     exits: [{ x: 19, y: 8, map: "route", to: [1, 8] }],
     npcs: [
-      { x: 5, y: 5, id: "healer", label: "Läkare" },
-      { x: 13, y: 5, id: "neighbor", label: "Bo" },
+      { x: 5, y: 5, id: "healer", label: "Mira" },
+      { x: 13, y: 5, id: "neighbor", label: "Perrin" },
     ],
   },
   route: {
-    name: "Sävstigen",
+    name: "Sedgeway",
     start: [1, 8],
     rows: [
       "####################",
@@ -91,30 +109,30 @@ export const maps = {
       "####################",
     ],
     exits: [{ x: 0, y: 8, map: "village", to: [18, 8] }],
-    npcs: [{ x: 16, y: 8, id: "liv", label: "Liv" }],
+    npcs: [{ x: 16, y: 8, id: "liv", label: "Rowan" }],
   },
 };
 
 export const trainers = {
   liv: {
-    name: "Liv",
+    name: "Rowan",
     flag: "rival",
     team: [["knopp", 4]],
     reward:
-      "Liv: Jag öppnar Vindryggen! Undersök gärna glödspåren längs rutterna. Varelserna där kan visa varför fyren slocknat.",
+      "Rowan: The rise is open! Look for sheltered sparks along the paths. Their guardians may know what happened to Stillglass.",
   },
   edda: {
-    name: "Edda",
+    name: "Maren",
     flag: "trainer",
     team: [
       ["vippa", 4],
       ["kolkrabb", 4],
     ],
     reward:
-      "Edda: Du tar hand om ditt lag. Källardörren är öppen. Läs inskriften vid skålarna.",
+      "Maren: You look after your companions. The vault is open. Read the inscription beside the bowls.",
   },
   keeper: {
-    name: "Signe",
+    name: "Alder",
     flag: "complete",
     team: [
       ["tuvling", 4],
@@ -122,7 +140,7 @@ export const trainers = {
       ["ljuskron", 5],
     ],
     reward:
-      "Signe: De stal aldrig ljuset. De höll det vid liv. Låt oss öppna fyren tillsammans.",
+      "Alder: They never stole the light. They kept it alive. Let us open the beacon together.",
   },
 };
 const routeRow = [...maps.route.rows[8]];
@@ -136,11 +154,11 @@ maps.route.exits.push({
   to: [1, 8],
   requires: "rival",
   locked:
-    "Liv vill se hur ni samarbetar innan hon öppnar vägen. Prata med henne.",
+    "Rowan wants to see how your team works together. Speak to them by the eastern path.",
 });
 maps.route.encounters = ["vippa", "daggla", "tuvling"];
 maps.ridge = {
-  name: "Vindryggen",
+  name: "Saltwind Rise",
   start: [1, 8],
   rows: [
     "####################",
@@ -165,18 +183,18 @@ maps.ridge = {
       map: "cellar",
       to: [3, 10],
       requires: "trainer",
-      locked: "Edda vaktar fyrens nyckel. Prata med henne på stigen.",
+      locked: "Maren carries the vault key. Speak to her on the path.",
     },
   ],
   npcs: [
-    { id: "rest", label: "Vila", x: 3, y: 6 },
-    { id: "edda", label: "Edda", x: 14, y: 6 },
-    { id: "lookout", label: "Utkik", x: 9, y: 3 },
+    { id: "rest", label: "Camp", x: 3, y: 6 },
+    { id: "edda", label: "Maren", x: 14, y: 6 },
+    { id: "lookout", label: "Tamsin", x: 9, y: 3 },
   ],
   encounters: ["kolkrabb", "daggla", "vippa", "ljuskron"],
 };
 maps.cellar = {
-  name: "Fyrkällaren",
+  name: "Stillglass Vault",
   start: [3, 10],
   rows: [
     "####################",
@@ -201,19 +219,20 @@ maps.cellar = {
       map: "summit",
       to: [9, 10],
       requires: "puzzle",
-      locked: "Trappan är förseglad. Tänd skålarna i inskriftens ordning.",
+      locked:
+        "The stairs are sealed. Light the bowls in the order shown by the inscription.",
     },
   ],
   npcs: [
-    { id: "inscription", label: "Inskrift", x: 4, y: 3 },
-    { id: "bowl-tide", label: "Vatten", x: 6, y: 6 },
-    { id: "bowl-moss", label: "Mossa", x: 10, y: 6 },
-    { id: "bowl-ember", label: "Glöd", x: 14, y: 6 },
-    { id: "reset", label: "Återställ", x: 4, y: 8 },
+    { id: "inscription", label: "Inscription", x: 4, y: 3 },
+    { id: "bowl-tide", label: "Tide", x: 6, y: 6 },
+    { id: "bowl-moss", label: "Moss", x: 10, y: 6 },
+    { id: "bowl-ember", label: "Ember", x: 14, y: 6 },
+    { id: "reset", label: "Reset", x: 4, y: 8 },
   ],
 };
 maps.summit = {
-  name: "Fyrens krön",
+  name: "Lantern Crown",
   start: [9, 10],
   rows: [
     "####################",
@@ -232,31 +251,31 @@ maps.summit = {
   ],
   exits: [{ x: 9, y: 10, map: "cellar", to: [16, 3] }],
   npcs: [
-    { id: "keeper", label: "Signe", x: 9, y: 4 },
-    { id: "rest", label: "Vila", x: 5, y: 8 },
-    { id: "beacon", label: "Fyrljus", x: 9, y: 2 },
+    { id: "keeper", label: "Alder", x: 9, y: 4 },
+    { id: "rest", label: "Camp", x: 5, y: 8 },
+    { id: "beacon", label: "Lantern", x: 9, y: 2 },
   ],
 };
 
 export const rescues = {
   reed: {
     species: "vippa",
-    title: "Vassens glöd",
-    clue: "Vippa håller vingarna över en ensam gnista. När vinden lägger sig följer glöden med dig. Den behöver skydd, inte ett lås.",
+    title: "A spark in the sedge",
+    clue: "Lunamoth folds its wings around a single spark. Once the wind eases, the ember follows you. It needed shelter, not a cage.",
   },
   shore: {
     species: "daggla",
-    title: "Strandens glöd",
-    clue: "I Dagglas skal vilar en varm gnista, skyddad av dagg. Varelserna har räddat fyrens glöd från havsvinden.",
+    title: "A spark on the shore",
+    clue: "A warm spark rests inside Dewshell, cradled in cool dew. The creatures have been rescuing the embers from the sea wind.",
   },
   cliff: {
     species: "kolkrabb",
-    title: "Klippans glöd",
-    clue: "Kolkrabb öppnar klon. Där ligger en gnista som aldrig slocknat. Fyrens ljus kan återvända om någon vågar släppa det fritt.",
+    title: "A spark in the stone",
+    clue: "Cinderclaw opens a pincer to reveal a steady spark. Stillglass could shine again, if someone dared to set its light free.",
   },
 };
 maps.route.npcs.push(
-  { id: "rescue-reed", label: "Glödspår", x: 10, y: 2 },
-  { id: "rescue-shore", label: "Glödspår", x: 17, y: 10 },
+  { id: "rescue-reed", label: "Spark", x: 10, y: 2 },
+  { id: "rescue-shore", label: "Spark", x: 17, y: 10 },
 );
-maps.ridge.npcs.push({ id: "rescue-cliff", label: "Glödspår", x: 12, y: 3 });
+maps.ridge.npcs.push({ id: "rescue-cliff", label: "Spark", x: 12, y: 3 });

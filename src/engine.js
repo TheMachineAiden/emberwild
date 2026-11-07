@@ -1,4 +1,11 @@
-import { species, starters, maps, trainers, rescues } from "./data.js";
+import {
+  species,
+  starters,
+  maps,
+  trainers,
+  rescues,
+  typedMoves,
+} from "./data.js";
 export const SAVE_KEY = "emberwild.save.v1";
 export function creature(id, level = 3) {
   const base = species[id];
@@ -33,7 +40,7 @@ export function newGame() {
     steps: 0,
     battle: null,
     message:
-      "Fyren har slocknat. Välj en följeslagare och sök efter glöden på Sävstigen.",
+      "Stillglass Beacon has gone dark. Choose a companion and follow the embers along Sedgeway.",
   };
 }
 export function chooseStarter(s, id) {
@@ -41,7 +48,7 @@ export function chooseStarter(s, id) {
   s.team = [creature(id)];
   s.mode = "world";
   s.message =
-    "Din följeslagare är redo! Bo vid huset vet mer. Sävstigen ligger österut.";
+    "Your companion is ready. Perrin by the cottage knows the coast. Sedgeway lies to the east.";
   return true;
 }
 export function walk(s, dx, dy, rng = Math.random) {
@@ -83,7 +90,7 @@ export function interact(s) {
     (n) => n.x === s.x + s.facing[0] && n.y === s.y + s.facing[1],
   );
   if (!npc) {
-    s.message = "Gå fram till någon och vänd dig mot dem för att prata.";
+    s.message = "Stand next to someone and face them to talk.";
     return;
   }
   if (npc.id.startsWith("rescue-")) {
@@ -97,7 +104,7 @@ export function interact(s) {
     s.battle.enemy = creature(rescue.species, 3);
     s.battle.rescueId = id;
     s.battle.log = [
-      `${rescue.title}: en ${species[rescue.species].name} skyddar en gnista. Lugna den genom strid eller fånga den. Du kan återvända om du flyr.`,
+      `${rescue.title}: ${species[rescue.species].name} is sheltering a spark. Win its trust in battle or catch it. You can leave and return.`,
     ];
     return;
   }
@@ -106,14 +113,14 @@ export function interact(s) {
     s.items.capsules = Math.max(6, s.items.capsules);
     s.items.tonics = Math.max(3, s.items.tonics);
     s.message =
-      "Hela laget är utvilat. Här får du fler glödkapslar och läkebrygder. Kom tillbaka när du vill.";
+      "Everyone is rested. Your Spark Vessels and Mending Draughts are topped up. Come back whenever you need a hand.";
   }
   if (npc.id === "neighbor")
     s.message =
-      "Bo: Följ glödspåren på Sävstigen och Vindryggen. Lugna eller fånga varelserna där. Försvaga dem först — läkaren hjälper dig gratis.";
+      "Perrin: Look for sheltered sparks along Sedgeway and Saltwind Rise. Weaken their guardians before catching them. Mira will heal your team for free.";
   if (npc.id === "neighbor" && s.flags.complete)
     s.message =
-      "Bo: Ljuset är tillbaka! Varelsernas glöd syns ända hit. Tack för att du lyssnade på dem.";
+      "Perrin: The light reaches Briarwick again! You saw what those little creatures were trying to tell us. Thank you.";
   if (trainers[npc.id]) {
     const trainer = trainers[npc.id];
     if (s.flags[trainer.flag]) s.message = trainer.reward;
@@ -121,17 +128,18 @@ export function interact(s) {
   }
   if (npc.id === "lookout")
     s.message =
-      "Utkiken: Signe stängde luckorna när glöden försvann. Men se — varelserna skyddar ljuset från vinden.";
+      "Tamsin: Alder shuttered the beacon when its embers vanished. But look at the creatures. They are shielding the sparks from the wind.";
   if (npc.id === "inscription")
     s.message =
-      "Inskriften: Från havet växer mossan. Ur mossan stiger glöden. Tänd skålarna: vatten, mossa, glöd. Varelserna har hållit glöden levande här nere.";
+      "The inscription reads: Tide feeds moss. Moss shelters ember. Light the bowls in that order. The creatures have kept these sparks alive in the vault.";
   if (npc.id === "reset") {
     s.bowlStep = 0;
-    s.message = "Skålarna är släckta. Börja med vattnet.";
+    s.message = "The bowls are dark again. Begin with Tide.";
   }
   if (npc.id.startsWith("bowl-")) {
     if (s.flags.puzzle) {
-      s.message = "Skålarna lyser tillsammans. Trappan i nordost är öppen.";
+      s.message =
+        "The three bowls shine together. The northeast stairs are open.";
       return;
     }
     const order = ["tide", "moss", "ember"];
@@ -140,18 +148,18 @@ export function interact(s) {
       if (s.bowlStep === 3) {
         s.flags.puzzle = true;
         s.message =
-          "Glöden förenas! Trappan i nordost öppnas. Varelserna bär ljuset uppåt.";
-      } else s.message = `Skålen lyser. ${s.bowlStep} av 3 tända.`;
+          "The sparks join! The northeast stairs open. The creatures carry their light toward the lantern.";
+      } else s.message = `The bowl is lit. ${s.bowlStep} of 3 are glowing.`;
     } else {
       s.bowlStep = 0;
       s.message =
-        "Glöden falnar. Försök igen: vatten, mossa, glöd. Inget har förbrukats.";
+        "The sparks fade. Try Tide, Moss, then Ember. Nothing was used up.";
     }
   }
   if (npc.id === "beacon")
     s.message = s.flags.complete
-      ? "Fyren lyser över Glödvik. Glöden räcker när alla delar den."
-      : "Fyrlinsen är mörk. Signe väntar söder om ljuset.";
+      ? "Stillglass shines over Briarwick. A little light goes a long way when it is shared."
+      : "The lantern is dark. Warden Alder waits just below it.";
 }
 export function heal(s) {
   for (const c of s.team) c.hp = c.maxHp;
@@ -181,8 +189,8 @@ export function startBattle(s, id, trainer = false) {
     result: null,
     log: [
       definition
-        ? `${definition.name} vill utmana dig!`
-        : `En vild ${species[id].name} dök upp!`,
+        ? `${definition.name} challenges you!`
+        : `A wild ${species[id].name} appears!`,
     ],
   };
 }
@@ -192,19 +200,28 @@ export function effectiveness(attack, defense) {
   if (beats[defense] === attack) return 0.7;
   return 1;
 }
-function hit(from, to, typed, guard = false) {
+export function moveInfo(from, to, typed) {
   const type = typed ? species[from.species].type : "neutral";
   const mult = effectiveness(type, species[to.species].type);
   const damage = Math.max(
     1,
+    Math.round((species[from.species].attack + from.level - 2) * mult),
+  );
+  return { type, damage, mult };
+}
+function hit(from, to, typed, guard = false) {
+  const info = moveInfo(from, to, typed);
+  // Round only once after guard, matching the original damage rule.
+  const damage = Math.max(
+    1,
     Math.round(
       (species[from.species].attack + from.level - 2) *
-        mult *
+        info.mult *
         (guard ? 0.4 : 1),
     ),
   );
   to.hp = Math.max(0, to.hp - damage);
-  return { damage, mult };
+  return { damage, mult: info.mult };
 }
 function lose(s) {
   heal(s);
@@ -216,7 +233,7 @@ function lose(s) {
   s.items.capsules = Math.max(6, s.items.capsules);
   s.items.tonics = Math.max(3, s.items.tonics);
   s.message =
-    "Läkaren tog hand om er. Hela laget är utvilat och väskan är påfylld. Du kan försöka igen.";
+    "Mira brought you home safely. Your whole team is rested and your supplies are topped up. You are ready to try again.";
 }
 function completeRescue(s) {
   const id = s.battle.rescueId;
@@ -224,7 +241,7 @@ function completeRescue(s) {
   s.rescued.push(id);
   s.battle.log.push(
     rescues[id].clue,
-    `Glödspår: ${s.rescued.length}/3. Anteckningen finns i lagets fältbok.`,
+    `Sheltered sparks: ${s.rescued.length}/3. A new note is waiting in your field journal.`,
   );
 }
 function win(s) {
@@ -237,11 +254,11 @@ function win(s) {
     c.level++;
     c.maxHp += 4;
     c.hp = Math.min(c.maxHp, c.hp + 8);
-    b.log.push(`${species[c.species].name} nådde nivå ${c.level}!`);
+    b.log.push(`${species[c.species].name} grew to level ${c.level}!`);
   }
   if (b.queue.length) {
     b.enemy = b.queue.shift();
-    b.log.push(`${b.name} skickar fram ${species[b.enemy.species].name}!`);
+    b.log.push(`${b.name} sends out ${species[b.enemy.species].name}!`);
     return;
   }
   if (b.trainer) {
@@ -250,7 +267,7 @@ function win(s) {
   }
   completeRescue(s);
   b.result = "win";
-  b.log.push(b.trainer ? trainers[b.trainerId].reward : "Ni vann striden!");
+  b.log.push(b.trainer ? trainers[b.trainerId].reward : "Battle won!");
 }
 export function battleAction(
   s,
@@ -268,13 +285,13 @@ export function battleAction(
   b.log = [];
   const mustSwitch = c.hp === 0;
   if (mustSwitch && action !== "switch") {
-    b.log = ["Välj en utvilad följeslagare i laget."];
+    b.log = ["Choose a companion that can still battle."];
     return false;
   }
   if (action === "attack" || action === "typed") {
     const { damage, mult } = hit(c, enemy, action === "typed");
     b.log.push(
-      `${species[c.species].name} gör ${damage} skada.${mult > 1 ? " Mycket effektivt!" : mult < 1 ? " Svag effekt." : ""}`,
+      `${species[c.species].name} uses ${action === "typed" ? typedMoves[species[c.species].type] : "Bump"}: ${damage} damage.${mult > 1 ? " A strong match!" : mult < 1 ? " The attack is resisted." : ""}`,
     );
     emit("player-hit", { actor: "ally", target: "enemy", damage, mult });
     if (enemy.hp === 0) {
@@ -284,26 +301,26 @@ export function battleAction(
     }
   } else if (action === "guard") {
     b.guard = true;
-    b.log.push("Du tar skydd och samlar kraft.");
+    b.log.push("Your companion braces and recovers 3 HP.");
     c.hp = Math.min(c.maxHp, c.hp + 3);
     emit("guard", { actor: "ally" });
   } else if (action === "tonic") {
     if (!s.items.tonics || c.hp === c.maxHp) {
-      b.log = ["Ingen brygd behövs, eller så är de slut."];
+      b.log = ["No draught is needed, or your supply has run out."];
       return false;
     }
     s.items.tonics--;
     c.hp = Math.min(c.maxHp, c.hp + 22);
-    b.log.push("Läkebrygden återställer upp till 22 HP.");
+    b.log.push("A Mending Draught restores up to 22 HP.");
     emit("heal", { actor: "ally", target: "ally" });
   } else if (action === "capture") {
     if (b.trainer || s.team.length >= 6 || !s.items.capsules) {
       b.log = [
         b.trainer
-          ? "Du kan bara fånga vilda varelser."
+          ? "Only wild creatures can join you in a Spark Vessel."
           : s.team.length >= 6
-            ? "Laget är fullt (6 varelser)."
-            : "Kapslarna är slut. Läkaren har fler.",
+            ? "Your team is full. You can travel with six companions."
+            : "No Spark Vessels left. Mira can give you more.",
       ];
       return false;
     }
@@ -313,11 +330,11 @@ export function battleAction(
       s.flags.captured = true;
       b.result = "capture";
       completeRescue(s);
-      b.log.push(`${species[enemy.species].name} ansluter till ditt lag!`);
+      b.log.push(`${species[enemy.species].name} joins your team!`);
       emit("capture", { target: "enemy" });
       return true;
     }
-    b.log.push("Varelsen tog sig ur kapseln. Försvaga den mer!");
+    b.log.push("It broke free! A weakened creature is easier to catch.");
     emit("capture-miss", { target: "enemy" });
   } else if (action === "switch") {
     if (
@@ -326,29 +343,31 @@ export function battleAction(
       s.team[index].hp === 0 ||
       index === s.active
     ) {
-      b.log = ["Välj en annan utvilad följeslagare."];
+      b.log = ["Choose another companion that can still battle."];
       return false;
     }
     s.active = index;
     c = s.team[index];
-    b.log.push(`${species[c.species].name}, din tur!`);
+    b.log.push(`${species[c.species].name}, you are up!`);
     emit("switch", { actor: "ally" });
     if (mustSwitch) return true;
   } else if (action === "flee") {
     if (b.trainer) {
       b.log = [
-        "Den här utmaningen måste avgöras. Läkaren hjälper er om ni förlorar.",
+        "You cannot leave a trainer challenge. Mira will help if your team is defeated.",
       ];
       return false;
     }
     b.result = "flee";
-    b.log.push("Ni kommer undan utan problem.");
+    b.log.push("You got away safely.");
     emit("flee");
     return true;
   } else return false;
   const { damage } = hit(enemy, c, rng() > 0.35, b.guard);
   b.guard = false;
-  b.log.push(`${species[enemy.species].name} svarar: ${damage} skada.`);
+  b.log.push(
+    `${species[enemy.species].name} strikes back for ${damage} damage.`,
+  );
   emit("enemy-hit", { actor: "enemy", target: "ally", damage });
   if (c.hp === 0) {
     if (s.team.every((m) => m.hp === 0)) {
@@ -356,7 +375,7 @@ export function battleAction(
       emit("loss", { target: "ally" });
       return true;
     }
-    b.log.push("Din följeslagare behöver vila. Välj en annan i laget.");
+    b.log.push("Your companion is exhausted. Choose another team member.");
     emit("faint", { target: "ally" });
   }
   return true;
@@ -371,7 +390,7 @@ export function finishBattle(s) {
 }
 export function encodeSave(s) {
   if (s.mode === "starter" || s.mode === "battle")
-    throw new Error("Spara när du är ute och går.");
+    throw new Error("Save while exploring, outside battle.");
   const copy = structuredClone(s);
   copy.mode = "world";
   copy.battle = null;
@@ -388,7 +407,7 @@ export function decodeSave(raw) {
     !validInt(s.x, 0, 19) ||
     !validInt(s.y, 0, 12)
   )
-    throw new Error("Sparfilen har ett okänt format.");
+    throw new Error("This save format is not supported.");
   if (
     !Array.isArray(s.team) ||
     s.team.length < 1 ||
@@ -403,7 +422,7 @@ export function decodeSave(raw) {
         validInt(c.xp, 0, 3),
     )
   )
-    throw new Error("Laget kunde inte läsas.");
+    throw new Error("The saved team could not be read.");
   if (
     !s.items ||
     !validInt(s.items.capsules, 0, 9999) ||
@@ -414,12 +433,12 @@ export function decodeSave(raw) {
     !validInt(s.steps, 0, 1e9) ||
     !validInt(s.active, 0, s.team.length - 1)
   )
-    throw new Error("Sparfilen är skadad.");
+    throw new Error("This save could not be read.");
   if (
     "#TH".includes(maps[s.map].rows[s.y][s.x]) ||
     maps[s.map].npcs.some((n) => n.x === s.x && n.y === s.y)
   )
-    throw new Error("Positionen kunde inte läsas.");
+    throw new Error("The saved location could not be read.");
   // Reconstruct only known fields, including a safe facing; never trust arbitrary saved UI data.
   const clean = newGame();
   Object.assign(clean, {
@@ -448,7 +467,7 @@ export function decodeSave(raw) {
       : [],
     bowlStep: s.flags.puzzle ? 3 : validInt(s.bowlStep, 0, 2) ? s.bowlStep : 0,
     steps: s.steps,
-    message: "Sparningen är inläst. Välkommen tillbaka!",
+    message: "Save loaded. Welcome back!",
   });
   if (clean.team.every((c) => c.hp === 0)) lose(clean);
   return clean;

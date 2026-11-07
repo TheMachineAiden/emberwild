@@ -12,15 +12,22 @@ import {
   chooseStarter,
   walk,
   interact,
-  battleAction,
+  moveInfo,
   finishBattle,
   encodeSave,
   decodeSave,
   SAVE_KEY,
 } from "./engine.js";
+import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 let state = newGame(),
   panel = null;
 const music = new Music();
+const sequence = new BattleSequence();
+let battleMenu = "commands",
+  presentation = null,
+  previousFrame = null;
+const reducedMotion = () =>
+  matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (id) => document.getElementById(id),
   scene = $("scene"),
   canvas = $("world"),
@@ -31,11 +38,14 @@ function node(tag, text, className) {
   if (className) el.className = className;
   return el;
 }
-function button(text, fn, disabled = false) {
+function button(text, fn, disabled = false, key = text) {
   const el = node("button", text);
   el.type = "button";
-  el.disabled = disabled;
-  el.addEventListener("click", fn);
+  el.disabled = disabled || sequence.busy;
+  el.dataset.focus = key;
+  el.addEventListener("click", () => {
+    if (!sequence.busy) fn();
+  });
   return el;
 }
 function marker(id, pose = "front") {
@@ -50,23 +60,25 @@ function marker(id, pose = "front") {
 function store(announce = false) {
   try {
     localStorage.setItem(SAVE_KEY, encodeSave(state));
-    if (announce) state.message = "Sparat på den här enheten.";
+    if (announce) state.message = "Saved on this device.";
   } catch {
     state.message =
-      "Kunde inte spara här. Kontrollera webbläsarens lagringsinställningar. Spelet kan fortsätta.";
+      "Could not save on this device. Check your browser storage settings. You can keep playing.";
   }
 }
 function load() {
+  if (sequence.busy) return;
   try {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) {
-      state.message = "Det finns ingen sparning på den här enheten.";
+      state.message = "No saved adventure on this device yet.";
     } else {
       state = decodeSave(raw);
       panel = null;
     }
   } catch {
-    state.message = "Sparningen kunde inte läsas. Ditt pågående spel är kvar.";
+    state.message =
+      "Could not load that save. Your current adventure is still here.";
   }
   render();
 }
@@ -208,62 +220,95 @@ function world() {
 }
 
 function renderTeam(inBattle = false) {
-  scene.append(node("h2", inBattle ? "Välj följeslagare" : "Ditt lag"));
+  const forced = inBattle && state.team[state.active].hp === 0;
+  scene.append(
+    node(
+      "h2",
+      forced
+        ? "Who will take their place?"
+        : inBattle
+          ? "Switch companion"
+          : "Your team",
+    ),
+  );
+  if (inBattle)
+    scene.append(
+      node(
+        "p",
+        forced
+          ? "Your next companion enters safely, without an extra enemy attack."
+          : "Switching gives your opponent a turn.",
+      ),
+    );
   const list = node("div", null, "team-list");
   state.team.forEach((c, i) => {
     const row = node("div", null, "team-row");
     row.append(
+      marker(c.species),
       node(
         "span",
-        `${species[c.species].name} · Nv ${c.level} · ${typeNames[species[c.species].type]}\nHP ${c.hp}/${c.maxHp}${i === state.active ? " · Aktiv" : ""}`,
+        `${species[c.species].name} · Lv. ${c.level} · ${typeNames[species[c.species].type]}\nHP ${c.hp}/${c.maxHp}${i === state.active ? " · Lead" : ""}`,
       ),
     );
     row.append(
       button(
-        i === state.active ? "Aktiv" : "Välj",
+        i === state.active ? "Lead" : "Choose",
         () => {
           if (inBattle) {
             panel = null;
             act("switch", i);
           } else {
             state.active = i;
+            store();
             render();
           }
         },
         c.hp === 0 || i === state.active,
+        `team-${i}`,
       ),
     );
     list.append(row);
   });
   scene.append(list);
-  scene.append(
-    node("h3", `Fältanteckningar · ${state.rescued.length}/3 glödspår`),
-  );
-  for (const [id, rescue] of Object.entries(rescues))
+  if (!inBattle) {
     scene.append(
-      node(
-        "p",
-        state.rescued.includes(id)
-          ? rescue.title + ": " + rescue.clue
-          : rescue.title + ": ännu inte undersökt.",
+      node("h3", `Field journal · ${state.rescued.length}/3 sheltered sparks`),
+    );
+    for (const [id, rescue] of Object.entries(rescues))
+      scene.append(
+        node(
+          "p",
+          state.rescued.includes(id)
+            ? rescue.title + ": " + rescue.clue
+            : rescue.title + ": not yet found.",
+        ),
+      );
+  }
+  if (!forced)
+    scene.append(
+      button(
+        "Back",
+        () => {
+          panel = null;
+          battleMenu = "commands";
+          render();
+          if (state.mode === "world")
+            $("team-toggle").focus({ preventScroll: true });
+        },
+        false,
+        "back",
       ),
     );
-  scene.append(
-    button("Tillbaka", () => {
-      panel = null;
-      render();
-    }),
-  );
 }
 function fighter(c, side) {
   const el = node("div", null, `fighter ${side}`);
   el.append(marker(c.species, side === "ally" ? "back" : "front"));
   const stat = node("div", null, "stats");
-  stat.append(node("strong", `${species[c.species].name} · Nv ${c.level}`));
+  stat.append(node("strong", `${species[c.species].name} · Lv. ${c.level}`));
   const hp = node("progress");
   hp.max = c.maxHp;
   hp.value = c.hp;
-  hp.setAttribute("aria-label", `HP ${c.hp} av ${c.maxHp}`);
+  hp.setAttribute("aria-label", `HP ${c.hp} of ${c.maxHp}`);
   stat.append(
     hp,
     node(
@@ -271,87 +316,211 @@ function fighter(c, side) {
       `${c.hp}/${c.maxHp} HP · ${typeNames[species[c.species].type]}`,
     ),
   );
+  const track = node("div", null, "hp-track"),
+    fill = node("div", null, "hp-fill");
+  const old =
+    previousFrame &&
+    (side === "enemy"
+      ? previousFrame.battle?.enemy
+      : previousFrame.team[previousFrame.active]);
+  const oldHp = old?.species === c.species ? old.hp : c.hp;
+  fill.style.width = `${(100 * oldHp) / c.maxHp}%`;
+  fill.classList.toggle("low", c.hp <= c.maxHp / 4);
+  track.setAttribute("aria-hidden", "true");
+  track.append(fill);
+  stat.insertBefore(track, hp);
+  hp.className = "sr-only";
+  requestAnimationFrame(() => {
+    fill.style.width = `${(100 * c.hp) / c.maxHp}%`;
+  });
+  if (
+    presentation?.target === side ||
+    (presentation?.actor === side &&
+      ["switch", "guard", "victory", "sendout"].includes(presentation.kind))
+  ) {
+    el.classList.add(`effect-${presentation.kind}`);
+    if (presentation.damage)
+      el.append(node("span", `−${presentation.damage}`, "damage-number"));
+  }
   el.append(stat);
   return el;
 }
-let lastBattleAction = -Infinity;
-function act(action, index) {
-  if (performance.now() - lastBattleAction < 180) return;
-  lastBattleAction = performance.now();
-  if (battleAction(state, action, index)) {
-    if (state.mode === "world") store();
-  }
+async function act(action, index) {
+  if (sequence.busy || state.mode !== "battle") return;
+  const plan = planBattleTurn(state, action, index);
+  panel = null;
+  battleMenu = "commands";
+  const completed = await sequence.play(
+    plan,
+    (frame) => {
+      previousFrame = state;
+      state = frame.state;
+      presentation = frame;
+      render();
+    },
+    reducedMotion(),
+  );
+  if (completed) state = plan.finalState;
+  presentation = null;
+  previousFrame = null;
+  if (state.mode === "world") store();
   render();
-  if (state.mode === "battle") {
-    scene.classList.remove("impact");
-    void scene.offsetWidth;
-    scene.classList.add("impact");
-  }
+  focusScene();
+}
+function focusScene(key) {
+  const buttons = [...scene.querySelectorAll("button:not(:disabled)")];
+  (buttons.find((b) => b.dataset.focus === key) || buttons[0])?.focus({
+    preventScroll: true,
+  });
+}
+function openBattleMenu(menu) {
+  battleMenu = menu;
+  panel = menu === "team" ? "team" : null;
+  render();
+  focusScene();
+}
+function command(title, detail, fn, disabled = false, key = title) {
+  const el = button("", fn, disabled, key);
+  el.append(node("strong", title), node("small", detail));
+  return el;
 }
 function renderBattle() {
   const b = state.battle,
     c = state.team[state.active];
-  scene.append(node("h2", b.trainer ? `Utmanare · ${b.name}` : "Vild varelse"));
+  scene.append(
+    node("h2", b.trainer ? `Challenge · ${b.name}` : "Wild encounter"),
+  );
   const field = node("div", null, "battlefield");
   field.append(fighter(b.enemy, "enemy"), fighter(c, "ally"));
   scene.append(field);
   const log = node("div", null, "battle-log");
   log.setAttribute("role", "status");
   log.setAttribute("aria-live", "polite");
-  for (const line of b.log) log.append(node("p", line));
+  const phases = {
+    "player-hit": "Your move",
+    "enemy-hit": "Their reply",
+    guard: "Bracing",
+    heal: "Mending",
+    capture: "A new companion!",
+    "capture-miss": "Broke free",
+    switch: "Into the fray",
+    flee: "Safe retreat",
+    victory: "Victory",
+    sendout: "Next opponent",
+    faint: "Companion exhausted",
+  };
+  log.append(
+    node(
+      "span",
+      presentation
+        ? phases[presentation.kind] || "Resolving…"
+        : b.result
+          ? "Battle complete"
+          : "Choose your next move",
+      "turn-label",
+    ),
+  );
+  for (const line of b.log.slice(-2)) log.append(node("p", line));
   scene.append(log);
-  const actions = node("div", null, "actions");
-  if (b.result)
+  const actions = node("div", null, "actions command-grid");
+  if (sequence.busy) {
+    actions.append(button("Resolving…", () => {}, true));
+    actions.setAttribute("aria-busy", "true");
+  } else if (b.result) {
     actions.append(
-      button("Fortsätt", () => {
-        finishBattle(state);
-        store();
-        render();
-      }),
-    );
-  else if (!c.hp) {
-    actions.append(
-      button("Välj i laget", () => {
-        panel = "team";
-        render();
-      }),
-    );
-  } else {
-    actions.append(
-      button("Tackling · neutral", () => act("attack")),
-      button(
-        `${typedMoves[species[c.species].type]} · ${typeNames[species[c.species].type]}`,
-        () => act("typed"),
+      command(
+        "Continue",
+        b.result === "capture"
+          ? "Meet your new companion in Team"
+          : "Return to your adventure",
+        () => {
+          finishBattle(state);
+          store();
+          render();
+          if (state.mode === "ending") focusScene();
+          else $("interact").focus({ preventScroll: true });
+        },
       ),
-      button("Skydd · +3 HP", () => act("guard")),
-      button(
-        `Glödkapsel (${state.items.capsules})`,
+    );
+  } else if (battleMenu === "moves") {
+    for (const [action, typed] of [
+      ["attack", false],
+      ["typed", true],
+    ]) {
+      const info = moveInfo(c, b.enemy, typed);
+      actions.append(
+        command(
+          typed ? typedMoves[info.type] : "Bump",
+          `${typeNames[info.type]} · ${info.damage} damage${info.mult > 1 ? " · Strong" : info.mult < 1 ? " · Resisted" : ""}`,
+          () => act(action),
+        ),
+      );
+    }
+    actions.append(
+      command("Brace", "Recover 3 HP · soften the next hit", () =>
+        act("guard"),
+      ),
+    );
+  } else if (battleMenu === "bag") {
+    const noCapture =
+      b.trainer || !state.items.capsules || state.team.length >= 6;
+    actions.append(
+      command(
+        `Spark Vessel · ${state.items.capsules}`,
+        b.trainer
+          ? "Wild creatures only"
+          : state.team.length >= 6
+            ? "Your team is full"
+            : "Catch a creature · weaken it first",
         () => act("capture"),
-        b.trainer || !state.items.capsules || state.team.length >= 6,
+        noCapture,
       ),
-      button(
-        `Brygd +22 (${state.items.tonics})`,
+    );
+    actions.append(
+      command(
+        `Mending Draught · ${state.items.tonics}`,
+        "Restore up to 22 HP · uses a turn",
         () => act("tonic"),
         !state.items.tonics || c.hp === c.maxHp,
       ),
-      button(
-        "Byt följeslagare",
-        () => {
-          panel = "team";
-          render();
-        },
-        state.team.length < 2,
+    );
+  } else {
+    actions.append(
+      command("Fight", "Choose a move", () => openBattleMenu("moves")),
+      command(
+        "Bag",
+        `${state.items.capsules} vessels · ${state.items.tonics} draughts`,
+        () => openBattleMenu("bag"),
       ),
-      button("Fly", () => act("flee"), b.trainer),
+      command(
+        "Team",
+        "Switch companion",
+        () => openBattleMenu("team"),
+        !state.team.some((m, i) => i !== state.active && m.hp > 0),
+      ),
+      command(
+        "Run",
+        b.trainer ? "Finish this challenge first" : "Leave safely",
+        () => act("flee"),
+        b.trainer,
+      ),
     );
   }
+  if (!sequence.busy && !b.result && battleMenu !== "commands")
+    actions.append(
+      button("Back", () => openBattleMenu("commands"), false, "back"),
+    );
   scene.append(actions);
 }
 function render() {
+  const focusKey = scene.contains(document.activeElement)
+    ? document.activeElement.dataset.focus
+    : null;
+  const wasBattle = document.body.classList.contains("in-battle");
   music.setCue(cueFor(state));
   $("stage").classList.toggle(
     "has-scene",
-    state.mode !== "world" || panel !== null,
+    state.mode !== "world" || panel !== null || sequence.busy,
   );
   document.body.classList.toggle("in-battle", state.mode === "battle");
   document.body.classList.toggle(
@@ -362,30 +531,42 @@ function render() {
   world();
   scene.replaceChildren();
   $("objective").textContent = state.flags.complete
-    ? "Fyren lyser igen. Återvänd till Glödvik eller fortsätt utforska."
+    ? "Stillglass shines again. Return to Briarwick or keep exploring."
     : !state.flags.rival
-      ? "Sök glöd på Sävstigen. Prata med Liv vid stigens östra ände."
+      ? "Follow Sedgeway east. Rowan is waiting near the far end."
       : !state.flags.trainer
-        ? "Följ vägen österut till Vindryggen. Sök upp Edda vid fyren."
+        ? "Head east to Saltwind Rise. Find Maren near the beacon."
         : !state.flags.puzzle
-          ? "Gå in i fyren. Läs inskriften och tänd de tre skålarna."
-          : "Trappan är öppen. Vila och möt Signe på fyrens krön.";
+          ? "Enter Stillglass. Read the inscription and light the three bowls."
+          : "The stairs are open. Rest, then meet Alder at the Lantern Crown.";
   $("location").textContent = maps[state.map].name;
   $("message").textContent = state.message;
-  $("save").disabled = state.mode !== "world";
-  $("load").disabled = state.mode === "battle";
+  $("save").disabled = state.mode !== "world" || sequence.busy;
+  $("load").disabled = state.mode === "battle" || sequence.busy;
+  $("restart").disabled = sequence.busy;
   $("team-toggle").disabled =
-    state.mode === "starter" || state.mode === "ending";
-  $("interact").disabled = state.mode !== "world" || panel !== null;
+    state.mode === "starter" ||
+    state.mode === "ending" ||
+    sequence.busy ||
+    (state.mode === "battle" &&
+      (!state.team[state.active].hp || !!state.battle.result));
+  $("interact").disabled =
+    state.mode !== "world" || panel !== null || sequence.busy;
   document
     .querySelectorAll("[data-dir]")
-    .forEach((b) => (b.disabled = state.mode !== "world" || panel !== null));
-  if (state.mode === "starter") {
+    .forEach(
+      (b) =>
+        (b.disabled =
+          state.mode !== "world" || panel !== null || sequence.busy),
+    );
+  if (presentation?.kind === "loss") {
+    scene.append(node("h2", "Safe at home"), node("p", state.message));
+  } else if (state.mode === "starter") {
     scene.append(
-      node("h2", "Vem följer med dig?"),
+      node("h2", "Who will travel with you?"),
       node(
         "p",
-        "Fyren har tystnat. De vilda varelserna bär fortfarande på glöd. Välj en vän och ta reda på varför.",
+        "Stillglass Beacon has fallen dark, but wild creatures still carry its embers. Choose a friend and follow their light.",
       ),
     );
     const grid = node("div", null, "starter-grid");
@@ -403,34 +584,44 @@ function render() {
     }
     scene.append(
       grid,
-      node("p", "Sparat sedan tidigare? Välj ”Läs in” ovanför."),
+      node(
+        "p",
+        "Returning to the coast? Use Load to restore a saved adventure.",
+      ),
     );
   } else if (state.mode === "ending") {
     scene.append(
-      node("h2", "Fyren lyser igen"),
+      node("h2", "A light worth sharing"),
       node(
         "p",
-        "Varelserna samlas kring linsen. En efter en delar de sin glöd, tills ljuset når havet.",
+        "The creatures gather around the lantern. One by one, they offer their embers until a warm beam reaches across the sea.",
       ),
       node(
         "p",
-        "Signe öppnar luckorna. Nere i Glödvik tänds fönstren som svar. Det som verkade stulet hade blivit skyddat hela tiden.",
+        "Alder opens the shutters. Far below, the windows of Briarwick answer with tiny lights. The missing embers were never stolen. They were being kept safe.",
       ),
       node(
         "p",
-        "Kapitel 1 är avslutat. Ditt lag och världen finns kvar att utforska.",
+        "Chapter complete. Your companions and the coast are still yours to explore.",
       ),
-      button("Tillbaka till världen", () => {
+      button("Return to the coast", () => {
         state.mode = "world";
         store();
         render();
       }),
     );
-  } else if (panel === "team") renderTeam(state.mode === "battle");
+  } else if (
+    panel === "team" ||
+    (state.mode === "battle" && !state.team[state.active].hp && !sequence.busy)
+  )
+    renderTeam(state.mode === "battle");
   else if (state.mode === "battle") renderBattle();
+  if (!sequence.busy && (focusKey || (!wasBattle && state.mode === "battle")))
+    focusScene(focusKey);
+  scene.setAttribute("aria-busy", String(sequence.busy));
 }
 function move(dx, dy) {
-  if (panel) return;
+  if (panel || sequence.busy) return;
   const previousMap = state.map;
   walk(state, dx, dy);
   if (previousMap !== state.map) store();
@@ -444,13 +635,17 @@ document
     ),
   );
 $("interact").addEventListener("click", () => {
+  if (sequence.busy) return;
   interact(state);
   if (state.mode === "world") store();
   render();
 });
 $("team-toggle").addEventListener("click", () => {
+  if (sequence.busy) return;
+  battleMenu = "commands";
   panel = panel ? null : "team";
   render();
+  if (panel) focusScene();
 });
 $("save").addEventListener("click", () => {
   store(true);
@@ -458,9 +653,10 @@ $("save").addEventListener("click", () => {
 });
 $("load").addEventListener("click", load);
 $("restart").addEventListener("click", () => {
+  if (sequence.busy) return;
   if (
     confirm(
-      "Börja ett nytt äventyr? Den sparade resan ersätts när du väljer en följeslagare.",
+      "Start a new adventure? Your current save will be replaced when you choose a companion.",
     )
   ) {
     state = newGame();
@@ -471,10 +667,10 @@ $("restart").addEventListener("click", () => {
 $("sound").addEventListener("click", async () => {
   try {
     const enabled = await music.toggle();
-    $("sound").textContent = enabled ? "Ljud på" : "Ljud av";
+    $("sound").textContent = enabled ? "Sound on" : "Sound off";
     $("sound").setAttribute("aria-pressed", String(enabled));
   } catch {
-    $("sound").textContent = "Ljud saknas";
+    $("sound").textContent = "Sound unavailable";
   }
 });
 document.addEventListener("visibilitychange", () =>
@@ -482,11 +678,60 @@ document.addEventListener("visibilitychange", () =>
 );
 let lastMove = 0;
 document.addEventListener("keydown", (event) => {
-  // Preserve native activation and tab navigation in all menus.
+  if (
+    (event.key === "Enter" || event.key === " ") &&
+    (event.repeat || sequence.busy)
+  ) {
+    event.preventDefault();
+    return;
+  }
+  if (sequence.busy) {
+    if (
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Escape"].includes(
+        event.key,
+      )
+    )
+      event.preventDefault();
+    return;
+  }
+  if (
+    scene.contains(event.target) &&
+    ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+  ) {
+    const choices = [...scene.querySelectorAll("button:not(:disabled)")];
+    const index = choices.indexOf(document.activeElement);
+    if (index >= 0) {
+      event.preventDefault();
+      const grid = document.activeElement.closest(
+        ".command-grid, .starter-grid",
+      );
+      const columns = grid
+        ? getComputedStyle(grid).gridTemplateColumns.split(" ").length
+        : 1;
+      const delta =
+        event.key === "ArrowRight"
+          ? 1
+          : event.key === "ArrowLeft"
+            ? -1
+            : event.key === "ArrowDown"
+              ? columns
+              : -columns;
+      choices[(index + delta + choices.length) % choices.length]?.focus();
+    }
+    return;
+  }
   if (event.key === "Escape") {
     if (state.mode === "starter" || state.mode === "ending") return;
+    event.preventDefault();
+    if (state.mode === "battle") {
+      if (!state.team[state.active].hp || state.battle.result) return;
+      if (panel || battleMenu !== "commands") openBattleMenu("commands");
+      return;
+    }
     panel = panel ? null : "team";
     render();
+    if (panel) focusScene();
+    else $("team-toggle").focus({ preventScroll: true });
     return;
   }
   if (state.mode !== "world" || panel) return;
@@ -523,7 +768,7 @@ try {
   if (saved) state = decodeSave(saved);
 } catch {
   state.message =
-    "Den tidigare sparningen kunde inte läsas. Du kan välja en ny följeslagare och börja om.";
+    "The previous save could not be read. Choose a companion to begin a new adventure.";
 }
 render();
 worldReady
@@ -532,7 +777,7 @@ worldReady
     render();
   })
   .catch(() => {
-    state.message = "Världsgrafiken kunde inte laddas. Försök ladda om sidan.";
+    state.message = "The world artwork could not load. Try reloading the page.";
     render();
   });
 

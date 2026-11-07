@@ -1,0 +1,9 @@
+# English interaction pass
+
+Development preview: `EMBERWILD_PORT=4389 npm start`, `http://127.0.0.1:4389/`. This draft has not replaced the published chapter. Artwork, smooth overworld travel, touch holding and whole-game rendered review remain in progress.
+
+The English display names and dialogue are adapted around Briarwick and Stillglass Beacon; stable IDs, save key and version remain unchanged. Runtime sources contain no remaining Swedish strings. The retained released-save fixture loads with the same team, supplies, location and progress; an additional completed-progress roundtrip retains all story flags and three discoveries. Move-card damage is checked against actual rule damage for all creature type pairs.
+
+Normal keyboard input in isolated desktop Chrome: chose Wickit, crossed the village boundary, entered Sedgeway grass and met Lunamoth. Enter opened Fight with Bump/Wickflare damage information. A Bump showed enemy HP18→9 while ally HP remained28, then the reply showed ally HP28→22. A second Enter during resolution was ignored; one action and one reply appeared. Root Fight focus returned after resolution. ArrowRight/Enter opened Bag; Spark Vessel succeeded, showed capture feedback, then enabled Continue. Continue returned to the world. Escape opened Team, Enter selected captured Lunamoth, Escape returned; browser reload retained both companions, HP and the selected lead. No console warnings/errors through this pass.
+
+This is functional evidence from accessibility snapshots, not visual acceptance or a complete regression. Mobile, failed capture/item, forced replacement/loss, reduced motion, complete English story traversal and matched rendered before/after evidence still need browser coverage. Rule/sequence tests already cover those battle branches independently. No music listening or first-player duration claim.
