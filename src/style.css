@@ -81,6 +81,12 @@ img, canvas { -webkit-user-drag: none; }
   position: absolute; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom));
   width: 112px; min-height: 80px; background: #283e40f5; border: 2px solid #d4bf87;
 }
+#sprint {
+  position: absolute; right: max(24px, env(safe-area-inset-right));
+  bottom: max(114px, calc(env(safe-area-inset-bottom) + 90px));
+  width: 112px; min-height: 52px; background: #192e36e8; touch-action: none;
+}
+#sprint[aria-pressed="true"] { background: #526d52; border-color: #f1d598; color: #fff4d4; }
 kbd { display: block; font: inherit; font-size: .65rem; margin-top: 5px; color: #bccabb; }
 .in-menu .bottom, .in-battle .bottom, .at-ending .bottom,
 .in-menu #dialogue, .in-battle #dialogue, .at-ending #dialogue { display: none; }
@@ -184,7 +190,7 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .team-details { font-size: .72rem; }
   .team-row button { padding: 7px; }
   #joystick { left: 18px; }
-  #interact { right: 18px; }
+  #interact, #sprint { right: max(18px, env(safe-area-inset-right)); }
 }
 .hp-track {
   height: 10px;
