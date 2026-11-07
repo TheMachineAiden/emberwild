@@ -124,7 +124,7 @@ function world() {
       Math.min(20 - columns, state.x - Math.floor(columns / 2)),
     ),
     cameraY =
-      narrow && state.map === "ridge" && state.y <= 6
+      narrow && ["ridge", "summit"].includes(state.map) && state.y <= 6
         ? 0
         : Math.max(0, Math.min(13 - rows, state.y - Math.floor(rows / 2)));
   ctx.clearRect(0, 0, canvas.width, canvas.height);
