@@ -6,7 +6,7 @@ Choose Wickit, Rillfin or Buddle in Briarwick, explore Sedgeway and Saltwind Ris
 
 ## Play and controls
 
-Use arrows/WASD to walk and Enter to talk or inspect. Hold a direction to keep walking; release finishes the current tile. Touch controls support held directions. Escape opens your team while exploring and goes back in battle menus. Tab or arrow keys navigate commands; Enter/Space activates them. The Field guide contains type, item and recovery help.
+Use arrows/WASD to walk and Enter to talk or inspect. Hold Shift to sprint. On touch screens, drag the joystick and hold Sprint with another finger to run. Hold a direction to keep walking; release finishes the current tile. Each step keeps the pace it started with; sprint changes apply to the next tile. Escape opens your team while exploring and goes back in battle menus. Tab or arrow keys navigate commands; Enter/Space activates them. The Field guide contains type, item and recovery help.
 
 Battles separate your move, the enemy reply and the return to commands. Fight shows damage and matchup information. Bag holds Spark Vessels and Mending Draughts. Switching normally gives the opponent a turn; replacing an exhausted companion does not. Inputs lock during brief resolution. Reduced motion removes impact/walk effects and shortens battle feedback.
 

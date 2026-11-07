@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { TileTravel, directionKey } from "../src/travel.js";
+import { TileTravel, directionKey, WALK_DURATION, SPRINT_DURATION } from "../src/travel.js";
 import { newGame, chooseStarter } from "../src/engine.js";
-function harness() {
+function harness(options = {}) {
   let state = newGame(),
     time = 0,
     frame;
@@ -23,6 +23,7 @@ function harness() {
     },
     rng: () => 0,
     duration: 100,
+    ...options,
   });
   return {
     travel,
@@ -109,4 +110,42 @@ test("changing letter case between press and release does not leave movement hel
   assert.equal(h.state.steps, 1);
   assert.equal(h.travel.held.size, 0);
   assert.equal(directionKey("ArrowUp"), "ArrowUp");
+});
+
+test('walk and sprint freeze their duration at tile start, including mid-step release', () => {
+  let sprint = false;
+  const h = harness({getDuration: () => sprint ? SPRINT_DURATION : WALK_DURATION});
+  h.travel.press('right', [1,0]);
+  h.advance(70);
+  assert.equal(h.travel.position(70).progress,.25);
+  sprint = true;
+  assert.equal(h.travel.position(70).progress,.25, 'pressing sprint cannot jump the current tile');
+  h.advance(280);
+  assert.equal(h.state.x,5);
+  h.advance(352.5);
+  assert.equal(h.travel.position(352.5).progress,.5);
+  sprint = false;
+  assert.equal(h.travel.position(352.5).progress,.5, 'release cannot reverse the current tile');
+  h.advance(425);
+  assert.equal(h.state.x,6);
+  h.travel.release('right');
+  h.advance(565);
+  assert.equal(h.travel.position(565).progress,.5,'next step returns to walking');
+  h.advance(705);
+  h.advance(1000);
+  assert.equal(h.state.x,7);
+  assert.equal(h.state.steps,3);
+  assert.equal(h.commits.length,3);
+});
+
+test('sprint encounter commits once at arrival and clears continued travel', () => {
+  const h = harness({duration: SPRINT_DURATION});
+  h.state.map='route'; h.state.x=4; h.state.y=5; h.state.steps=3;
+  h.travel.press('right',[1,0]);
+  h.advance(144);
+  assert.equal(h.state.mode,'world'); assert.equal(h.state.steps,3);
+  h.advance(145);
+  assert.equal(h.state.mode,'battle'); assert.equal(h.state.steps,4);
+  h.advance(1000);
+  assert.equal(h.commits.length,1); assert.equal(h.travel.held.size,0);
 });

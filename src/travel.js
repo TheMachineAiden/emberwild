@@ -4,6 +4,8 @@ import { walk } from "./engine.js";
 // freely without moving collisions, rolling encounters twice or saving mid-step.
 export const directionKey = (key) =>
   key.length === 1 ? key.toLowerCase() : key;
+export const WALK_DURATION = 280;
+export const SPRINT_DURATION = 145;
 
 export class TileTravel {
   constructor({
@@ -13,7 +15,8 @@ export class TileTravel {
     draw,
     now = () => performance.now(),
     requestFrame = (callback) => requestAnimationFrame(callback),
-    duration = 145,
+    duration = WALK_DURATION,
+    getDuration = () => duration,
     rng = Math.random,
   }) {
     Object.assign(this, {
@@ -24,6 +27,7 @@ export class TileTravel {
       now,
       requestFrame,
       duration,
+      getDuration,
       rng,
     });
     this.held = new Map();
@@ -54,7 +58,7 @@ export class TileTravel {
   position(time = this.now()) {
     if (!this.motion) return null;
     const m = this.motion,
-      progress = Math.min(1, Math.max(0, (time - m.start) / this.duration));
+      progress = Math.min(1, Math.max(0, (time - m.start) / m.duration));
     return {
       x: m.x + m.dx * progress,
       y: m.y + m.dy * progress,
@@ -100,11 +104,12 @@ export class TileTravel {
           next,
           before,
           start: time,
+          duration: this.getDuration(),
         };
         this.draw(this.position(time));
       } else {
         this.commit(next, before);
-        this.retryAt = time + this.duration;
+        this.retryAt = time + this.getDuration();
       }
     }
     if (this.motion || (this.held.size && this.canMove())) this.schedule();

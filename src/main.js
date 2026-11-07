@@ -19,8 +19,9 @@ import {
 } from "./engine.js";
 import { worldCamera } from "./camera.js";
 import { bindJoystick } from "./joystick.js";
+import { bindSprint } from "./sprint.js";
 import { portraitGate, toggleFullscreen } from "./display.js";
-import { TileTravel, directionKey } from "./travel.js";
+import { TileTravel, directionKey, WALK_DURATION, SPRINT_DURATION } from "./travel.js";
 import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 let state = newGame(),
@@ -44,6 +45,7 @@ let inputSuspended = false;
 const canExplore = () => !inputSuspended && !$("game-menu").open &&
   state.mode === "world" && !panel && !dialogue && !sequence.busy && worldLoaded;
 const travel = new TileTravel({
+  getDuration: () => sprint.active ? SPRINT_DURATION : WALK_DURATION,
   getState: () => state,
   canMove: () =>
     canExplore(),
@@ -74,8 +76,7 @@ function sceneTransition() {
   $("stage").classList.add("scene-enter");
 }
 function afterTravel(action) {
-  joystick.reset();
-  travel.clear();
+  clearInput();
   if (travel.busy)
     queuedInteraction = () => {
       if (state.mode === "world") action();
@@ -712,7 +713,8 @@ function render() {
     sequence.busy ||
     !worldLoaded || !!dialogue;
   $("joystick").setAttribute("aria-disabled", String(!canExplore()));
-  if (!canExplore()) joystick.reset();
+  $("sprint").disabled = !canExplore();
+  if (!canExplore()) { joystick.reset(); sprint.reset(); }
   if (presentation?.kind === "loss") {
     scene.append(node("h2", "Safe at home"), node("p", state.message));
   } else if (state.mode === "starter") {
@@ -776,6 +778,7 @@ function render() {
   if (enteringTeam) scene.scrollTop = 0;
   scene.setAttribute("aria-busy", String(sequence.busy));
 }
+const sprint = bindSprint($("sprint"), { enabled: canExplore });
 const joystick = bindJoystick($("joystick"), {
   enabled: canExplore,
   change: (direction) => {
@@ -785,6 +788,7 @@ const joystick = bindJoystick($("joystick"), {
 });
 function clearInput() {
   joystick.reset();
+  sprint.reset();
   travel.clear();
   queuedInteraction = null;
 }
@@ -904,12 +908,17 @@ const directions = {
   ArrowRight: [1, 0],
   d: [1, 0],
 };
-document.addEventListener("keyup", (event) =>
-  travel.release(directionKey(event.key)),
-);
+document.addEventListener("keyup", (event) => {
+  travel.release(directionKey(event.key));
+  if (event.key === "Shift") sprint.release("keyboard");
+});
 window.addEventListener("blur", clearInput);
 document.addEventListener("keydown", (event) => {
   if (inputSuspended) { event.preventDefault(); return; }
+  if (event.key === "Shift") {
+    if (canExplore() && !event.repeat) sprint.press("keyboard");
+    return;
+  }
   if ($("game-menu").open) return;
   if (
     (event.key === "Enter" || event.key === " ") &&
