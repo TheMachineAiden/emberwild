@@ -75,6 +75,7 @@ export class TileTravel {
     });
   }
   tick(time) {
+    let nextStart = time;
     if (this.motion) {
       const pose = this.position(time);
       if (pose.progress < 1) {
@@ -82,7 +83,10 @@ export class TileTravel {
         this.schedule();
         return;
       }
-      const { next, before } = this.motion;
+      const { next, before, start, duration } = this.motion;
+      // Preserve the fractional frame remainder across held steps. Starting
+      // every tile at this frame's timestamp creates a tiny pause per tile.
+      nextStart = start + duration;
       this.motion = null;
       this.commit(next, before);
       if (!this.canMove()) this.clear();
@@ -103,7 +107,7 @@ export class TileTravel {
           dy,
           next,
           before,
-          start: time,
+          start: nextStart,
           duration: this.getDuration(),
         };
         this.draw(this.position(time));

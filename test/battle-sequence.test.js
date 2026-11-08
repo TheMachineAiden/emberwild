@@ -32,13 +32,13 @@ test("capture, item, faint, forced switch and exit retain their own sequence bou
   let s = ready();
   assert.deepEqual(
     planBattleTurn(s, "capture", undefined, () => 0).frames.map((f) => f.kind),
-    ["capture"],
+    ["capture-attempt", "capture"],
   );
   assert.deepEqual(
     planBattleTurn(s, "capture", undefined, () => 0.99).frames.map(
       (f) => f.kind,
     ),
-    ["capture-miss", "enemy-hit"],
+    ["capture-attempt", "capture-miss", "enemy-hit"],
   );
   s.team[0].hp = 10;
   assert.deepEqual(
@@ -87,13 +87,13 @@ test("a defeated opponent never replies, including a trainer sendout", () => {
   let p = planBattleTurn(s, "attack");
   assert.deepEqual(
     p.frames.map((f) => f.kind),
-    ["player-hit", "victory"],
+    ["player-hit", "xp", "victory"],
   );
   s.battle.queue = [creature("knopp")];
   p = planBattleTurn(s, "attack");
   assert.deepEqual(
     p.frames.map((f) => f.kind),
-    ["player-hit", "sendout"],
+    ["player-hit", "xp", "sendout"],
   );
   assert.equal(p.finalState.battle.enemy.species, "knopp");
 });

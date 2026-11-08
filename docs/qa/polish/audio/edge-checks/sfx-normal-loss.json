@@ -1,0 +1,68 @@
+{
+  "label": "Labelled final-companion HP1 starting save; ordinary Bump and enemy reply",
+  "frames": [
+    {
+      "kind": "player-hit",
+      "at": 573508.5,
+      "audio": 299.5466666666667,
+      "enemy": "daggla",
+      "enemyHP": 20,
+      "team": [
+        [
+          "strila",
+          1
+        ]
+      ],
+      "reduced": false
+    },
+    {
+      "kind": "enemy-hit",
+      "at": 573910.7000000477,
+      "audio": 299.94666666666666,
+      "enemy": "daggla",
+      "enemyHP": 20,
+      "team": [
+        [
+          "strila",
+          0
+        ]
+      ],
+      "reduced": false
+    },
+    {
+      "kind": "loss",
+      "at": 574326.5,
+      "audio": 300.36266666666666,
+      "team": [
+        [
+          "strila",
+          31
+        ]
+      ],
+      "reduced": false
+    }
+  ],
+  "sounds": [
+    {
+      "id": "attack-neutral",
+      "ok": true,
+      "time": 299.5466666666667,
+      "delay": 0
+    },
+    {
+      "id": "attack-neutral",
+      "ok": true,
+      "time": 299.94666666666666,
+      "delay": 0
+    },
+    {
+      "id": "loss",
+      "ok": true,
+      "time": 300.36266666666666,
+      "delay": 0
+    }
+  ],
+  "recovery": "Mira brought you home safely. Your whole team is rested and your supplies are topped up. You are ready to try again.",
+  "position": "Briarwick. Position 5, 6.",
+  "voices": 0
+}

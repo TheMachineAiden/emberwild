@@ -1,0 +1,82 @@
+{
+  "label": "Reduced-motion normal attack from level100 multi-opponent fixture; outgoing effect retirement corrected",
+  "audit": {
+    "sounds": [
+      {
+        "id": "sendout",
+        "ok": false,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": false,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 0.005333333333333333,
+        "delay": 0
+      },
+      {
+        "id": "back",
+        "ok": true,
+        "time": 0.42133333333333334,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 0.896,
+        "delay": 0
+      },
+      {
+        "id": "attack-neutral",
+        "ok": true,
+        "time": 1.4133333333333333,
+        "delay": 0
+      },
+      {
+        "id": "defeat",
+        "ok": true,
+        "time": 1.4133333333333333,
+        "delay": 0.09
+      },
+      {
+        "id": "sendout",
+        "ok": true,
+        "time": 1.5946666666666667,
+        "delay": 0
+      }
+    ],
+    "frames": [
+      {
+        "kind": "player-hit",
+        "audio": 1.4133333333333333,
+        "enemy": "vippa",
+        "reduced": true
+      },
+      {
+        "kind": "sendout",
+        "audio": 1.5946666666666667,
+        "enemy": "kolkrabb",
+        "reduced": true
+      }
+    ],
+    "stops": [
+      {
+        "phase": "Choose your next move",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "phase": "Next opponent",
+        "before": 1,
+        "after": 0,
+        "time": 1.5946666666666667
+      }
+    ]
+  },
+  "hiddenWorldDraws": 0,
+  "voices": 0
+}

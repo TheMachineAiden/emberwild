@@ -7,12 +7,14 @@ import {
   typeNames,
   typedMoves,
   maps,
+  trainers,
   rescues,
 } from "./data.js";
 import {
   newGame,
   chooseStarter,
   interact,
+  startBattle,
   moveInfo,
   finishBattle,
   encodeSave,
@@ -20,19 +22,26 @@ import {
   SAVE_KEY,
 } from "./engine.js";
 import { worldCamera } from "./camera.js";
+import { rasterSize, projectWorldRect, WorldLabels } from "./world-view.js";
 import { bindJoystick } from "./joystick.js";
 import { bindSprint } from "./sprint.js";
 import { portraitGate, toggleFullscreen } from "./display.js";
 import { TileTravel, directionKey, WALK_DURATION, SPRINT_DURATION } from "./travel.js";
 import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
+import { TrainerSight } from "./trainer-sight.js";
+import { WorldClock, UnderfootGrass, waterFrame } from "./world-clock.js";
+import { battleEffect } from "./sfx.js";
+import { battleEnvironment, battleContacts } from "./battle-scene.js";
 let state = newGame(),
   panel = null,
   dialogue = null;
 const SAVE_FAILURE_MESSAGE = "Could not save on this device. Check your browser storage settings. You can keep playing.";
 const music = new Music();
-const sequence = new BattleSequence();
+const sequence = new BattleSequence(undefined, () => music.effects.stop());
 const encounter = new EncounterIntro();
+const trainerSight = new TrainerSight(maps, trainers);
+const grass = new UnderfootGrass();
 const battleBusy = () => sequence.busy || encounter.busy;
 let renderedMode = "starter";
 let battleMenu = "commands",
@@ -45,27 +54,65 @@ const $ = (id) => document.getElementById(id),
   scene = $("scene"),
   canvas = $("world"),
   ctx = canvas.getContext("2d");
+const worldLabels = new WorldLabels($("world-labels"));
 let queuedInteraction = null;
 let inputSuspended = false;
-const canExplore = () => !inputSuspended && !$("game-menu").open &&
+let explorationBlurred = false;
+const worldEnabled = () => !inputSuspended && !explorationBlurred && !document.hidden && !$("game-menu").open &&
   state.mode === "world" && !panel && !dialogue && !battleBusy() && worldLoaded;
+const canExplore = () => worldEnabled() && !trainerSight.busy;
+const gameSoundReady = () => !document.hidden && !explorationBlurred &&
+  !inputSuspended && !$("game-menu").open;
+let ambientKey = "";
+const worldClock = new WorldClock({
+  enabled: worldEnabled,
+  update: (now, time) => {
+    const event = advanceTrainers(now, travel.busy);
+    const poses = maps[state.map].npcs.filter(n => trainers[n.id]).map(n => trainerSight.pose(n, now));
+    const rustle = grass.pose(state.map, now, reducedMotion());
+    const key = JSON.stringify([reducedMotion() || ["cellar", "summit"].includes(state.map) ? 0 : waterFrame(time), poses,
+      rustle && [rustle.frame, Math.round(rustle.alpha * 8)]]);
+    const dirty = key !== ambientKey;
+    ambientKey = key;
+    if (event) render();
+    return dirty;
+  },
+  draw: () => { if (!travel.busy) world(); },
+  pause: () => { trainerSight.suspend(); grass.clear(); ambientKey = ""; },
+});
+function advanceTrainers(now, moving = false) {
+  const events = trainerSight.tick(state, now, { enabled: worldEnabled(), moving });
+  for (const event of events) {
+    clearInput();
+    if (event.type === "notice" && gameSoundReady()) music.effects.play("notice");
+    if (event.type === "encounter") {
+      startBattle(state, trainers[event.id].team[0][0], event.id);
+    }
+  }
+  return events.length > 0;
+}
 const travel = new TileTravel({
   getDuration: () => sprint.active ? SPRINT_DURATION : WALK_DURATION,
   getState: () => state,
   canMove: () =>
     canExplore(),
   draw: (pose) => {
+    if (!reducedMotion()) grass.touch(state.map, maps[state.map], pose, performance.now());
     if (pose.progress === 0) render();
     else world();
   },
   commit: (next, before) => {
     state = next;
+    if (!reducedMotion() && next.map === before.map && next.steps !== before.steps)
+      grass.touch(next.map, maps[next.map], { x: next.x, y: next.y,
+        progress: 1, stride: travel.stride }, performance.now());
     if (next.mode === "world" && next.map === before.map && next.steps === before.steps && next.message !== before.message)
       dialogue = next.message;
     if (before.map !== next.map) {
       store();
       sceneTransition();
     }
+    if (!queuedInteraction) advanceTrainers(performance.now());
     render();
     if (queuedInteraction) {
       const action = queuedInteraction;
@@ -94,13 +141,16 @@ function node(tag, text, className) {
   if (className) el.className = className;
   return el;
 }
-function button(text, fn, disabled = false, key = text) {
+function button(text, fn, disabled = false, key = text, sound = "confirm") {
   const el = node("button", text);
   el.type = "button";
   el.disabled = disabled || battleBusy();
   el.dataset.focus = key;
   el.addEventListener("click", () => {
-    if (!battleBusy()) fn();
+    if (!battleBusy()) {
+      if (sound) music.effects.play(key === "back" ? "back" : sound);
+      fn();
+    }
   });
   return el;
 }
@@ -120,8 +170,10 @@ function store(announce = false) {
     if (announce) {
       state.message = "Saved on this device.";
       $("display-status").textContent = state.message;
+      music.effects.play("save");
     }
   } catch {
+    if (announce) music.effects.play("unavailable");
     state.message = SAVE_FAILURE_MESSAGE;
     $("display-status").textContent = state.message;
     if (state.mode === "world") dialogue = state.message;
@@ -159,12 +211,21 @@ const worldIds = [
   "maren",
   "alder",
   "tamsin",
+  ...["rowan", "maren", "alder"].flatMap((name) =>
+    ["north", "south", "east", "west"].flatMap((dir) =>
+      [0, 1, 2].map((step) => `${name}-${dir}${step ? "-" + step : ""}`),
+    ),
+  ),
   ...["north", "south", "east", "west"].flatMap((dir) =>
     [0, 1, 2].map((step) => `player-${dir}${step ? "-" + step : ""}`),
   ),
   "sand",
   "ground",
   "water",
+  "water-1",
+  "water-2",
+  "grass-front-1",
+  "grass-front-2",
   "reeds",
   "tree",
   "roof",
@@ -201,35 +262,40 @@ const worldReady = Promise.all(
   ),
 );
 function world() {
-  const pose = travel.position();
+  const now = performance.now();
+  const pose = travel.position(now);
   const px = pose?.x ?? state.x,
     py = pose?.y ?? state.y;
   const map = maps[state.map],
     inside = ["cellar", "summit"].includes(state.map);
-  const camera = worldCamera($("stage").clientWidth, $("stage").clientHeight, px, py, {
+  const cssWidth = $("stage").clientWidth, cssHeight = $("stage").clientHeight;
+  const camera = worldCamera(cssWidth, cssHeight, px, py, {
     touch: matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0,
     dialogue: !!dialogue,
     landmarkTop: state.map === "summit" ? 1 : state.map === "ridge" ? Math.min(1, Math.max(0, (px - 10) / 3)) : 0,
   });
-  const cameraX = camera.x / 24, cameraY = camera.y / 24,
-    columns = camera.width / 24;
-  canvas.width = camera.width;
-  canvas.height = camera.height;
+  const cameraX = camera.x / 24, cameraY = camera.y / 24;
+  const raster = rasterSize(cssWidth, cssHeight, devicePixelRatio);
+  if (canvas.width !== raster.width) canvas.width = raster.width;
+  if (canvas.height !== raster.height) canvas.height = raster.height;
   canvas.dataset.camera = JSON.stringify(camera);
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.imageSmoothingEnabled = false;
-  ctx.translate(-camera.x, -camera.y);
   if (!worldLoaded) return;
+  worldLabels.begin();
   const draw = (id, x, y, width = 24, height = 24) =>
-    ctx.drawImage(worldAssets[id], x, y, width, height);
+    ctx.drawImage(worldAssets[id], ...projectWorldRect(camera,raster,cssWidth,cssHeight,x,y,width,height));
+  const water = reducedMotion() ? "water" : ["water", "water-1", "water-2"][waterFrame(worldClock.time)];
   // Authored boundary tiles fill the view when the camera extends past a map
   // edge. Collision and map transitions still use the original logical tiles.
   for (let y = Math.floor(cameraY); y <= Math.ceil((camera.y + camera.height) / 24); y++)
     for (let x = Math.floor(cameraX); x <= Math.ceil((camera.x + camera.width) / 24); x++)
-      draw(inside ? "wall" : "water", x * 24, y * 24);
+      draw(inside ? "wall" : water, x * 24, y * 24);
   map.rows.forEach((row, y) =>
     [...row].forEach((tile, x) => {
       let id = inside ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
-      if (tile === "#") id = inside ? "wall" : "water";
+      if (tile === "#") id = inside ? "wall" : water;
       if (tile === "T" || tile === "g") id = "ground";
       if (tile === "H" && state.map !== "village")
         id =
@@ -258,6 +324,8 @@ function world() {
       exit.y * 24,
     );
   for (const n of map.npcs) {
+    const trainerPose = trainerSight.pose(n, now);
+    const nx = trainerPose.x, ny = trainerPose.y;
     let id =
       npcArt[n.id] ||
       (n.id === "healer" || n.id === "rest" ? "healer" : "trainer");
@@ -285,32 +353,24 @@ function world() {
       continue;
     }
     if (n.id === "reset" || n.id === "inscription") id = "seal";
-    draw(id, n.x * 24 + (actor ? 4 : 0), n.y * 24, actor ? 16 : 24, 24);
-    ctx.font = "9px monospace";
+    if (["liv", "edda", "keeper"].includes(n.id)) {
+      const [dx, dy] = trainerPose.facing;
+      const direction = dx > 0 ? "east" : dx < 0 ? "west" : dy < 0 ? "north" : "south";
+      const step = trainerPose.moving && !reducedMotion() ? trainerPose.frame : 0;
+      id += `-${direction}${step ? "-" + step : ""}`;
+    }
+    draw(id, nx * 24 + (actor ? 4 : 0), ny * 24, actor ? 16 : 24, 24);
+    if (trainerPose.notice) worldLabels.place(`notice:${n.id}`, "!",
+      (nx*24+12-camera.x)*camera.scale, (ny*24-camera.y)*camera.scale-32,
+      cssWidth, { notice: true });
     if (actor) {
-      if (Math.abs(px - n.x) + Math.abs(py - n.y) > 2) continue;
-      // An approach label sits beside the actor, clear of roofs and either
-      // approach direction. It is UI, not part of the sprite silhouette.
-      const width = Math.ceil(ctx.measureText(n.label).width) + 8;
-      const proposed = px > n.x ? n.x * 24 - width - 2 : (n.x + 1) * 24 + 2;
-      const left = Math.max(
-        cameraX * 24 + 4,
-        Math.min((cameraX + columns) * 24 - width - 4, proposed),
-      );
-      const top = n.y * 24 + 5;
-      ctx.fillStyle = "#203239";
-      ctx.fillRect(left, top, width, 15);
-      ctx.strokeStyle = "#b1ad81";
-      ctx.strokeRect(left + 0.5, top + 0.5, width - 1, 14);
-      ctx.fillStyle = "#f5e7c0";
-      ctx.textAlign = "left";
-      ctx.fillText(n.label, left + 4, top + 11);
+      if (Math.abs(px - nx) + Math.abs(py - ny) > 2) continue;
+      const left = px > nx;
+      const x = ((nx + (left ? 0 : 1)) * 24 - camera.x) * camera.scale + (left ? -6 : 6);
+      worldLabels.place(n.id,n.label,x,(ny*24+5-camera.y)*camera.scale,cssWidth,{actor:true,left});
     } else {
-      ctx.textAlign = "center";
-      ctx.fillStyle = "#20323b";
-      ctx.fillText(n.label, n.x * 24 + 13, n.y * 24 - 2);
-      ctx.fillStyle = "#f5e7c0";
-      ctx.fillText(n.label, n.x * 24 + 12, n.y * 24 - 3);
+      worldLabels.place(n.id,n.label,(n.x*24+12-camera.x)*camera.scale,
+        (n.y*24-camera.y)*camera.scale-22,cssWidth);
     }
   }
   const direction =
@@ -324,11 +384,18 @@ function world() {
   const step = pose && !reducedMotion() ? (pose.progress < 0.5 ? 1 : 2) : 0;
   draw(
     `player-${direction}${step ? "-" + (((step + pose.stride) % 2) + 1) : ""}`,
-    Math.round(px * 24) + 4,
-    Math.round(py * 24),
+    px * 24 + 4,
+    py * 24,
     16,
     24,
   );
+  const rustle = grass.pose(state.map, now, reducedMotion());
+  if (rustle) {
+    ctx.globalAlpha = rustle.alpha;
+    draw(`grass-front-${rustle.frame}`, rustle.x - 12, rustle.y - 10, 24, 12);
+    ctx.globalAlpha = 1;
+  }
+  worldLabels.end();
   canvas.setAttribute(
     "aria-label",
     `${map.name}. Position ${state.x}, ${state.y}.`,
@@ -381,6 +448,7 @@ function renderTeam(inBattle = false) {
       node("strong", species[c.species].name),
       node("small", `Lv. ${c.level} · ${typeNames[species[c.species].type]}`),
       node("span", `HP ${c.hp}/${c.maxHp}`),
+      experienceMeter(c),
     );
     row.append(marker(c.species), details);
     row.append(
@@ -398,6 +466,7 @@ function renderTeam(inBattle = false) {
         },
         c.hp === 0 || i === state.active,
         `team-${i}`,
+        inBattle ? null : "confirm",
       ),
     );
     row
@@ -416,7 +485,7 @@ function renderTeam(inBattle = false) {
     );
     const titles = {
       reed: "Sedge shelter",
-      shore: "Dew cradle",
+      shore: "Reef refuge",
       cliff: "Stone hearth",
     };
     for (const [id, rescue] of Object.entries(rescues)) {
@@ -440,8 +509,33 @@ function renderTeam(inBattle = false) {
     }
   }
 }
+function experienceMeter(c, motion = null) {
+  const meter = node("div", null, "experience");
+  const capped = c.level >= 100 && !motion;
+  const from = motion?.from ?? c.xp, to = motion?.to ?? c.xp;
+  meter.append(node("small", capped ? "XP · Max level" : `XP ${to}/4`));
+  const track = node("div", null, "xp-track");
+  track.setAttribute("role", "progressbar");
+  track.setAttribute("aria-label", "Experience");
+  track.setAttribute("aria-valuemin", "0");
+  track.setAttribute("aria-valuemax", "4");
+  track.setAttribute("aria-valuenow", String(capped ? 4 : to));
+  const fill = node("div", null, "xp-fill");
+  fill.style.width = `${(capped ? 4 : from) * 25}%`;
+  track.append(fill); meter.append(track);
+  if (motion && from !== to) requestAnimationFrame(() => {
+    // Two frames give the newly inserted track a starting painted value.
+    requestAnimationFrame(() => { fill.style.width = `${to * 25}%`; });
+  });
+  return meter;
+}
 function fighter(c, side) {
   const el = node("div", null, `fighter ${side}`);
+  el.classList.toggle("defeated", c.hp === 0);
+  const contact = node("img", null, "fighter-contact");
+  contact.src = "assets/world/battle-contact.png";
+  contact.alt = "";
+  el.append(contact);
   el.append(marker(c.species, side === "ally" ? "back" : "front"));
   const stat = node("div", null, "stats");
   const heading = node("strong", species[c.species].name);
@@ -472,13 +566,14 @@ function fighter(c, side) {
   track.append(fill);
   stat.insertBefore(track, hp);
   hp.className = "sr-only";
+  if (side === "ally") stat.append(experienceMeter(c, presentation?.xp));
   requestAnimationFrame(() => {
     fill.style.width = `${(100 * c.hp) / c.maxHp}%`;
   });
   if (
     presentation?.target === side ||
     (presentation?.actor === side &&
-      ["switch", "guard", "victory", "sendout"].includes(presentation.kind))
+      ["switch", "guard", "victory", "sendout", "level-up"].includes(presentation.kind))
   ) {
     el.classList.add(`effect-${presentation.kind}`);
     if (presentation.damage)
@@ -498,6 +593,15 @@ async function act(action, index) {
       state = frame.state;
       presentation = frame;
       render();
+      if (gameSoundReady()) {
+        // Reduced hit phases can end before a defeat tail; no outgoing sound
+        // should attach to the next fighter. The music bus keeps its clock.
+        if (["sendout", "switch"].includes(frame.kind)) music.effects.stop();
+        const effect = battleEffect(frame);
+        if (effect) music.effects.play(effect);
+        if (frame.kind === "player-hit" && frame.state.battle.enemy.hp === 0)
+          music.effects.play("defeat", {delay:reducedMotion() ? .09 : .18});
+      }
     },
     reducedMotion(),
   );
@@ -524,6 +628,7 @@ function focusScene(key) {
   });
 }
 function openBattleMenu(menu) {
+  music.effects.play(menu === "commands" ? "back" : "confirm");
   battleMenu = menu;
   panel = menu === "team" ? "team" : null;
   render();
@@ -533,29 +638,46 @@ function quantity(value, word) {
   return `${value} ${word}${value === 1 ? "" : "s"}`;
 }
 function command(title, detail, fn, disabled = false, key = title) {
-  const el = button("", fn, disabled, key);
+  const el = button("", fn, disabled, key, null);
   el.append(node("strong", title), node("small", detail));
   return el;
 }
+const battleResize = new ResizeObserver(([{ target: field }]) => {
+  const contacts = battleContacts(field.dataset.environment, field.clientWidth, field.clientHeight);
+  for (const [side, [x, y]] of Object.entries(contacts)) {
+    field.style.setProperty(`--${side}-x`, `${x}px`);
+    field.style.setProperty(`--${side}-y`, `${y}px`);
+  }
+});
 function renderBattle() {
   const b = state.battle,
     c = state.team[state.active];
   scene.append(
-    node("h2", b.trainer ? `Challenge · ${b.name}` : "Wild encounter"),
+    node("h2", b.trainer ? `Challenge · ${b.name}` : `Wild encounter · ${maps[state.map].name}`),
   );
   const field = node("div", null, "battlefield");
+  field.dataset.environment = battleEnvironment(state.map, state.x);
+  const backdrop = node("img", null, "battle-backdrop");
+  backdrop.src = `assets/world/battle-${field.dataset.environment}.png`;
+  backdrop.alt = "";
+  field.append(backdrop);
   field.append(fighter(b.enemy, "enemy"), fighter(c, "ally"));
   scene.append(field);
+  battleResize.disconnect();
+  battleResize.observe(field);
   const log = node("div", null, "battle-log");
   log.setAttribute("role", "status");
   log.setAttribute("aria-live", "polite");
   const phases = {
     "player-hit": "Your move",
+    xp: "Experience gained",
+    "level-up": "Level up!",
     "enemy-hit": "Their reply",
     guard: "Bracing",
     heal: "Mending",
     capture: "A new companion!",
     "capture-miss": "Broke free",
+    "capture-attempt": "Spark Vessel",
     switch: "Into the fray",
     flee: "Safe retreat",
     victory: "Victory",
@@ -586,6 +708,7 @@ function renderBattle() {
           ? "Meet your new companion in Team"
           : "Return to your adventure",
         () => {
+          music.effects.play("confirm");
           finishBattle(state);
           store();
           render();
@@ -663,7 +786,7 @@ function renderBattle() {
     battleMenu !== "team"
   )
     actions.append(
-      button("Back", () => openBattleMenu("commands"), false, "back"),
+      button("Back", () => openBattleMenu("commands"), false, "back", null),
     );
   scene.append(actions);
 }
@@ -688,7 +811,10 @@ function beginEncounter() {
     show(phase) {
       document.body.dataset.entry = phase;
       overlay.dataset.phase = phase;
-      if (phase === "entrances") render();
+      if (phase === "entrances") {
+        render();
+        if (gameSoundReady()) music.effects.play("sendout");
+      }
     },
     done({interrupted}) {
       overlay.remove();
@@ -701,12 +827,15 @@ function beginEncounter() {
     },
   });
 }
-function interruptEntry() { encounter.finish(); }
+function interruptEntry() { music.effects.stop(); encounter.finish(); }
 function render() {
   const enteringBattle = renderedMode === "world" && state.mode === "battle";
   renderedMode = state.mode;
   if (enteringBattle) {
     clearInput();
+    // Capture the exact committed arrival/approach once. Battle actions and
+    // covered panels do not need to redraw the hidden world underneath them.
+    world();
     if (!inputSuspended && !document.hidden && !$("game-menu").open) beginEncounter();
   }
   const enteringTeam =
@@ -728,7 +857,7 @@ function render() {
       (state.mode === "battle" && !state.team[state.active].hp && !battleBusy()),
   );
   document.body.classList.toggle("at-ending", state.mode === "ending");
-  world();
+  if (state.mode === "world" && !panel) world();
   scene.replaceChildren();
   $("objective").textContent = state.flags.complete
     ? "Stillglass shines again. Return to Briarwick or keep exploring."
@@ -743,20 +872,22 @@ function render() {
   $("message").textContent = dialogue || "";
   $("dialogue").hidden = !dialogue || state.mode !== "world" || panel !== null;
   document.body.classList.toggle("in-dialogue", !!dialogue && state.mode === "world" && !panel);
-  $("save").disabled = state.mode !== "world" || battleBusy() || travel.busy;
-  $("load").disabled = state.mode === "battle" || battleBusy() || travel.busy;
-  $("restart").disabled = battleBusy() || travel.busy;
+  $("save").disabled = state.mode !== "world" || battleBusy() || travel.busy || trainerSight.busy;
+  $("load").disabled = state.mode === "battle" || battleBusy() || travel.busy || trainerSight.busy;
+  $("restart").disabled = battleBusy() || travel.busy || trainerSight.busy;
   $("team-toggle").disabled =
     state.mode === "starter" ||
     state.mode === "ending" ||
     battleBusy() ||
     travel.busy ||
+    trainerSight.busy ||
     (state.mode === "battle" &&
       (!state.team[state.active].hp || !!state.battle.result));
   $("interact").disabled =
     state.mode !== "world" ||
     panel !== null ||
     battleBusy() ||
+    trainerSight.busy ||
     !worldLoaded || !!dialogue;
   $("joystick").setAttribute("aria-disabled", String(!canExplore()));
   $("sprint").disabled = !canExplore();
@@ -775,9 +906,10 @@ function render() {
     for (const id of starters) {
       const el = button(species[id].name, () => {
         chooseStarter(state, id);
+        music.effects.play("sendout");
         store();
         render();
-      });
+      }, false, species[id].name, null);
       el.prepend(marker(id));
       el.append(
         node("small", `${typeNames[species[id].type]} · ${species[id].hp} HP`),
@@ -824,6 +956,7 @@ function render() {
   if (enteringTeam) scene.scrollTop = 0;
   scene.setAttribute("aria-busy", String(battleBusy()));
   scene.inert = encounter.busy;
+  worldClock.sync();
 }
 const sprint = bindSprint($("sprint"), { enabled: canExplore });
 const joystick = bindJoystick($("joystick"), {
@@ -842,6 +975,7 @@ function clearInput() {
 function updateDisplay() {
   interruptEntry();
   clearInput();
+  worldClock.stop();
   inputSuspended = portraitGate(innerWidth, innerHeight,
     matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0);
   $("rotate-gate").hidden = !inputSuspended;
@@ -851,6 +985,7 @@ function updateDisplay() {
   render();
 }
 $("fullscreen").addEventListener("click", async () => {
+  music.effects.play("confirm");
   clearInput();
   const result = await toggleFullscreen(document.documentElement, document, screen.orientation);
   $("display-status").textContent = ['denied', 'unavailable'].includes(result)
@@ -868,9 +1003,12 @@ $("menu-toggle").addEventListener("click", () => {
   interruptEntry();
   clearInput();
   $("game-menu").showModal();
+  worldClock.stop();
+  render();
+  music.effects.play("confirm");
   $("menu-close").focus();
 });
-$("menu-close").addEventListener("click", () => $("game-menu").close());
+$("menu-close").addEventListener("click", () => { music.effects.play("back"); $("game-menu").close(); });
 $("game-menu").addEventListener("close", () => {
   clearInput();
   render();
@@ -881,6 +1019,7 @@ $("game-menu").addEventListener("close", () => {
 for (const name of ["contextmenu", "selectstart", "dragstart"])
   $("game").addEventListener(name, (event) => event.preventDefault());
 function closeDialogue() {
+  music.effects.play("back");
   clearInput();
   dialogue = null;
   render();
@@ -890,8 +1029,15 @@ $("dialogue-close").addEventListener("click", closeDialogue);
 function talk() {
   if (!canExplore()) return;
   afterTravel(() => {
+    const npc = maps[state.map].npcs.find(n => n.x === state.x + state.facing[0] && n.y === state.y + state.facing[1]);
+    const bowl = state.bowlStep, solved = state.flags.puzzle;
     interact(state);
     if (state.mode === "world") {
+      const effect = !npc ? "unavailable" : ["healer", "rest"].includes(npc.id) ? "heal"
+        : !solved && state.flags.puzzle ? "reward"
+        : state.bowlStep > bowl ? "light"
+        : npc.id === "reset" || (npc.id.startsWith("bowl-") && !solved && state.bowlStep === 0) ? "reset" : "interact";
+      music.effects.play(effect);
       store();
       dialogue = state.message;
     }
@@ -905,6 +1051,7 @@ $("interact").addEventListener("click", () => {
 $("team-toggle").addEventListener("click", () => {
   if (battleBusy()) return;
   clearInput();
+  music.effects.play(panel ? "back" : "confirm");
   battleMenu = "commands";
   panel = panel ? null : "team";
   if ($("game-menu").open) $("game-menu").close();
@@ -916,6 +1063,7 @@ $("save").addEventListener("click", () => {
   render();
 });
 $("load").addEventListener("click", () => {
+  music.effects.play("confirm");
   load();
   $("display-status").textContent = state.message;
 });
@@ -926,6 +1074,7 @@ $("restart").addEventListener("click", () => {
       "Start a new adventure? Your current save will be replaced when you choose a companion.",
     )
   ) {
+    music.effects.play("confirm");
     $("game-menu").close();
     clearInput();
     state = newGame();
@@ -939,13 +1088,15 @@ $("sound").addEventListener("click", async () => {
     const enabled = await music.toggle();
     $("sound").textContent = enabled ? "Sound on" : "Sound off";
     $("sound").setAttribute("aria-pressed", String(enabled));
+    if (enabled) music.effects.play("confirm");
   } catch {
     $("sound").textContent = "Sound unavailable";
   }
 });
 document.addEventListener("visibilitychange", () => {
   music.setHidden(document.hidden);
-  if (document.hidden) { interruptEntry(); clearInput(); }
+  if (document.hidden) { interruptEntry(); clearInput(); worldClock.stop(); }
+  else worldClock.sync();
 });
 const directions = {
   ArrowUp: [0, -1],
@@ -961,14 +1112,20 @@ document.addEventListener("keyup", (event) => {
   travel.release(directionKey(event.key));
   if (event.key === "Shift") sprint.release("keyboard");
 });
-window.addEventListener("blur", () => { interruptEntry(); clearInput(); });
+window.addEventListener("blur", () => { explorationBlurred = true; interruptEntry(); clearInput(); worldClock.stop(); });
+window.addEventListener("focus", () => { explorationBlurred = false; render(); });
 document.addEventListener("keydown", (event) => {
   if (inputSuspended) { event.preventDefault(); return; }
   if (event.key === "Shift") {
     if (canExplore() && !event.repeat) sprint.press("keyboard");
     return;
   }
-  if ($("game-menu").open) return;
+  if ($("game-menu").open) {
+    if (!event.repeat && event.key === "Tab") music.effects.play("navigate");
+    if (!event.repeat && event.key === "Escape") music.effects.play("back");
+    return;
+  }
+  if (event.key === "Tab" && !event.repeat && !battleBusy()) music.effects.play("navigate");
   if (
     (event.key === "Enter" || event.key === " ") &&
     (event.repeat || battleBusy())
@@ -995,6 +1152,7 @@ document.addEventListener("keydown", (event) => {
   if (event.target.closest?.("#field-guide")) {
     if (event.key === "Escape") {
       event.preventDefault();
+      music.effects.play("back");
       $("field-guide").open = false;
       if (state.mode === "world" && !panel)
         $("interact").focus({ preventScroll: true });
@@ -1031,6 +1189,7 @@ document.addEventListener("keydown", (event) => {
         candidates.filter(({rect}) => Math.abs(rect.top - top) < 1)
           .sort((a,b) => Math.abs((a.rect.left + a.rect.right) / 2 - center) -
             Math.abs((b.rect.left + b.rect.right) / 2 - center))[0].button.focus();
+        if (!event.repeat) music.effects.play("navigate");
         return;
       }
       const delta =
@@ -1042,6 +1201,7 @@ document.addEventListener("keydown", (event) => {
               ? columns
               : -columns;
       choices[(index + delta + choices.length) % choices.length]?.focus();
+      if (!event.repeat) music.effects.play("navigate");
     }
     return;
   }
@@ -1054,6 +1214,7 @@ document.addEventListener("keydown", (event) => {
       return;
     }
     afterTravel(() => {
+      music.effects.play(panel ? "back" : "confirm");
       panel = panel ? null : "team";
       render();
       if (panel) focusScene();
@@ -1064,6 +1225,7 @@ document.addEventListener("keydown", (event) => {
   if (state.mode !== "world" || panel) return;
   const key = directionKey(event.key),
     dir = directions[key];
+  if (!canExplore()) { if (dir) event.preventDefault(); return; }
   if (dir) {
     event.preventDefault();
     if (!event.repeat) travel.press(key, dir);
@@ -1076,6 +1238,13 @@ document.addEventListener("keydown", (event) => {
     if (event.repeat) return;
     talk();
   }
+});
+document.addEventListener("pointerdown", event => {
+  const target = event.target.closest?.("button:disabled");
+  if (target && event.button === 0 && !battleBusy()) music.effects.play("unavailable");
+}, true);
+document.addEventListener("click", event => {
+  if (event.target.closest?.("summary")) music.effects.play("confirm");
 });
 try {
   const saved = localStorage.getItem(SAVE_KEY);

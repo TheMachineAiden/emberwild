@@ -215,3 +215,49 @@ test("intro and two-loop event spans retain three monophonic channels, release g
     }
   }
 });
+
+test('rapid zone requests coalesce behind one crossfade and retire on mute/hide', () => {
+  const oldSet=globalThis.setTimeout, oldClear=globalThis.clearTimeout;
+  const timers=new Map(), voices=[]; let id=0;
+  const param=()=>({value:1,events:[],setValueAtTime(v,t){this.value=v;this.events.push(['set',v,t]);},linearRampToValueAtTime(v,t){this.events.push(['ramp',v,t]);},cancelScheduledValues(){}});
+  const context={currentTime:10,destination:{},
+    createGain(){return {gain:param(),connect(){},disconnect(){this.disconnected=true;}};},
+    createOscillator(){const v={frequency:{},connect(){},disconnect(){this.disconnected=true;},start(at){this.at=at;},stop(at){this.end=at;}};voices.push(v);return v;}};
+  globalThis.setTimeout=(fn,ms)=>{timers.set(++id,{fn,ms});return id;};
+  globalThis.clearTimeout=handle=>timers.delete(handle);
+  const music=new Music(); music.context=context; music.enabled=true;
+  const fire=handle=>{const timer=timers.get(handle);assert.ok(timer);timers.delete(handle);timer.fn();};
+  try {
+    music.setCue('village'); const village=music.bus;
+    music.setCue('route'); const route=music.bus, count=voices.length;
+    const staleLoop = timers.get(music.timer).fn;
+    assert.equal(music.retiring.size,1);
+    assert.ok(village.node.gain.events.some(([kind,v,t])=>kind==='ramp'&&v===0&&Math.abs(t-10.42)<1e-9));
+    assert.ok(route.node.gain.events.some(([kind,v,t])=>kind==='ramp'&&v===1&&Math.abs(t-10.46)<1e-9));
+    for(let i=0;i<100;i++) music.setCue(i%2?'village':'landmark');
+    music.setCue('landmark');
+    assert.equal(music.bus,route); assert.equal(music.current,'landmark');
+    assert.equal(voices.length,count); assert.equal(music.retiring.size,1);
+    context.currentTime=10.5; fire(village.cleanup);
+    assert.equal(village.voices.size,0); assert.equal(village.node.disconnected,true);
+    assert.equal(music.bus.id,'landmark'); assert.equal(music.retiring.size,1);
+    const afterReplacement = voices.length, currentTimer = music.timer;
+    staleLoop();
+    assert.equal(voices.length, afterReplacement);
+    assert.equal(music.timer, currentTimer);
+    const current=music.bus; music.setHidden(false); assert.equal(music.bus,current,'duplicate visible event does not restart music');
+    music.setHidden(true); assert.equal(music.nodes.size,0); assert.equal(music.timer,null);
+    for(const bus of [...music.retiring]) fire(bus.cleanup);
+    assert.equal(music.retiring.size,0);
+    assert.ok(voices.every(v=>v.disconnected));
+    music.setHidden(false); const audible=music.bus;
+    music.setCue('battle',{intro:true}); assert.notEqual(music.bus,audible);
+    const battle=music.bus; music.setCue('battle',{intro:true}); assert.equal(music.bus,battle);
+    music.enabled=false; music.stop();
+    for(const bus of [...music.retiring]) fire(bus.cleanup);
+    assert.equal(music.nodes.size,0); assert.equal(music.retiring.size,0);
+  } finally {
+    music.enabled=false; music.stop();
+    globalThis.setTimeout=oldSet;globalThis.clearTimeout=oldClear;
+  }
+});

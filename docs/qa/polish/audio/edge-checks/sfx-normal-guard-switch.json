@@ -1,0 +1,244 @@
+{
+  "label": "Normal guard and switch from labelled starting saves, immutable75f9",
+  "audit": {
+    "sounds": [
+      {
+        "id": "confirm",
+        "ok": false,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 0.005333333333333333,
+        "delay": 0
+      },
+      {
+        "id": "back",
+        "ok": true,
+        "time": 0.4053333333333333,
+        "delay": 0
+      },
+      {
+        "id": "sendout",
+        "ok": true,
+        "time": 1.712,
+        "delay": 0
+      },
+      {
+        "id": "capture-attempt",
+        "ok": true,
+        "time": 2.864,
+        "delay": 0
+      },
+      {
+        "id": "capture-miss",
+        "ok": true,
+        "time": 3.1786666666666665,
+        "delay": 0
+      },
+      {
+        "id": "attack-tide",
+        "ok": true,
+        "time": 3.578666666666667,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 150.704,
+        "delay": 0
+      },
+      {
+        "id": "guard",
+        "ok": true,
+        "time": 151.12533333333334,
+        "delay": 0
+      },
+      {
+        "id": "attack-neutral",
+        "ok": true,
+        "time": 151.408,
+        "delay": 0
+      },
+      {
+        "id": "flee",
+        "ok": true,
+        "time": 152.352,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 153.22133333333332,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 154.12266666666667,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 154.624,
+        "delay": 0
+      },
+      {
+        "id": "back",
+        "ok": true,
+        "time": 155.024,
+        "delay": 0
+      },
+      {
+        "id": "sendout",
+        "ok": true,
+        "time": 156.47466666666668,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 157.72266666666667,
+        "delay": 0
+      },
+      {
+        "id": "switch",
+        "ok": true,
+        "time": 194.34133333333332,
+        "delay": 0
+      },
+      {
+        "id": "attack-tide",
+        "ok": true,
+        "time": 194.66666666666666,
+        "delay": 0
+      }
+    ],
+    "frames": [
+      {
+        "kind": "capture-attempt",
+        "at": 276837.80000019073,
+        "audio": 2.864,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            31
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "capture-miss",
+        "at": 277150,
+        "audio": 3.1786666666666665,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            31
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "enemy-hit",
+        "at": 277549.5,
+        "audio": 3.578666666666667,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            24
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "guard",
+        "at": 425091.90000009537,
+        "audio": 151.12533333333334,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            27
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "enemy-hit",
+        "at": 425377.30000019073,
+        "audio": 151.408,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            24
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "flee",
+        "at": 426318.40000009537,
+        "audio": 152.352,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            24
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "switch",
+        "at": 468309.60000014305,
+        "audio": 194.34133333333332,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            31
+          ],
+          [
+            "daggla",
+            28
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "enemy-hit",
+        "at": 468631.7000000477,
+        "audio": 194.66666666666666,
+        "enemy": "daggla",
+        "enemyHP": 28,
+        "team": [
+          [
+            "strila",
+            31
+          ],
+          [
+            "daggla",
+            21
+          ]
+        ],
+        "reduced": false
+      }
+    ]
+  },
+  "log": "Choose your next moveBrinecrest, you are up!Brinecrest strikes back for 7 damage.",
+  "voices": 0
+}

@@ -5,3 +5,11 @@
 Ground, coast water, reeds, tree, copper roof, windowed house wall, stone floor/wall, stair, sealed stair, bowl and lit bowl are separate rasters. The player has front and rear head details. The world renderer composes PNGs on the existing map coordinates; labels are UI text. Källaren and summit use stone surfaces, outdoor maps coastal water and vegetation. Door/stair and puzzle light states use different raster assets.
 
 This first world set requires rendered desktop/mobile review before final acceptance. Larger landmarks, natural terrain edges, actor readability and map-specific composition remain art review work.
+
+The polish human sample is authored in `humans.json`, at16×24 source pixels,
+exported to32×48 with the same16×24 logical world footprint. Its named poses
+supersede matching entries in `pixels.json`; `export_world.py` reads both so an
+ordinary export cannot revert the current protagonist. Four directions share
+24-row contact bounds; standing and alternating boot poses retain head/torso
+anchors. The NPC set is still the earlier source pending the representative
+composition review. Source colors retain the coastal hat/coat/scarf identity.
