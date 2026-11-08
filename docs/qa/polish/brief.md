@@ -1,6 +1,6 @@
 # Emberwild visual and gameplay polish
 
-Baseline: main13409b273cba9acde12bc43b059233121cadebfe (PR7). Preserve prior release/candidate/rollback evidence, version1 saves, current PWA scope/offline/version-pinning/update behavior, English chapter, creature rules, joystick/held Sprint and full-viewport landscape play. This is one finite pass with ten related outcomes, not a new engine or content expansion.
+Baseline: main13409b273cba9acde12bc43b059233121cadebfe (PR7). Preserve prior release/candidate/rollback evidence, version1 saves, current PWA scope/offline/version-pinning/update behavior, English chapter, creature rules, joystick/held Sprint and full-viewport landscape play. This is one finite pass with eleven related outcomes, not a new engine or content expansion.
 
 ## Representative direction before asset production
 
@@ -32,6 +32,7 @@ The existing internal species daggla remains stable. Its current Dewshell front/
 | 8 Human sprites | Directional protagonist walking/sprinting, relevant NPCs consistent, stable feet/scale | All directions, corners, foreground, interaction/approach; source/export inventory |
 | 9 New Tide species | Front/back and in-context owned/caught render; matching English lore/journal references | Internal daggla save identity unchanged; old owned creature Save/reload |
 | 10 Vertical stutter | Reproduce before changing code; log actor/camera screen coordinates and canvas reallocations from normal input | Walk/sprint/joystick, all directions, boundary/threshold, deterministic60/120Hz and actual browser sample |
+| 11 Cohesive SFX | Actual cast/impact, capture, XP/level-up, notice, world/UI/save semantic edges; original event palette and score-derived mix export | Shared unlocked context; mute/hidden/cancel drops voices and future bursts; no render/held-repeat triggers or duplicate result fanfares |
 | Cross-cutting release | Before/after matched viewport/save, exact preview and PR, actual normal catch/Team/Save/reload | Existing49 tests plus targeted checks; PWA offline cold load and cached update; exact accepted/public revision/assets |
 
 Tool limits remain explicit: browser emulation is not physical iPhone/multifinger/install-window testing. Native audio scheduling/export inspection is not hearing. Preserve labelled fixture/keyframe evidence separately from ordinary input and real-time observation. Stop after the requested changes and public verification.

@@ -293,7 +293,8 @@ export function battleAction(
     b.log.push(
       `${species[c.species].name} uses ${action === "typed" ? typedMoves[species[c.species].type] : "Bump"}: ${damage} damage.${mult > 1 ? " A strong match!" : mult < 1 ? " The attack is resisted." : ""}`,
     );
-    emit("player-hit", { actor: "ally", target: "enemy", damage, mult });
+    emit("player-hit", { actor: "ally", target: "enemy", damage, mult,
+      moveType: action === "typed" ? species[c.species].type : "neutral" });
     if (enemy.hp === 0) {
       win(s);
       emit(b.result ? "victory" : "sendout", { actor: "enemy" });
@@ -363,12 +364,14 @@ export function battleAction(
     emit("flee");
     return true;
   } else return false;
-  const { damage } = hit(enemy, c, rng() > 0.35, b.guard);
+  const typed = rng() > 0.35;
+  const { damage } = hit(enemy, c, typed, b.guard);
   b.guard = false;
   b.log.push(
     `${species[enemy.species].name} strikes back for ${damage} damage.`,
   );
-  emit("enemy-hit", { actor: "enemy", target: "ally", damage });
+  emit("enemy-hit", { actor: "enemy", target: "ally", damage,
+    moveType: typed ? species[enemy.species].type : "neutral" });
   if (c.hp === 0) {
     if (s.team.every((m) => m.hp === 0)) {
       lose(s);

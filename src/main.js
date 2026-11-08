@@ -31,12 +31,13 @@ import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 import { TrainerSight } from "./trainer-sight.js";
 import { WorldClock, UnderfootGrass, waterFrame } from "./world-clock.js";
+import { battleEffect } from "./sfx.js";
 let state = newGame(),
   panel = null,
   dialogue = null;
 const SAVE_FAILURE_MESSAGE = "Could not save on this device. Check your browser storage settings. You can keep playing.";
 const music = new Music();
-const sequence = new BattleSequence();
+const sequence = new BattleSequence(undefined, () => music.effects.stop());
 const encounter = new EncounterIntro();
 const trainerSight = new TrainerSight(maps, trainers);
 const grass = new UnderfootGrass();
@@ -59,6 +60,8 @@ let explorationBlurred = false;
 const worldEnabled = () => !inputSuspended && !explorationBlurred && !document.hidden && !$("game-menu").open &&
   state.mode === "world" && !panel && !dialogue && !battleBusy() && worldLoaded;
 const canExplore = () => worldEnabled() && !trainerSight.busy;
+const gameSoundReady = () => !document.hidden && !explorationBlurred &&
+  !inputSuspended && !$("game-menu").open;
 let ambientKey = "";
 const worldClock = new WorldClock({
   enabled: worldEnabled,
@@ -80,6 +83,7 @@ function advanceTrainers(now, moving = false) {
   const events = trainerSight.tick(state, now, { enabled: worldEnabled(), moving });
   for (const event of events) {
     clearInput();
+    if (event.type === "notice" && gameSoundReady()) music.effects.play("notice");
     if (event.type === "encounter") {
       // Keep the final approach pose in the frozen encounter image, then let
       // the existing genuine world→battle lifecycle own input/music/entry.
@@ -139,13 +143,16 @@ function node(tag, text, className) {
   if (className) el.className = className;
   return el;
 }
-function button(text, fn, disabled = false, key = text) {
+function button(text, fn, disabled = false, key = text, sound = "confirm") {
   const el = node("button", text);
   el.type = "button";
   el.disabled = disabled || battleBusy();
   el.dataset.focus = key;
   el.addEventListener("click", () => {
-    if (!battleBusy()) fn();
+    if (!battleBusy()) {
+      if (sound) music.effects.play(key === "back" ? "back" : sound);
+      fn();
+    }
   });
   return el;
 }
@@ -165,8 +172,10 @@ function store(announce = false) {
     if (announce) {
       state.message = "Saved on this device.";
       $("display-status").textContent = state.message;
+      music.effects.play("save");
     }
   } catch {
+    if (announce) music.effects.play("unavailable");
     state.message = SAVE_FAILURE_MESSAGE;
     $("display-status").textContent = state.message;
     if (state.mode === "world") dialogue = state.message;
@@ -448,6 +457,7 @@ function renderTeam(inBattle = false) {
         },
         c.hp === 0 || i === state.active,
         `team-${i}`,
+        inBattle ? null : "confirm",
       ),
     );
     row
@@ -574,6 +584,12 @@ async function act(action, index) {
       state = frame.state;
       presentation = frame;
       render();
+      if (gameSoundReady()) {
+        const effect = battleEffect(frame);
+        if (effect) music.effects.play(effect);
+        if (frame.kind === "player-hit" && frame.state.battle.enemy.hp === 0)
+          music.effects.play("defeat", {delay:reducedMotion() ? .09 : .18});
+      }
     },
     reducedMotion(),
   );
@@ -600,6 +616,7 @@ function focusScene(key) {
   });
 }
 function openBattleMenu(menu) {
+  music.effects.play(menu === "commands" ? "back" : "confirm");
   battleMenu = menu;
   panel = menu === "team" ? "team" : null;
   render();
@@ -609,7 +626,7 @@ function quantity(value, word) {
   return `${value} ${word}${value === 1 ? "" : "s"}`;
 }
 function command(title, detail, fn, disabled = false, key = title) {
-  const el = button("", fn, disabled, key);
+  const el = button("", fn, disabled, key, null);
   el.append(node("strong", title), node("small", detail));
   return el;
 }
@@ -643,6 +660,7 @@ function renderBattle() {
     heal: "Mending",
     capture: "A new companion!",
     "capture-miss": "Broke free",
+    "capture-attempt": "Spark Vessel",
     switch: "Into the fray",
     flee: "Safe retreat",
     victory: "Victory",
@@ -673,6 +691,7 @@ function renderBattle() {
           ? "Meet your new companion in Team"
           : "Return to your adventure",
         () => {
+          music.effects.play("confirm");
           finishBattle(state);
           store();
           render();
@@ -750,7 +769,7 @@ function renderBattle() {
     battleMenu !== "team"
   )
     actions.append(
-      button("Back", () => openBattleMenu("commands"), false, "back"),
+      button("Back", () => openBattleMenu("commands"), false, "back", null),
     );
   scene.append(actions);
 }
@@ -775,7 +794,10 @@ function beginEncounter() {
     show(phase) {
       document.body.dataset.entry = phase;
       overlay.dataset.phase = phase;
-      if (phase === "entrances") render();
+      if (phase === "entrances") {
+        render();
+        if (gameSoundReady()) music.effects.play("sendout");
+      }
     },
     done({interrupted}) {
       overlay.remove();
@@ -788,7 +810,7 @@ function beginEncounter() {
     },
   });
 }
-function interruptEntry() { encounter.finish(); }
+function interruptEntry() { music.effects.stop(); encounter.finish(); }
 function render() {
   const enteringBattle = renderedMode === "world" && state.mode === "battle";
   renderedMode = state.mode;
@@ -864,9 +886,10 @@ function render() {
     for (const id of starters) {
       const el = button(species[id].name, () => {
         chooseStarter(state, id);
+        music.effects.play("sendout");
         store();
         render();
-      });
+      }, false, species[id].name, null);
       el.prepend(marker(id));
       el.append(
         node("small", `${typeNames[species[id].type]} · ${species[id].hp} HP`),
@@ -942,6 +965,7 @@ function updateDisplay() {
   render();
 }
 $("fullscreen").addEventListener("click", async () => {
+  music.effects.play("confirm");
   clearInput();
   const result = await toggleFullscreen(document.documentElement, document, screen.orientation);
   $("display-status").textContent = ['denied', 'unavailable'].includes(result)
@@ -961,9 +985,10 @@ $("menu-toggle").addEventListener("click", () => {
   $("game-menu").showModal();
   worldClock.stop();
   render();
+  music.effects.play("confirm");
   $("menu-close").focus();
 });
-$("menu-close").addEventListener("click", () => $("game-menu").close());
+$("menu-close").addEventListener("click", () => { music.effects.play("back"); $("game-menu").close(); });
 $("game-menu").addEventListener("close", () => {
   clearInput();
   render();
@@ -974,6 +999,7 @@ $("game-menu").addEventListener("close", () => {
 for (const name of ["contextmenu", "selectstart", "dragstart"])
   $("game").addEventListener(name, (event) => event.preventDefault());
 function closeDialogue() {
+  music.effects.play("back");
   clearInput();
   dialogue = null;
   render();
@@ -983,8 +1009,15 @@ $("dialogue-close").addEventListener("click", closeDialogue);
 function talk() {
   if (!canExplore()) return;
   afterTravel(() => {
+    const npc = maps[state.map].npcs.find(n => n.x === state.x + state.facing[0] && n.y === state.y + state.facing[1]);
+    const bowl = state.bowlStep, solved = state.flags.puzzle;
     interact(state);
     if (state.mode === "world") {
+      const effect = !npc ? "unavailable" : ["healer", "rest"].includes(npc.id) ? "heal"
+        : !solved && state.flags.puzzle ? "reward"
+        : state.bowlStep > bowl ? "light"
+        : npc.id === "reset" || (npc.id.startsWith("bowl-") && !solved && state.bowlStep === 0) ? "reset" : "interact";
+      music.effects.play(effect);
       store();
       dialogue = state.message;
     }
@@ -998,6 +1031,7 @@ $("interact").addEventListener("click", () => {
 $("team-toggle").addEventListener("click", () => {
   if (battleBusy()) return;
   clearInput();
+  music.effects.play(panel ? "back" : "confirm");
   battleMenu = "commands";
   panel = panel ? null : "team";
   if ($("game-menu").open) $("game-menu").close();
@@ -1009,6 +1043,7 @@ $("save").addEventListener("click", () => {
   render();
 });
 $("load").addEventListener("click", () => {
+  music.effects.play("confirm");
   load();
   $("display-status").textContent = state.message;
 });
@@ -1019,6 +1054,7 @@ $("restart").addEventListener("click", () => {
       "Start a new adventure? Your current save will be replaced when you choose a companion.",
     )
   ) {
+    music.effects.play("confirm");
     $("game-menu").close();
     clearInput();
     state = newGame();
@@ -1032,6 +1068,7 @@ $("sound").addEventListener("click", async () => {
     const enabled = await music.toggle();
     $("sound").textContent = enabled ? "Sound on" : "Sound off";
     $("sound").setAttribute("aria-pressed", String(enabled));
+    if (enabled) music.effects.play("confirm");
   } catch {
     $("sound").textContent = "Sound unavailable";
   }
@@ -1063,7 +1100,12 @@ document.addEventListener("keydown", (event) => {
     if (canExplore() && !event.repeat) sprint.press("keyboard");
     return;
   }
-  if ($("game-menu").open) return;
+  if ($("game-menu").open) {
+    if (!event.repeat && event.key === "Tab") music.effects.play("navigate");
+    if (!event.repeat && event.key === "Escape") music.effects.play("back");
+    return;
+  }
+  if (event.key === "Tab" && !event.repeat && !battleBusy()) music.effects.play("navigate");
   if (
     (event.key === "Enter" || event.key === " ") &&
     (event.repeat || battleBusy())
@@ -1090,6 +1132,7 @@ document.addEventListener("keydown", (event) => {
   if (event.target.closest?.("#field-guide")) {
     if (event.key === "Escape") {
       event.preventDefault();
+      music.effects.play("back");
       $("field-guide").open = false;
       if (state.mode === "world" && !panel)
         $("interact").focus({ preventScroll: true });
@@ -1126,6 +1169,7 @@ document.addEventListener("keydown", (event) => {
         candidates.filter(({rect}) => Math.abs(rect.top - top) < 1)
           .sort((a,b) => Math.abs((a.rect.left + a.rect.right) / 2 - center) -
             Math.abs((b.rect.left + b.rect.right) / 2 - center))[0].button.focus();
+        if (!event.repeat) music.effects.play("navigate");
         return;
       }
       const delta =
@@ -1137,6 +1181,7 @@ document.addEventListener("keydown", (event) => {
               ? columns
               : -columns;
       choices[(index + delta + choices.length) % choices.length]?.focus();
+      if (!event.repeat) music.effects.play("navigate");
     }
     return;
   }
@@ -1149,6 +1194,7 @@ document.addEventListener("keydown", (event) => {
       return;
     }
     afterTravel(() => {
+      music.effects.play(panel ? "back" : "confirm");
       panel = panel ? null : "team";
       render();
       if (panel) focusScene();
@@ -1172,6 +1218,13 @@ document.addEventListener("keydown", (event) => {
     if (event.repeat) return;
     talk();
   }
+});
+document.addEventListener("pointerdown", event => {
+  const target = event.target.closest?.("button:disabled");
+  if (target && event.button === 0 && !battleBusy()) music.effects.play("unavailable");
+}, true);
+document.addEventListener("click", event => {
+  if (event.target.closest?.("summary")) music.effects.play("confirm");
 });
 try {
   const saved = localStorage.getItem(SAVE_KEY);

@@ -1,0 +1,189 @@
+{
+  "palette": {
+    "seconds": 6.990022675736961,
+    "sampleRate": 44100,
+    "peak": 0.03039553575217724,
+    "rms": 0.006945183889996964,
+    "scheduleLead": 0.005,
+    "scoreProof": {
+      "healMiddleHz": 523
+    },
+    "timeline": [
+      {
+        "at": 0.1,
+        "id": "navigate"
+      },
+      {
+        "at": 0.245,
+        "id": "confirm"
+      },
+      {
+        "at": 0.4,
+        "id": "back"
+      },
+      {
+        "at": 0.575,
+        "id": "unavailable"
+      },
+      {
+        "at": 0.7849999999999999,
+        "id": "save"
+      },
+      {
+        "at": 1.025,
+        "id": "interact"
+      },
+      {
+        "at": 1.2,
+        "id": "light"
+      },
+      {
+        "at": 1.455,
+        "id": "reset"
+      },
+      {
+        "at": 1.665,
+        "id": "reward"
+      },
+      {
+        "at": 1.9300000000000002,
+        "id": "notice"
+      },
+      {
+        "at": 2.085,
+        "id": "sendout"
+      },
+      {
+        "at": 2.325,
+        "id": "switch"
+      },
+      {
+        "at": 2.6100000000000003,
+        "id": "guard"
+      },
+      {
+        "at": 2.8400000000000003,
+        "id": "heal"
+      },
+      {
+        "at": 3.1650000000000005,
+        "id": "attack-neutral"
+      },
+      {
+        "at": 3.4500000000000006,
+        "id": "attack-ember"
+      },
+      {
+        "at": 3.7250000000000005,
+        "id": "attack-tide"
+      },
+      {
+        "at": 4.03,
+        "id": "attack-moss"
+      },
+      {
+        "at": 4.315,
+        "id": "attack-wind"
+      },
+      {
+        "at": 4.6000000000000005,
+        "id": "defeat"
+      },
+      {
+        "at": 4.870000000000001,
+        "id": "capture-attempt"
+      },
+      {
+        "at": 5.220000000000001,
+        "id": "capture-miss"
+      },
+      {
+        "at": 5.48,
+        "id": "capture"
+      },
+      {
+        "at": 5.675000000000001,
+        "id": "victory"
+      },
+      {
+        "at": 5.875000000000001,
+        "id": "loss"
+      },
+      {
+        "at": 6.175000000000001,
+        "id": "flee"
+      },
+      {
+        "at": 6.415000000000001,
+        "id": "xp"
+      },
+      {
+        "at": 6.630000000000001,
+        "id": "level-up"
+      }
+    ],
+    "sha256": "54cc7a25a8efe1339b1d47406cedf881f9826adc3a3b6ab67065251080f00f13",
+    "bytes": 616564
+  },
+  "battle-mix": {
+    "seconds": 9,
+    "sampleRate": 44100,
+    "peak": 0.10923480987548828,
+    "rms": 0.036269913784636856,
+    "scheduleLead": 0.005,
+    "scoreProof": {
+      "healMiddleHz": 523
+    },
+    "timeline": [
+      {
+        "at": 0.6,
+        "id": "sendout"
+      },
+      {
+        "at": 1.7,
+        "id": "attack-neutral"
+      },
+      {
+        "at": 2.35,
+        "id": "attack-moss"
+      },
+      {
+        "at": 3,
+        "id": "guard"
+      },
+      {
+        "at": 3.65,
+        "id": "attack-ember"
+      },
+      {
+        "at": 3.83,
+        "id": "defeat"
+      },
+      {
+        "at": 4,
+        "id": "xp"
+      },
+      {
+        "at": 4.52,
+        "id": "level-up"
+      },
+      {
+        "at": 4.94,
+        "id": "xp"
+      },
+      {
+        "at": 5.46,
+        "id": "victory"
+      }
+    ],
+    "sha256": "1d19d6467f6e9b09e3247ec1f296a6868c3f28c0253dde274a4b3c4a47cec87c",
+    "bytes": 793844
+  },
+  "sources": {
+    "src/sfx.js": "c8f49c5dbeef5a42d253fa7a061849f1ad518443660425a71d4f605d6ca998f1",
+    "src/audio.js": "e6b7f6c8d8b72c50499648d8b7b115a68313ec476906b5793849c32cb363dd28",
+    "music/scores.js": "210962018b8f912ce6f75ddd82ce91dda9a4219838a90c1e02d726b2b723378b",
+    "scripts/export-sfx-browser.js": "2d7a0fb49891d42ce2f572f9dc0d2ae191a41e6e50bfe0e1c6566acbd1113cf4"
+  },
+  "evidence": "Fresh-module OfflineAudioContext construction/export only. No audition or perceived mix-quality verdict."
+}

@@ -34,6 +34,6 @@ test('capture never invents experience or level animation', () => {
   const s=newGame(); chooseStarter(s,'glimra'); startBattle(s,'daggla');
   s.team[0].xp=3;
   const p=planBattleTurn(s,'capture',undefined,()=>0);
-  assert.deepEqual(p.frames.map(f=>f.kind),['capture']);
+  assert.deepEqual(p.frames.map(f=>f.kind),['capture-attempt','capture']);
   assert.equal(p.finalState.team[0].xp,3);
 });

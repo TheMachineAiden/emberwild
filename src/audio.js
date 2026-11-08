@@ -1,4 +1,5 @@
 import { scores, eventsFor } from "../music/scores.js";
+import { SoundEffects } from "./sfx.js";
 const explorationCues = new Set(["village", "route", "landmark"]);
 const ZONE_FADE = 0.42;
 export function cueFor(state) {
@@ -27,11 +28,13 @@ export class Music {
     this.bus = null;
     this.hidden = false;
     this.retiring = new Set();
+    this.effects = new SoundEffects(() => this.context, () => this.enabled && !this.hidden);
   }
   async toggle() {
     if (this.pending) return this.enabled;
     if (this.enabled) {
       this.enabled = false;
+      this.effects.stop();
       this.stop();
       return false;
     }
@@ -100,6 +103,7 @@ export class Music {
     if (this.hidden === hidden) return;
     this.hidden = hidden;
     this.introPending = false;
+    this.effects.stop();
     this.stop();
     if (!hidden) this.play();
   }

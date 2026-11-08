@@ -32,13 +32,13 @@ test("capture, item, faint, forced switch and exit retain their own sequence bou
   let s = ready();
   assert.deepEqual(
     planBattleTurn(s, "capture", undefined, () => 0).frames.map((f) => f.kind),
-    ["capture"],
+    ["capture-attempt", "capture"],
   );
   assert.deepEqual(
     planBattleTurn(s, "capture", undefined, () => 0.99).frames.map(
       (f) => f.kind,
     ),
-    ["capture-miss", "enemy-hit"],
+    ["capture-attempt", "capture-miss", "enemy-hit"],
   );
   s.team[0].hp = 10;
   assert.deepEqual(
