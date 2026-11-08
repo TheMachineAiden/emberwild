@@ -50,6 +50,12 @@ img, canvas { -webkit-user-drag: none; }
 #scene p { line-height: 1.55; }
 #scene > h2 + p { padding-right: 80px; }
 .has-scene #world { visibility: hidden; }
+#world-labels { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.has-scene #world-labels { visibility: hidden; }
+.world-label { position: absolute; top: 0; left: 0; font-size: 13px; line-height: 18px;
+  white-space: nowrap; color: #fff0cf; text-shadow: 1px 1px #172b31, -1px -1px #172b31; }
+.actor-label { padding: 2px 6px; background: #203239; border: 1px solid #b1ad81; border-radius: 3px; }
+.world-label[hidden] { display: none; }
 #dialogue {
   position: absolute; z-index: 5;
   left: max(18px, env(safe-area-inset-left)); right: max(18px, env(safe-area-inset-right));

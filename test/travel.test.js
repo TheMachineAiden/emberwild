@@ -149,3 +149,18 @@ test('sprint encounter commits once at arrival and clears continued travel', () 
   h.advance(1000);
   assert.equal(h.commits.length,1); assert.equal(h.travel.held.size,0);
 });
+
+test('held steps carry frame remainder at60/120Hz without duplicate commits or a tile-boundary pause', () => {
+  for(const hz of [60,120])for(const duration of [WALK_DURATION,SPRINT_DURATION]) {
+    const h=harness({duration});
+    h.travel.press('right',[1,0]);
+    for(let i=1;i<=Math.ceil(4.5*duration*hz/1000);i++) h.advance(i*1000/hz);
+    const t=Math.ceil(4.5*duration*hz/1000)*1000/hz;
+    assert.equal(h.state.steps,4);
+    assert.ok(Math.abs(h.travel.position(t).x-(4+t/duration))<1e-9);
+    assert.equal(h.commits.length,4);
+    h.travel.release('right');
+    h.advance(5*duration+1000/hz);
+    assert.equal(h.commits.length,5,'release completes only the already-started step');
+  }
+});

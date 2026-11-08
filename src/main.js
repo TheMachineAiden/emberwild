@@ -20,6 +20,7 @@ import {
   SAVE_KEY,
 } from "./engine.js";
 import { worldCamera } from "./camera.js";
+import { rasterSize, projectWorldRect, WorldLabels } from "./world-view.js";
 import { bindJoystick } from "./joystick.js";
 import { bindSprint } from "./sprint.js";
 import { portraitGate, toggleFullscreen } from "./display.js";
@@ -45,6 +46,7 @@ const $ = (id) => document.getElementById(id),
   scene = $("scene"),
   canvas = $("world"),
   ctx = canvas.getContext("2d");
+const worldLabels = new WorldLabels($("world-labels"));
 let queuedInteraction = null;
 let inputSuspended = false;
 const canExplore = () => !inputSuspended && !$("game-menu").open &&
@@ -206,21 +208,24 @@ function world() {
     py = pose?.y ?? state.y;
   const map = maps[state.map],
     inside = ["cellar", "summit"].includes(state.map);
-  const camera = worldCamera($("stage").clientWidth, $("stage").clientHeight, px, py, {
+  const cssWidth = $("stage").clientWidth, cssHeight = $("stage").clientHeight;
+  const camera = worldCamera(cssWidth, cssHeight, px, py, {
     touch: matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0,
     dialogue: !!dialogue,
     landmarkTop: state.map === "summit" ? 1 : state.map === "ridge" ? Math.min(1, Math.max(0, (px - 10) / 3)) : 0,
   });
-  const cameraX = camera.x / 24, cameraY = camera.y / 24,
-    columns = camera.width / 24;
-  canvas.width = camera.width;
-  canvas.height = camera.height;
+  const cameraX = camera.x / 24, cameraY = camera.y / 24;
+  const raster = rasterSize(cssWidth, cssHeight, devicePixelRatio);
+  if (canvas.width !== raster.width) canvas.width = raster.width;
+  if (canvas.height !== raster.height) canvas.height = raster.height;
   canvas.dataset.camera = JSON.stringify(camera);
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.imageSmoothingEnabled = false;
-  ctx.translate(-camera.x, -camera.y);
   if (!worldLoaded) return;
+  worldLabels.begin();
   const draw = (id, x, y, width = 24, height = 24) =>
-    ctx.drawImage(worldAssets[id], x, y, width, height);
+    ctx.drawImage(worldAssets[id], ...projectWorldRect(camera,raster,cssWidth,cssHeight,x,y,width,height));
   // Authored boundary tiles fill the view when the camera extends past a map
   // edge. Collision and map transitions still use the original logical tiles.
   for (let y = Math.floor(cameraY); y <= Math.ceil((camera.y + camera.height) / 24); y++)
@@ -286,31 +291,14 @@ function world() {
     }
     if (n.id === "reset" || n.id === "inscription") id = "seal";
     draw(id, n.x * 24 + (actor ? 4 : 0), n.y * 24, actor ? 16 : 24, 24);
-    ctx.font = "9px monospace";
     if (actor) {
       if (Math.abs(px - n.x) + Math.abs(py - n.y) > 2) continue;
-      // An approach label sits beside the actor, clear of roofs and either
-      // approach direction. It is UI, not part of the sprite silhouette.
-      const width = Math.ceil(ctx.measureText(n.label).width) + 8;
-      const proposed = px > n.x ? n.x * 24 - width - 2 : (n.x + 1) * 24 + 2;
-      const left = Math.max(
-        cameraX * 24 + 4,
-        Math.min((cameraX + columns) * 24 - width - 4, proposed),
-      );
-      const top = n.y * 24 + 5;
-      ctx.fillStyle = "#203239";
-      ctx.fillRect(left, top, width, 15);
-      ctx.strokeStyle = "#b1ad81";
-      ctx.strokeRect(left + 0.5, top + 0.5, width - 1, 14);
-      ctx.fillStyle = "#f5e7c0";
-      ctx.textAlign = "left";
-      ctx.fillText(n.label, left + 4, top + 11);
+      const left = px > n.x;
+      const x = ((n.x + (left ? 0 : 1)) * 24 - camera.x) * camera.scale + (left ? -6 : 6);
+      worldLabels.place(n.id,n.label,x,(n.y*24+5-camera.y)*camera.scale,cssWidth,{actor:true,left});
     } else {
-      ctx.textAlign = "center";
-      ctx.fillStyle = "#20323b";
-      ctx.fillText(n.label, n.x * 24 + 13, n.y * 24 - 2);
-      ctx.fillStyle = "#f5e7c0";
-      ctx.fillText(n.label, n.x * 24 + 12, n.y * 24 - 3);
+      worldLabels.place(n.id,n.label,(n.x*24+12-camera.x)*camera.scale,
+        (n.y*24-camera.y)*camera.scale-22,cssWidth);
     }
   }
   const direction =
@@ -324,11 +312,12 @@ function world() {
   const step = pose && !reducedMotion() ? (pose.progress < 0.5 ? 1 : 2) : 0;
   draw(
     `player-${direction}${step ? "-" + (((step + pose.stride) % 2) + 1) : ""}`,
-    Math.round(px * 24) + 4,
-    Math.round(py * 24),
+    px * 24 + 4,
+    py * 24,
     16,
     24,
   );
+  worldLabels.end();
   canvas.setAttribute(
     "aria-label",
     `${map.name}. Position ${state.x}, ${state.y}.`,
