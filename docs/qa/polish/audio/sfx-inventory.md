@@ -80,14 +80,45 @@ Gesture-enabled native browser checks on844×390 reduced motion observed:
   Catch. The enemy weakened28→12HP. Capture succeeded, its attempt and closure
   each scheduled once; type/neutral damage and heal effects were observed.
   Team showed Brinecrest12/28; Save/reload preserved the exact save, Rillfin24/31,
- 5 vessels,2 draughts and internal daggla identity. Capture failure is covered
-  by targeted resolved-outcome tests here; this native attempt succeeded.
+ 5 vessels,2 draughts and internal daggla identity. This weakened native attempt succeeded; the later normal-motion full-health
+  attempt broke free, as detailed in the additional edge checks below.
 - A labelled native diagnostic scheduled a delayed effect, then dispatched
   synthetic window blur and Music hidden/resume. Both voices were retired,
   hidden effects were ignored, and focus/resume queued no burst. The effect
   and music context identities matched. This is not physical backgrounding.
 - Normal Sound off left zero effect voices; console remained clean.
 
-Full normal-motion candidate checks, remaining world/guard/switch/failed-capture
-edges and the final integrated audiovisual review continue with the complete
-visual pass. These checks and exports are not a listening-quality verdict.
+Final world interaction/reward edges and the integrated audiovisual review
+continue with the complete revised visual pass. These checks and exports are not a listening-quality verdict.
+
+## Additional native edge verification
+
+Normal-motion checks now cover full-health capture failure, Brace, voluntary
+switch, escape, multi-opponent sendout and final-companion loss. Starting saves
+are labelled, while every action uses ordinary controls and the actual engine.
+`edge-checks/` retains semantic frame/audio traces. A missed capture consumed one
+vessel and caused one reply. Switching to Brinecrest caused exactly one reply.
+A1HP final companion lost, then returned to Mira healed with recovery supplies.
+No extra random choices or duplicate result sounds appeared; voices retired.
+
+A level100 Maren fixture isolates a sendout with no XP phase. Normal motion's
+outgoing defeat ended before the actual incoming frame. Reduced motion exposed
+69ms of outgoing defeat tail after the next creature had appeared. New fighter
+edges (sendout/switch) now retire outgoing SFX before playing the incoming effect;
+the repeated native trace records1 outgoing voice→0 at that boundary and one
+fresh sendout. Music and its warning/loop are untouched. This is scheduling and
+visible-enemy identity evidence, not an audition of the transition.
+
+The same check found2176 drawImage calls to the hidden world while opening Fight
+and resolving one hit/sendout. Battle/panel renders now skip that hidden work;
+genuine entry captures the committed arrival once. Repeated native observation
+records0 hidden-world draws through the corresponding action sequence. This
+supports removing wasted rendering, not a physical FPS claim.
+
+A normal-motion Menu opened during a failed capture sequence. The actual enemy
+reply frame occurred with Menu open and its SFX was skipped. Back produced no
+queued result/reply burst; commands became usable and effect voices were0. The
+retained fresh-UID capture probe is the authoritative interruption case. Final
+world puzzle/reward sound edges and the complete revised visual candidate still
+need their integrated review. Source/export suitability is not release or
+listening-quality acceptance.

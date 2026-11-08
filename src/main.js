@@ -85,9 +85,6 @@ function advanceTrainers(now, moving = false) {
     clearInput();
     if (event.type === "notice" && gameSoundReady()) music.effects.play("notice");
     if (event.type === "encounter") {
-      // Keep the final approach pose in the frozen encounter image, then let
-      // the existing genuine world→battle lifecycle own input/music/entry.
-      world();
       startBattle(state, trainers[event.id].team[0][0], event.id);
     }
   }
@@ -585,6 +582,9 @@ async function act(action, index) {
       presentation = frame;
       render();
       if (gameSoundReady()) {
+        // Reduced hit phases can end before a defeat tail; no outgoing sound
+        // should attach to the next fighter. The music bus keeps its clock.
+        if (["sendout", "switch"].includes(frame.kind)) music.effects.stop();
         const effect = battleEffect(frame);
         if (effect) music.effects.play(effect);
         if (frame.kind === "player-hit" && frame.state.battle.enemy.hp === 0)
@@ -816,6 +816,9 @@ function render() {
   renderedMode = state.mode;
   if (enteringBattle) {
     clearInput();
+    // Capture the exact committed arrival/approach once. Battle actions and
+    // covered panels do not need to redraw the hidden world underneath them.
+    world();
     if (!inputSuspended && !document.hidden && !$("game-menu").open) beginEncounter();
   }
   const enteringTeam =
@@ -837,7 +840,7 @@ function render() {
       (state.mode === "battle" && !state.team[state.active].hp && !battleBusy()),
   );
   document.body.classList.toggle("at-ending", state.mode === "ending");
-  world();
+  if (state.mode === "world" && !panel) world();
   scene.replaceChildren();
   $("objective").textContent = state.flags.complete
     ? "Stillglass shines again. Return to Briarwick or keep exploring."

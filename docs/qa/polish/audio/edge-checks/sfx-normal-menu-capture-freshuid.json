@@ -1,0 +1,54 @@
+{
+  "immediate": {
+    "busy": true,
+    "phase": "Their reply",
+    "menu": true
+  },
+  "menu": true,
+  "audit": {
+    "sounds": [
+      {
+        "id": "capture-attempt",
+        "ok": true,
+        "time": 42.624
+      },
+      {
+        "id": "capture-miss",
+        "ok": true,
+        "time": 42.885333333333335
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 43.08266666666667
+      }
+    ],
+    "frames": [
+      {
+        "kind": "capture-attempt",
+        "audio": 42.624,
+        "menu": false
+      },
+      {
+        "kind": "capture-miss",
+        "audio": 42.885333333333335,
+        "menu": false
+      },
+      {
+        "kind": "enemy-hit",
+        "audio": 43.28,
+        "menu": true
+      }
+    ],
+    "stops": [
+      {
+        "time": 43.08266666666667,
+        "phase": "Broke free",
+        "before": 0,
+        "after": 0
+      }
+    ]
+  },
+  "busy": false,
+  "voices": 0
+}

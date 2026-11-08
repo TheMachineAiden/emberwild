@@ -1,0 +1,71 @@
+{
+  "label": "Reduced-motion native multi-opponent, level100 fixture; source world-paint optimization",
+  "audit": {
+    "sounds": [
+      {
+        "id": "sendout",
+        "ok": false,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": false,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 0.005333333333333333,
+        "delay": 0
+      },
+      {
+        "id": "back",
+        "ok": true,
+        "time": 0.4106666666666667,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 0.864,
+        "delay": 0
+      },
+      {
+        "id": "attack-neutral",
+        "ok": true,
+        "time": 1.392,
+        "delay": 0
+      },
+      {
+        "id": "defeat",
+        "ok": true,
+        "time": 1.392,
+        "delay": 0.09
+      },
+      {
+        "id": "sendout",
+        "ok": true,
+        "time": 1.568,
+        "delay": 0
+      }
+    ],
+    "frames": [
+      {
+        "kind": "player-hit",
+        "audio": 1.392,
+        "enemy": "vippa",
+        "reduced": true
+      },
+      {
+        "kind": "sendout",
+        "audio": 1.568,
+        "enemy": "kolkrabb",
+        "reduced": true
+      }
+    ]
+  },
+  "hiddenWorldDraws": 0,
+  "defeatEnd": 1.6369999999999998,
+  "sendoutAt": 1.568,
+  "visibleEnemy": "CinderclawLv. 4"
+}

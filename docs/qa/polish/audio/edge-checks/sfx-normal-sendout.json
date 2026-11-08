@@ -1,0 +1,94 @@
+{
+  "label": "Normal-motion native level100 Maren fixture, ordinary attack; baseline75f9",
+  "audit": {
+    "sounds": [
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 375.728,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 376.18666666666667,
+        "delay": 0
+      },
+      {
+        "id": "back",
+        "ok": true,
+        "time": 376.736,
+        "delay": 0
+      },
+      {
+        "id": "notice",
+        "ok": true,
+        "time": 376.8106666666667,
+        "delay": 0
+      },
+      {
+        "id": "sendout",
+        "ok": true,
+        "time": 378.5706666666667,
+        "delay": 0
+      },
+      {
+        "id": "confirm",
+        "ok": true,
+        "time": 379.584,
+        "delay": 0
+      },
+      {
+        "id": "attack-neutral",
+        "ok": true,
+        "time": 379.90933333333334,
+        "delay": 0
+      },
+      {
+        "id": "defeat",
+        "ok": true,
+        "time": 379.90933333333334,
+        "delay": 0.18
+      },
+      {
+        "id": "sendout",
+        "ok": true,
+        "time": 380.2506666666667,
+        "delay": 0
+      }
+    ],
+    "frames": [
+      {
+        "kind": "player-hit",
+        "at": 653869.3000001907,
+        "audio": 379.90933333333334,
+        "enemy": "vippa",
+        "enemyHP": 0,
+        "team": [
+          [
+            "glimra",
+            416
+          ]
+        ],
+        "reduced": false
+      },
+      {
+        "kind": "sendout",
+        "at": 654211.9000000954,
+        "audio": 380.2506666666667,
+        "enemy": "kolkrabb",
+        "enemyHP": 34,
+        "team": [
+          [
+            "glimra",
+            416
+          ]
+        ],
+        "reduced": false
+      }
+    ]
+  },
+  "hiddenWorldDraws": 2176,
+  "defeatEnd": 380.2443333333333,
+  "sendoutAt": 380.2506666666667
+}
