@@ -53,8 +53,10 @@ test('directional human frames retain head and contact anchors at the existing f
       const rows=characters[`player-${direction}${suffix}`];
       assert.equal(rows.length,24);
       assert.ok(rows.every(r=>r.length===16));
-      assert.deepEqual(rows.slice(0,20),standing.slice(0,20));
+      assert.deepEqual(rows.slice(0,11),standing.slice(0,11), 'head never bobs with the gait');
       assert.ok(rows[23].includes('o'),'boots keep their bottom contact row');
     }
+    assert.notDeepEqual(characters[`player-${direction}-1`].slice(13,18),
+      characters[`player-${direction}-2`].slice(13,18), 'opposed arm poses are visible above the legs');
   }
 });

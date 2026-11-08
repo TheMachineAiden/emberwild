@@ -107,6 +107,7 @@ export class TrainerSight {
       x: a.x + (a.step ? a.step.x - a.x : 0) * progress,
       y: a.y + (a.step ? a.step.y - a.y : 0) * progress,
       facing: a.facing, notice: a.phase === "notice", moving: !!a.step,
+      frame: progress < .5 ? 1 : 2,
     };
   }
 }

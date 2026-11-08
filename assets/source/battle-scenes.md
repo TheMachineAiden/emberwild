@@ -1,12 +1,11 @@
-# Battle environment raster candidates
+# Battle environment raster sources
 
-The current runtime still uses battle-coast-master.png through export_polish.py.
-The following replacement candidates are retained for contact/composition review;
-they are not yet the active battle set. Built-in image generation created the
+The runtime uses the following three environment masters through export_polish.py.
+The earlier battle-coast-master.png is retained as the first composition study. Built-in image generation created the
 originals, with the first coast as the style/composition reference. Prompt files
 retain the full production request. No game collision or encounter data changes.
 
-| Candidate source | Role | Prompt |
+| Active source | Role | Prompt |
 | --- | --- | --- |
 | battle-coast-calm-master.png | Saltwind coast / eastern Sedgeway, reduced foreground texture | battle-coast-calm-prompt.txt |
 | battle-meadow-master.png | Western Sedgeway sedge and path | battle-meadow-prompt.txt |
@@ -28,3 +27,8 @@ Do not assume the prompted platform percentages establish creature contact.
 Review the runtime crop and each front/back opaque foot/shadow anchor at667×375,
 844×390 anddesktop, and set each environment's contact positions from that
 rendered evidence. Keep backdrop pixel detail subordinate to64px creature art.
+
+Runtime contacts are in src/battle-scene.js in the480×240 image coordinate system.
+The cover projection follows each actual field size. Exported creature poses share
+opaque bottom row59 (contact at60/64 of frame height), confirmed for all16 front/back
+exports. Desktop and minimum landscape renders are retained in docs/qa/polish/scenes.

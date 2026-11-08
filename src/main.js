@@ -32,6 +32,7 @@ import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
 import { TrainerSight } from "./trainer-sight.js";
 import { WorldClock, UnderfootGrass, waterFrame } from "./world-clock.js";
 import { battleEffect } from "./sfx.js";
+import { battleEnvironment, battleContacts } from "./battle-scene.js";
 let state = newGame(),
   panel = null,
   dialogue = null;
@@ -210,6 +211,11 @@ const worldIds = [
   "maren",
   "alder",
   "tamsin",
+  ...["rowan", "maren", "alder"].flatMap((name) =>
+    ["north", "south", "east", "west"].flatMap((dir) =>
+      [0, 1, 2].map((step) => `${name}-${dir}${step ? "-" + step : ""}`),
+    ),
+  ),
   ...["north", "south", "east", "west"].flatMap((dir) =>
     [0, 1, 2].map((step) => `player-${dir}${step ? "-" + step : ""}`),
   ),
@@ -347,6 +353,12 @@ function world() {
       continue;
     }
     if (n.id === "reset" || n.id === "inscription") id = "seal";
+    if (["liv", "edda", "keeper"].includes(n.id)) {
+      const [dx, dy] = trainerPose.facing;
+      const direction = dx > 0 ? "east" : dx < 0 ? "west" : dy < 0 ? "north" : "south";
+      const step = trainerPose.moving && !reducedMotion() ? trainerPose.frame : 0;
+      id += `-${direction}${step ? "-" + step : ""}`;
+    }
     draw(id, nx * 24 + (actor ? 4 : 0), ny * 24, actor ? 16 : 24, 24);
     if (trainerPose.notice) worldLabels.place(`notice:${n.id}`, "!",
       (nx*24+12-camera.x)*camera.scale, (ny*24-camera.y)*camera.scale-32,
@@ -630,6 +642,13 @@ function command(title, detail, fn, disabled = false, key = title) {
   el.append(node("strong", title), node("small", detail));
   return el;
 }
+const battleResize = new ResizeObserver(([{ target: field }]) => {
+  const contacts = battleContacts(field.dataset.environment, field.clientWidth, field.clientHeight);
+  for (const [side, [x, y]] of Object.entries(contacts)) {
+    field.style.setProperty(`--${side}-x`, `${x}px`);
+    field.style.setProperty(`--${side}-y`, `${y}px`);
+  }
+});
 function renderBattle() {
   const b = state.battle,
     c = state.team[state.active];
@@ -637,17 +656,15 @@ function renderBattle() {
     node("h2", b.trainer ? `Challenge · ${b.name}` : `Wild encounter · ${maps[state.map].name}`),
   );
   const field = node("div", null, "battlefield");
-  // One representative coast scene establishes composition before the other
-  // biomes are authored. Match actual coastal encounter positions.
-  if (state.map === "ridge" || (state.map === "route" && state.x >= 13)) {
-    const backdrop = node("img", null, "battle-backdrop");
-    backdrop.src = "assets/world/battle-coast.png";
-    backdrop.alt = "";
-    field.append(backdrop);
-    field.dataset.environment = "coast";
-  }
+  field.dataset.environment = battleEnvironment(state.map, state.x);
+  const backdrop = node("img", null, "battle-backdrop");
+  backdrop.src = `assets/world/battle-${field.dataset.environment}.png`;
+  backdrop.alt = "";
+  field.append(backdrop);
   field.append(fighter(b.enemy, "enemy"), fighter(c, "ally"));
   scene.append(field);
+  battleResize.disconnect();
+  battleResize.observe(field);
   const log = node("div", null, "battle-log");
   log.setAttribute("role", "status");
   log.setAttribute("aria-live", "polite");
