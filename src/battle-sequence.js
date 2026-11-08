@@ -1,4 +1,5 @@
 import { battleAction } from "./engine.js";
+import { withExperienceFrames } from "./experience.js";
 
 // Resolve randomness once on a copy. Presentation may reveal these snapshots over
 // time without rerolling a turn or mutating a save halfway through an animation.
@@ -8,10 +9,12 @@ export function planBattleTurn(state, action, index, rng = Math.random) {
   const accepted = battleAction(finalState, action, index, rng, (frame) =>
     frames.push(frame),
   );
-  return { accepted, frames, finalState };
+  return { accepted, frames: withExperienceFrames(frames), finalState };
 }
 
 const durations = {
+  xp: 520,
+  "level-up": 420,
   "player-hit": 320,
   "enemy-hit": 340,
   guard: 260,

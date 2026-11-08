@@ -359,3 +359,62 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   [data-entry="entrances"] .fighter { animation: encounter-fade 140ms ease-out both !important; }
 }
 @keyframes encounter-fade { from { opacity: 0; } to { opacity: 1; } }
+/* Owned experience follows the committed reward, including threshold resets. */
+.experience { margin-top: 5px; }
+.experience small { display: block; font-size: 11px; line-height: 15px; color: #aedbfa; }
+.xp-track { height: 5px; margin-top: 2px; background: #142b3b; border: 1px solid #4b7895; overflow: hidden; }
+.xp-fill { height: 100%; background: #63b9f5; transition: width 400ms linear; }
+.team-details .experience { max-width: 180px; margin-top: 0; }
+@media (prefers-reduced-motion: reduce) { .xp-fill { transition: none; } }
+/* Representative grounded duel: raster scenery, native text and fixed command
+   reach. Other biome artwork follows the same contact/overlay contract. */
+.in-battle:not(.in-menu) #scene { grid-template-columns: minmax(0, 1.45fr) minmax(270px, 1fr); gap: 10px 14px; }
+.battlefield { isolation: isolate; overflow: hidden; border: 1px solid #6f8f83; }
+.battle-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+.fighter, .fighter.enemy, .fighter.ally { position: absolute; inset: 0; display: block; max-width: none; pointer-events: none; }
+.fighter > .creature-sprite { position: absolute; width: 96px; height: 96px; z-index: 2; }
+.fighter.enemy > .creature-sprite { left: calc(75% - 48px); bottom: calc(49% - 6px); }
+.fighter.ally > .creature-sprite { left: calc(25% - 48px); bottom: calc(23% - 6px); }
+.fighter-contact { position: absolute; width: 78px; height: 16px; image-rendering: pixelated; z-index: 1; }
+.enemy .fighter-contact { left: calc(75% - 39px); bottom: calc(49% - 8px); }
+.ally .fighter-contact { left: calc(25% - 39px); bottom: calc(23% - 8px); }
+.fighter .stats { position: absolute; width: 178px; padding: 8px 10px; background: #172e35f2; border: 1px solid #8ca997; box-shadow: 0 3px 0 #0c1f2580; font-size: 12px; line-height: 1.4; z-index: 3; }
+.fighter.enemy .stats { top: 10px; left: 10px; }
+.fighter.ally .stats { bottom: 10px; right: 10px; }
+.stats strong { font-size: 13px; color: #fff1cf; }
+.stats .level { font-size: 11px; }
+.battle-log { font-size: 13px; line-height: 1.4; }
+.turn-label { font-size: 11px; letter-spacing: .04em; }
+.command-grid strong { font-size: 15px; }
+.command-grid small { font-size: 12px; }
+.effect-player-hit, .effect-enemy-hit, .effect-heal, .effect-guard, .effect-sendout, .effect-switch { animation: none; }
+.effect-player-hit > .creature-sprite, .effect-enemy-hit > .creature-sprite { animation: hit-recoil 260ms ease-out; }
+.effect-heal > .creature-sprite, .effect-guard > .creature-sprite { animation: mend-glow 300ms ease-out; }
+.effect-sendout > .creature-sprite, .effect-switch > .creature-sprite { animation: companion-enter 280ms ease-out; }
+.effect-faint { opacity: 1; }
+.effect-faint > .creature-sprite { opacity: .35; }
+.damage-number { right: auto; top: auto; left: 75%; bottom: 65%; z-index: 4; }
+.ally .damage-number { left: 25%; bottom: 43%; }
+@media (max-height: 450px) {
+  .in-battle:not(.in-menu) #scene { gap: 6px 12px; }
+  .battle-log { min-height: 78px; }
+  #scene .battle-log p { font-size: 12px; line-height: 1.4; }
+  .command-grid button { padding: 8px; }
+  .command-grid strong { font-size: 14px; }
+  .command-grid small { font-size: 12px; }
+  .fighter .stats { width: 168px; padding: 6px 8px; }
+  .fighter.enemy .stats { top: 8px; left: 8px; }
+  .fighter.ally .stats { bottom: 8px; right: 8px; }
+}
+@media (max-width: 720px) { .in-battle:not(.in-menu) #scene { grid-template-columns: minmax(0, 1fr) 265px; } }
+@media (min-width: 1100px) and (min-height: 650px) {
+  .fighter > .creature-sprite { width: 160px; height: 160px; }
+  .fighter.enemy > .creature-sprite { left: calc(75% - 80px); bottom: calc(49% - 10px); }
+  .fighter.ally > .creature-sprite { left: calc(25% - 80px); bottom: calc(23% - 10px); }
+  .fighter .stats { width: 220px; padding: 12px; font-size: 15px; }
+  .stats strong { font-size: 16px; }
+  .stats .level { font-size: 13px; }
+  .experience small { font-size: 13px; }
+}
+.effect-level-up .stats { animation: level-glow 400ms ease-out; }
+@keyframes level-glow { 50% { border-color: #9edfff; box-shadow: 0 0 0 3px #63b9f555; } }

@@ -370,6 +370,7 @@ function renderTeam(inBattle = false) {
       node("strong", species[c.species].name),
       node("small", `Lv. ${c.level} · ${typeNames[species[c.species].type]}`),
       node("span", `HP ${c.hp}/${c.maxHp}`),
+      experienceMeter(c),
     );
     row.append(marker(c.species), details);
     row.append(
@@ -405,7 +406,7 @@ function renderTeam(inBattle = false) {
     );
     const titles = {
       reed: "Sedge shelter",
-      shore: "Dew cradle",
+      shore: "Reef refuge",
       cliff: "Stone hearth",
     };
     for (const [id, rescue] of Object.entries(rescues)) {
@@ -429,8 +430,32 @@ function renderTeam(inBattle = false) {
     }
   }
 }
+function experienceMeter(c, motion = null) {
+  const meter = node("div", null, "experience");
+  const capped = c.level >= 100 && !motion;
+  const from = motion?.from ?? c.xp, to = motion?.to ?? c.xp;
+  meter.append(node("small", capped ? "XP · Max level" : `XP ${to}/4`));
+  const track = node("div", null, "xp-track");
+  track.setAttribute("role", "progressbar");
+  track.setAttribute("aria-label", "Experience");
+  track.setAttribute("aria-valuemin", "0");
+  track.setAttribute("aria-valuemax", "4");
+  track.setAttribute("aria-valuenow", String(capped ? 4 : to));
+  const fill = node("div", null, "xp-fill");
+  fill.style.width = `${(capped ? 4 : from) * 25}%`;
+  track.append(fill); meter.append(track);
+  if (motion && from !== to) requestAnimationFrame(() => {
+    // Two frames give the newly inserted track a starting painted value.
+    requestAnimationFrame(() => { fill.style.width = `${to * 25}%`; });
+  });
+  return meter;
+}
 function fighter(c, side) {
   const el = node("div", null, `fighter ${side}`);
+  const contact = node("img", null, "fighter-contact");
+  contact.src = "assets/world/battle-contact.png";
+  contact.alt = "";
+  el.append(contact);
   el.append(marker(c.species, side === "ally" ? "back" : "front"));
   const stat = node("div", null, "stats");
   const heading = node("strong", species[c.species].name);
@@ -461,13 +486,14 @@ function fighter(c, side) {
   track.append(fill);
   stat.insertBefore(track, hp);
   hp.className = "sr-only";
+  if (side === "ally") stat.append(experienceMeter(c, presentation?.xp));
   requestAnimationFrame(() => {
     fill.style.width = `${(100 * c.hp) / c.maxHp}%`;
   });
   if (
     presentation?.target === side ||
     (presentation?.actor === side &&
-      ["switch", "guard", "victory", "sendout"].includes(presentation.kind))
+      ["switch", "guard", "victory", "sendout", "level-up"].includes(presentation.kind))
   ) {
     el.classList.add(`effect-${presentation.kind}`);
     if (presentation.damage)
@@ -530,9 +556,18 @@ function renderBattle() {
   const b = state.battle,
     c = state.team[state.active];
   scene.append(
-    node("h2", b.trainer ? `Challenge · ${b.name}` : "Wild encounter"),
+    node("h2", b.trainer ? `Challenge · ${b.name}` : `Wild encounter · ${maps[state.map].name}`),
   );
   const field = node("div", null, "battlefield");
+  // One representative coast scene establishes composition before the other
+  // biomes are authored. Match actual coastal encounter positions.
+  if (state.map === "ridge" || (state.map === "route" && state.x >= 13)) {
+    const backdrop = node("img", null, "battle-backdrop");
+    backdrop.src = "assets/world/battle-coast.png";
+    backdrop.alt = "";
+    field.append(backdrop);
+    field.dataset.environment = "coast";
+  }
   field.append(fighter(b.enemy, "enemy"), fighter(c, "ally"));
   scene.append(field);
   const log = node("div", null, "battle-log");
@@ -540,6 +575,8 @@ function renderBattle() {
   log.setAttribute("aria-live", "polite");
   const phases = {
     "player-hit": "Your move",
+    xp: "Experience gained",
+    "level-up": "Level up!",
     "enemy-hit": "Their reply",
     guard: "Bracing",
     heal: "Mending",

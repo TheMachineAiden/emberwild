@@ -36,7 +36,7 @@ export const species = {
     attack: 7,
   },
   daggla: {
-    name: "Dewshell",
+    name: "Brinecrest",
     type: "tide",
     color: "#89b3d3",
     hp: 28,
@@ -266,7 +266,7 @@ export const rescues = {
   shore: {
     species: "daggla",
     title: "A spark on the shore",
-    clue: "A warm spark rests inside Dewshell, cradled in cool dew. The creatures have been rescuing the embers from the sea wind.",
+    clue: "Brinecrest shelters a warm spark between its wave-shaped plates. The reef guardian has been carrying the ember above the cold sea spray.",
   },
   cliff: {
     species: "kolkrabb",

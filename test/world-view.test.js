@@ -43,3 +43,18 @@ test('native raster covers the viewport and shared terrain edges have no fractio
     }
   }
 });
+
+test('directional human frames retain head and contact anchors at the existing footprint', async () => {
+  const {readFile}=await import('node:fs/promises');
+  const {characters}=JSON.parse(await readFile(new URL('../assets/source/world/humans.json',import.meta.url),'utf8'));
+  for(const direction of ['north','south','east','west']) {
+    const standing=characters[`player-${direction}`];
+    for(const suffix of ['','-1','-2']) {
+      const rows=characters[`player-${direction}${suffix}`];
+      assert.equal(rows.length,24);
+      assert.ok(rows.every(r=>r.length===16));
+      assert.deepEqual(rows.slice(0,20),standing.slice(0,20));
+      assert.ok(rows[23].includes('o'),'boots keep their bottom contact row');
+    }
+  }
+});

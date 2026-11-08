@@ -87,13 +87,13 @@ test("a defeated opponent never replies, including a trainer sendout", () => {
   let p = planBattleTurn(s, "attack");
   assert.deepEqual(
     p.frames.map((f) => f.kind),
-    ["player-hit", "victory"],
+    ["player-hit", "xp", "victory"],
   );
   s.battle.queue = [creature("knopp")];
   p = planBattleTurn(s, "attack");
   assert.deepEqual(
     p.frames.map((f) => f.kind),
-    ["player-hit", "sendout"],
+    ["player-hit", "xp", "sendout"],
   );
   assert.equal(p.finalState.battle.enemy.species, "knopp");
 });
