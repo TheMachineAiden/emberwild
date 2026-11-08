@@ -419,3 +419,6 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
 .effect-level-up .stats { animation: level-glow 400ms ease-out; }
 .fighter.defeated > .creature-sprite { opacity: .28; }
 @keyframes level-glow { 50% { border-color: #9edfff; box-shadow: 0 0 0 3px #63b9f555; } }
+.notice-label { min-width: 26px; text-align: center; padding: 2px 5px;
+  font-size: 24px; line-height: 26px; font-weight: bold; color: #172b31;
+  background: #ffe0a1; border: 2px solid #6e4934; box-shadow: 0 3px 0 #172b3180; }

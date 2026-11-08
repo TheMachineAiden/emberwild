@@ -427,6 +427,50 @@
       "...oo.oo....",
       ".k......k...",
       "...kkkk....."
+    ],
+    "water-1": [
+      "wwwwwwwwwwww",
+      "wwwbbwwwwwww",
+      "wwbbfbbwwwww",
+      "wwwwwwwwwwww",
+      "wwwwwwwwwwww",
+      "wwwwwwwwbbww",
+      "wwwwwwwbbfbb",
+      "wwwwwwwwwwww",
+      "wwwwwwwwwwww",
+      "wwwbbwwwwwww",
+      "wwbbfbbwwwww",
+      "wwwwwwwwwwww"
+    ],
+    "water-2": [
+      "wwwwwwwwwwww",
+      "wwwwbbwwwwww",
+      "wwwbbfbbwwww",
+      "wwwwwwwwwwww",
+      "wwwwwwwwwwww",
+      "wwwwwwwwwbbw",
+      "bwwwwwwwbbfb",
+      "wwwwwwwwwwww",
+      "wwwwwwwwwwww",
+      "wwwwbbwwwwww",
+      "wwwbbfbbwwww",
+      "wwwwwwwwwwww"
+    ],
+    "grass-front-1": [
+      ".l........l.",
+      "..l.g..l.g..",
+      "..gl.l.gl...",
+      "...glglll...",
+      "...ggggg....",
+      "............"
+    ],
+    "grass-front-2": [
+      "..l......l..",
+      ".gl...l...g.",
+      "..gl.l.gll..",
+      "...glglll...",
+      "...ggggg....",
+      "............"
     ]
   },
   "characters": {

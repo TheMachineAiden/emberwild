@@ -7,12 +7,14 @@ import {
   typeNames,
   typedMoves,
   maps,
+  trainers,
   rescues,
 } from "./data.js";
 import {
   newGame,
   chooseStarter,
   interact,
+  startBattle,
   moveInfo,
   finishBattle,
   encodeSave,
@@ -27,6 +29,8 @@ import { portraitGate, toggleFullscreen } from "./display.js";
 import { TileTravel, directionKey, WALK_DURATION, SPRINT_DURATION } from "./travel.js";
 import { onPath, decorations, npcArt } from "./world-layout.js";
 import { planBattleTurn, BattleSequence } from "./battle-sequence.js";
+import { TrainerSight } from "./trainer-sight.js";
+import { WorldClock, UnderfootGrass, waterFrame } from "./world-clock.js";
 let state = newGame(),
   panel = null,
   dialogue = null;
@@ -34,6 +38,8 @@ const SAVE_FAILURE_MESSAGE = "Could not save on this device. Check your browser 
 const music = new Music();
 const sequence = new BattleSequence();
 const encounter = new EncounterIntro();
+const trainerSight = new TrainerSight(maps, trainers);
+const grass = new UnderfootGrass();
 const battleBusy = () => sequence.busy || encounter.busy;
 let renderedMode = "starter";
 let battleMenu = "commands",
@@ -49,25 +55,62 @@ const $ = (id) => document.getElementById(id),
 const worldLabels = new WorldLabels($("world-labels"));
 let queuedInteraction = null;
 let inputSuspended = false;
-const canExplore = () => !inputSuspended && !$("game-menu").open &&
+let explorationBlurred = false;
+const worldEnabled = () => !inputSuspended && !explorationBlurred && !document.hidden && !$("game-menu").open &&
   state.mode === "world" && !panel && !dialogue && !battleBusy() && worldLoaded;
+const canExplore = () => worldEnabled() && !trainerSight.busy;
+let ambientKey = "";
+const worldClock = new WorldClock({
+  enabled: worldEnabled,
+  update: (now, time) => {
+    const event = advanceTrainers(now, travel.busy);
+    const poses = maps[state.map].npcs.filter(n => trainers[n.id]).map(n => trainerSight.pose(n, now));
+    const rustle = grass.pose(state.map, now, reducedMotion());
+    const key = JSON.stringify([reducedMotion() || ["cellar", "summit"].includes(state.map) ? 0 : waterFrame(time), poses,
+      rustle && [rustle.frame, Math.round(rustle.alpha * 8)]]);
+    const dirty = key !== ambientKey;
+    ambientKey = key;
+    if (event) render();
+    return dirty;
+  },
+  draw: () => { if (!travel.busy) world(); },
+  pause: () => { trainerSight.suspend(); grass.clear(); ambientKey = ""; },
+});
+function advanceTrainers(now, moving = false) {
+  const events = trainerSight.tick(state, now, { enabled: worldEnabled(), moving });
+  for (const event of events) {
+    clearInput();
+    if (event.type === "encounter") {
+      // Keep the final approach pose in the frozen encounter image, then let
+      // the existing genuine world→battle lifecycle own input/music/entry.
+      world();
+      startBattle(state, trainers[event.id].team[0][0], event.id);
+    }
+  }
+  return events.length > 0;
+}
 const travel = new TileTravel({
   getDuration: () => sprint.active ? SPRINT_DURATION : WALK_DURATION,
   getState: () => state,
   canMove: () =>
     canExplore(),
   draw: (pose) => {
+    if (!reducedMotion()) grass.touch(state.map, maps[state.map], pose, performance.now());
     if (pose.progress === 0) render();
     else world();
   },
   commit: (next, before) => {
     state = next;
+    if (!reducedMotion() && next.map === before.map && next.steps !== before.steps)
+      grass.touch(next.map, maps[next.map], { x: next.x, y: next.y,
+        progress: 1, stride: travel.stride }, performance.now());
     if (next.mode === "world" && next.map === before.map && next.steps === before.steps && next.message !== before.message)
       dialogue = next.message;
     if (before.map !== next.map) {
       store();
       sceneTransition();
     }
+    if (!queuedInteraction) advanceTrainers(performance.now());
     render();
     if (queuedInteraction) {
       const action = queuedInteraction;
@@ -167,6 +210,10 @@ const worldIds = [
   "sand",
   "ground",
   "water",
+  "water-1",
+  "water-2",
+  "grass-front-1",
+  "grass-front-2",
   "reeds",
   "tree",
   "roof",
@@ -203,7 +250,8 @@ const worldReady = Promise.all(
   ),
 );
 function world() {
-  const pose = travel.position();
+  const now = performance.now();
+  const pose = travel.position(now);
   const px = pose?.x ?? state.x,
     py = pose?.y ?? state.y;
   const map = maps[state.map],
@@ -226,15 +274,16 @@ function world() {
   worldLabels.begin();
   const draw = (id, x, y, width = 24, height = 24) =>
     ctx.drawImage(worldAssets[id], ...projectWorldRect(camera,raster,cssWidth,cssHeight,x,y,width,height));
+  const water = reducedMotion() ? "water" : ["water", "water-1", "water-2"][waterFrame(worldClock.time)];
   // Authored boundary tiles fill the view when the camera extends past a map
   // edge. Collision and map transitions still use the original logical tiles.
   for (let y = Math.floor(cameraY); y <= Math.ceil((camera.y + camera.height) / 24); y++)
     for (let x = Math.floor(cameraX); x <= Math.ceil((camera.x + camera.width) / 24); x++)
-      draw(inside ? "wall" : "water", x * 24, y * 24);
+      draw(inside ? "wall" : water, x * 24, y * 24);
   map.rows.forEach((row, y) =>
     [...row].forEach((tile, x) => {
       let id = inside ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
-      if (tile === "#") id = inside ? "wall" : "water";
+      if (tile === "#") id = inside ? "wall" : water;
       if (tile === "T" || tile === "g") id = "ground";
       if (tile === "H" && state.map !== "village")
         id =
@@ -263,6 +312,8 @@ function world() {
       exit.y * 24,
     );
   for (const n of map.npcs) {
+    const trainerPose = trainerSight.pose(n, now);
+    const nx = trainerPose.x, ny = trainerPose.y;
     let id =
       npcArt[n.id] ||
       (n.id === "healer" || n.id === "rest" ? "healer" : "trainer");
@@ -290,12 +341,15 @@ function world() {
       continue;
     }
     if (n.id === "reset" || n.id === "inscription") id = "seal";
-    draw(id, n.x * 24 + (actor ? 4 : 0), n.y * 24, actor ? 16 : 24, 24);
+    draw(id, nx * 24 + (actor ? 4 : 0), ny * 24, actor ? 16 : 24, 24);
+    if (trainerPose.notice) worldLabels.place(`notice:${n.id}`, "!",
+      (nx*24+12-camera.x)*camera.scale, (ny*24-camera.y)*camera.scale-32,
+      cssWidth, { notice: true });
     if (actor) {
-      if (Math.abs(px - n.x) + Math.abs(py - n.y) > 2) continue;
-      const left = px > n.x;
-      const x = ((n.x + (left ? 0 : 1)) * 24 - camera.x) * camera.scale + (left ? -6 : 6);
-      worldLabels.place(n.id,n.label,x,(n.y*24+5-camera.y)*camera.scale,cssWidth,{actor:true,left});
+      if (Math.abs(px - nx) + Math.abs(py - ny) > 2) continue;
+      const left = px > nx;
+      const x = ((nx + (left ? 0 : 1)) * 24 - camera.x) * camera.scale + (left ? -6 : 6);
+      worldLabels.place(n.id,n.label,x,(ny*24+5-camera.y)*camera.scale,cssWidth,{actor:true,left});
     } else {
       worldLabels.place(n.id,n.label,(n.x*24+12-camera.x)*camera.scale,
         (n.y*24-camera.y)*camera.scale-22,cssWidth);
@@ -317,6 +371,12 @@ function world() {
     16,
     24,
   );
+  const rustle = grass.pose(state.map, now, reducedMotion());
+  if (rustle) {
+    ctx.globalAlpha = rustle.alpha;
+    draw(`grass-front-${rustle.frame}`, rustle.x - 12, rustle.y - 10, 24, 12);
+    ctx.globalAlpha = 1;
+  }
   worldLabels.end();
   canvas.setAttribute(
     "aria-label",
@@ -770,20 +830,22 @@ function render() {
   $("message").textContent = dialogue || "";
   $("dialogue").hidden = !dialogue || state.mode !== "world" || panel !== null;
   document.body.classList.toggle("in-dialogue", !!dialogue && state.mode === "world" && !panel);
-  $("save").disabled = state.mode !== "world" || battleBusy() || travel.busy;
-  $("load").disabled = state.mode === "battle" || battleBusy() || travel.busy;
-  $("restart").disabled = battleBusy() || travel.busy;
+  $("save").disabled = state.mode !== "world" || battleBusy() || travel.busy || trainerSight.busy;
+  $("load").disabled = state.mode === "battle" || battleBusy() || travel.busy || trainerSight.busy;
+  $("restart").disabled = battleBusy() || travel.busy || trainerSight.busy;
   $("team-toggle").disabled =
     state.mode === "starter" ||
     state.mode === "ending" ||
     battleBusy() ||
     travel.busy ||
+    trainerSight.busy ||
     (state.mode === "battle" &&
       (!state.team[state.active].hp || !!state.battle.result));
   $("interact").disabled =
     state.mode !== "world" ||
     panel !== null ||
     battleBusy() ||
+    trainerSight.busy ||
     !worldLoaded || !!dialogue;
   $("joystick").setAttribute("aria-disabled", String(!canExplore()));
   $("sprint").disabled = !canExplore();
@@ -851,6 +913,7 @@ function render() {
   if (enteringTeam) scene.scrollTop = 0;
   scene.setAttribute("aria-busy", String(battleBusy()));
   scene.inert = encounter.busy;
+  worldClock.sync();
 }
 const sprint = bindSprint($("sprint"), { enabled: canExplore });
 const joystick = bindJoystick($("joystick"), {
@@ -869,6 +932,7 @@ function clearInput() {
 function updateDisplay() {
   interruptEntry();
   clearInput();
+  worldClock.stop();
   inputSuspended = portraitGate(innerWidth, innerHeight,
     matchMedia("(any-pointer: coarse)").matches || navigator.maxTouchPoints > 0);
   $("rotate-gate").hidden = !inputSuspended;
@@ -895,6 +959,8 @@ $("menu-toggle").addEventListener("click", () => {
   interruptEntry();
   clearInput();
   $("game-menu").showModal();
+  worldClock.stop();
+  render();
   $("menu-close").focus();
 });
 $("menu-close").addEventListener("click", () => $("game-menu").close());
@@ -972,7 +1038,8 @@ $("sound").addEventListener("click", async () => {
 });
 document.addEventListener("visibilitychange", () => {
   music.setHidden(document.hidden);
-  if (document.hidden) { interruptEntry(); clearInput(); }
+  if (document.hidden) { interruptEntry(); clearInput(); worldClock.stop(); }
+  else worldClock.sync();
 });
 const directions = {
   ArrowUp: [0, -1],
@@ -988,7 +1055,8 @@ document.addEventListener("keyup", (event) => {
   travel.release(directionKey(event.key));
   if (event.key === "Shift") sprint.release("keyboard");
 });
-window.addEventListener("blur", () => { interruptEntry(); clearInput(); });
+window.addEventListener("blur", () => { explorationBlurred = true; interruptEntry(); clearInput(); worldClock.stop(); });
+window.addEventListener("focus", () => { explorationBlurred = false; render(); });
 document.addEventListener("keydown", (event) => {
   if (inputSuspended) { event.preventDefault(); return; }
   if (event.key === "Shift") {
@@ -1091,6 +1159,7 @@ document.addEventListener("keydown", (event) => {
   if (state.mode !== "world" || panel) return;
   const key = directionKey(event.key),
     dir = directions[key];
+  if (!canExplore()) { if (dir) event.preventDefault(); return; }
   if (dir) {
     event.preventDefault();
     if (!event.repeat) travel.press(key, dir);

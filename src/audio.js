@@ -1,4 +1,6 @@
 import { scores, eventsFor } from "../music/scores.js";
+const explorationCues = new Set(["village", "route", "landmark"]);
+const ZONE_FADE = 0.42;
 export function cueFor(state) {
   if (state.mode === "battle")
     return state.battle.result === "capture"
@@ -24,6 +26,7 @@ export class Music {
     this.context = null;
     this.bus = null;
     this.hidden = false;
+    this.retiring = new Set();
   }
   async toggle() {
     if (this.pending) return this.enabled;
@@ -49,30 +52,52 @@ export class Music {
     this.timer = null;
     const bus = this.bus;
     this.bus = null;
-    const now = this.context?.currentTime || 0,
-      end = now + 0.035;
-    if (bus) {
-      bus.retiring = true;
-      bus.node.gain.cancelScheduledValues(now);
-      bus.node.gain.setValueAtTime(bus.node.gain.value, now);
-      bus.node.gain.linearRampToValueAtTime(0, end);
-      if (!bus.voices.size) bus.node.disconnect();
+    for (const prior of this.retiring) this.retire(prior, 0.035);
+    if (bus) this.retire(bus, 0.035);
+  }
+  retire(bus, fade) {
+    const now = this.context.currentTime, end = now + fade;
+    bus.retiring = true;
+    const gain = bus.node.gain;
+    if (gain.cancelAndHoldAtTime) gain.cancelAndHoldAtTime(now);
+    else { const value = gain.value; gain.cancelScheduledValues(now); gain.setValueAtTime(value, now); }
+    gain.linearRampToValueAtTime(0, end);
+    for (const voice of bus.voices) {
+      try { voice.stop(end); } catch {}
+      this.nodes.delete(voice);
     }
-    for (const oscillator of this.nodes) {
-      try {
-        oscillator.stop(end);
-      } catch {}
-    }
-    this.nodes.clear();
+    this.retiring.add(bus);
+    clearTimeout(bus.cleanup);
+    // Wall-clock disposal also retires future scheduled voices if a browser
+    // suspends its audio clock and onended cannot arrive until a later resume.
+    bus.cleanup = setTimeout(() => {
+      for (const voice of [...bus.voices]) voice.onended?.();
+      bus.node.disconnect();
+      this.retiring.delete(bus);
+      // Rapid exploration changes coalesce to the latest zone. The audible
+      // bus retains its own score/loop clock while this fade finishes.
+      if (!this.retiring.size && this.enabled && !this.hidden && this.bus &&
+          this.bus.id !== this.current) this.replace(ZONE_FADE);
+    }, fade * 1000 + 20);
+  }
+  replace(fade = 0.025) {
+    if (fade === ZONE_FADE && this.bus) {
+      clearTimeout(this.timer); this.timer = null;
+      const prior = this.bus; this.bus = null;
+      this.retire(prior, fade);
+    } else this.stop();
+    this.play(fade);
   }
   setCue(id, { intro = false } = {}) {
     if (this.current === id) return;
     this.current = id;
     this.introPending = intro && this.enabled && !this.hidden;
-    this.stop();
-    this.play();
+    const zoneChange = this.bus && explorationCues.has(this.bus.id) && explorationCues.has(id);
+    if (zoneChange && this.retiring.size) return;
+    this.replace(zoneChange ? ZONE_FADE : 0.025);
   }
   setHidden(hidden) {
+    if (this.hidden === hidden) return;
     this.hidden = hidden;
     this.introPending = false;
     this.stop();
@@ -85,32 +110,32 @@ export class Music {
       this.play();
     }
   }
-  play() {
+  play(fade = 0.025) {
     if (!this.enabled || this.hidden || !this.context || !this.current) return;
+    if (this.bus && !this.bus.retiring) return;
     const intro = !!this.introPending;
     this.introPending = false;
-    this.schedule(this.context.currentTime + 0.04, intro);
+    const start = this.context.currentTime + 0.04;
+    const node = this.context.createGain();
+    node.gain.setValueAtTime(0, start);
+    node.gain.linearRampToValueAtTime(1, start + fade);
+    node.connect(this.context.destination);
+    this.bus = { id: this.current, node, voices: new Set(), retiring: false };
+    this.schedule(start, intro, this.bus);
   }
-  schedule(start, includeIntro = false) {
-    const cue = scores[this.current], seconds = 60 / cue.bpm;
+  schedule(start, includeIntro = false, bus = this.bus) {
+    if (!bus || bus !== this.bus || bus.retiring) return;
+    const cue = scores[bus.id], seconds = 60 / cue.bpm;
     // Suspended/late timers can resume at a clean main-section entry, never at
     // the warning. Ordinary boundaries use the exact previous musical clock.
     start = Math.max(start, this.context.currentTime + 0.005);
     if (includeIntro) this.introEnd = start + cue.loopStart * seconds;
-    if (!this.bus) {
-      const node = this.context.createGain();
-      node.gain.setValueAtTime(0, start);
-      node.gain.linearRampToValueAtTime(1, start + 0.025);
-      node.connect(this.context.destination);
-      this.bus = { node, voices: new Set(), retiring: false };
-    }
-    const bus = this.bus;
     scheduleEvents(this.context, bus, eventsFor(cue, {includeIntro}), cue.bpm, start,
       oscillator => this.nodes.add(oscillator), oscillator => this.nodes.delete(oscillator));
     if (cue.loop) {
       const beats = cue.beats - (includeIntro ? 0 : cue.loopStart || 0);
       const next = start + beats * seconds;
-      this.timer = setTimeout(() => this.schedule(next),
+      this.timer = setTimeout(() => this.schedule(next, false, bus),
         Math.max(0, (next - this.context.currentTime - 0.15) * 1000));
     }
   }
@@ -143,7 +168,10 @@ export function scheduleEvents(context, bus, events, bpm, start,
     oscillator.stop(end);
     onVoice(oscillator);
     bus.voices.add(oscillator);
+    let cleaned = false;
     oscillator.onended = () => {
+      if (cleaned) return;
+      cleaned = true;
       onEnded(oscillator);
       bus.voices.delete(oscillator);
       if (bus.retiring && !bus.voices.size) bus.node.disconnect();

@@ -23,11 +23,11 @@ export function projectWorldRect(camera, raster, cssWidth, cssHeight, x, y, widt
 export class WorldLabels {
   constructor(root) { this.root = root; this.labels = new Map(); }
   begin() { for (const label of this.labels.values()) label.used = false; }
-  place(id, text, x, y, viewportWidth, {actor = false, left = false} = {}) {
+  place(id, text, x, y, viewportWidth, {actor = false, left = false, notice = false} = {}) {
     let label = this.labels.get(id);
     if (!label) {
       const element = document.createElement('span');
-      element.className = 'world-label' + (actor ? ' actor-label' : '');
+      element.className = 'world-label' + (actor ? ' actor-label' : '') + (notice ? ' notice-label' : '');
       element.textContent = text;
       this.root.append(element);
       label = {element, width:element.offsetWidth};
@@ -37,7 +37,10 @@ export class WorldLabels {
     if (label.element.hidden) label.element.hidden = false;
     const anchor = actor ? (left ? label.width : 0) : label.width / 2;
     const px = Math.max(4,Math.min(viewportWidth-label.width-4,x-anchor));
-    const transform = `translate(${px}px, ${y}px)`;
+    // A four-tile vertical sight line can begin just above the viewport. Keep
+    // the notice visible at its edge while the trainer enters the view.
+    const py = notice ? Math.max(4, y) : y;
+    const transform = `translate(${px}px, ${py}px)`;
     if (label.transform !== transform) {
       label.element.style.transform = transform;
       label.transform = transform;
