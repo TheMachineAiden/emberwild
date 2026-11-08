@@ -57,3 +57,33 @@ browser level-up animation/reward exit still needs retained normal-input evidenc
 and worker tests pass. Final preview/build/offline/update, full asset set,
 trainer perception, ambient grass/water, crossfade and new intro polish remain
 pending. No physical-device or listening verdict is claimed.
+
+## Native reward follow-up
+
+At the unchanged representative runtime, a labelled matched shore save started
+with owned XP3. All subsequent input was normal Fight/Bump, Bag/Mending Draught,
+Fight/Bump; no combat state, odds or reward was injected. An initial exploratory
+attempt without healing lost to normal enemy replies and correctly returned to
+Mira. The retained successful attempt used healing and finished the guardian.
+`xp-native-audit.json` contains read-only native animation-frame samples: XP3→4,
+level4 reset to0, then XP0→1. Commands stay disabled through reward phases;
+Continue becomes enabled after Victory. Final Wickit14/32HP, level4, XP1/4,
+shore spark1/3. `xp-fill-native.png` and `xp-remainder-native.png` were personally
+inspected; the blue bar and final remainder are clear.
+
+The final settled scene exposed a presentation issue: the defeated foe returned
+to normal opacity when the transient victory class disappeared, despite0HP. A
+persistent defeated class now retains reduced opacity through Continue. The
+labelled level100 visual setup then ordinary attack verified the settled0HP foe
+keeps opacity0.28 with Continue available; defeated-settled-fixture.png was
+personally inspected. This fixture is not normal progression. The original
+XP3 native audit remains separate. Its frame samples show fill ratios0.75→1,
+reset0, remainder0→0.25, commands disabled in every reward phase and enabled
+only after completion. This is timing/visible-width evidence, not a claim of
+physical refresh-rate measurement.
+
+The pure `TrainerSight` controller now has tests for cardinal range/occlusion,
+NPC/exit obstacles, exact one initiation, read-only pose calls, interrupted and
+defeated reentry, paused facing rotation and an approach newly blocked mid-route.
+It has not yet been wired into the live world clock or normal-play reviewed.
+The complete local test suite now passes61 tests.

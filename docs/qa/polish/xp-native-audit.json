@@ -1,0 +1,1624 @@
+{
+  "fixture": "XP3 starting shore save; normal Bump/Bump/heal/Bump/Bump",
+  "events": [
+    {
+      "ms": 552,
+      "phase": "Choose your next move",
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    }
+  ],
+  "motion": [
+    {
+      "ms": 0.39999985694885254,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 93.79999995231628,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 97.09999990463257,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 224.5,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 239.70000004768372,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 283,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 366.7000000476837,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 428.89999985694885,
+      "phase": "Choose your next move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": true
+    },
+    {
+      "ms": 574.8999998569489,
+      "phase": "Your move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": false
+    },
+    {
+      "ms": 723,
+      "phase": "Your move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": false
+    },
+    {
+      "ms": 729.2999999523163,
+      "phase": "Your move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": false
+    },
+    {
+      "ms": 855.2000000476837,
+      "phase": "Your move",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "3",
+      "enabled": false
+    },
+    {
+      "ms": 887.2999999523163,
+      "phase": "Experience gained",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 897.2999999523163,
+      "phase": "Experience gained",
+      "ratio": 0.75,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1024.2999999523163,
+      "phase": "Experience gained",
+      "ratio": 0.822998046875,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1029,
+      "phase": "Experience gained",
+      "ratio": 0.8333333333333334,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1161.0999999046326,
+      "phase": "Experience gained",
+      "ratio": 0.90625,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1162.7000000476837,
+      "phase": "Experience gained",
+      "ratio": 0.9166666666666666,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1290.5,
+      "phase": "Experience gained",
+      "ratio": 0.9895833333333334,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1326.7000000476837,
+      "phase": "Experience gained",
+      "ratio": 1,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1328.3999998569489,
+      "phase": "Experience gained",
+      "ratio": 1,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1439.7000000476837,
+      "phase": "Experience gained",
+      "ratio": 1,
+      "level": "Lv. 3",
+      "xp": "4",
+      "enabled": false
+    },
+    {
+      "ms": 1449.2999999523163,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1574.5999999046326,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1608.2000000476837,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1636.5,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1702.7000000476837,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1743.2000000476837,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1745.2999999523163,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1843,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1845.0999999046326,
+      "phase": "Level up!",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "0",
+      "enabled": false
+    },
+    {
+      "ms": 1989.2999999523163,
+      "phase": "Experience gained",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 1996.5999999046326,
+      "phase": "Experience gained",
+      "ratio": 0,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2124.5,
+      "phase": "Experience gained",
+      "ratio": 0.07283528645833333,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2158.899999856949,
+      "phase": "Experience gained",
+      "ratio": 0.09375,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2162.2000000476837,
+      "phase": "Experience gained",
+      "ratio": 0.10408528645833333,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2294.399999856949,
+      "phase": "Experience gained",
+      "ratio": 0.177001953125,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2295.5999999046326,
+      "phase": "Experience gained",
+      "ratio": 0.18741861979166666,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2423,
+      "phase": "Experience gained",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2440.7999999523163,
+      "phase": "Experience gained",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2474.7000000476837,
+      "phase": "Experience gained",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2497.899999856949,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2624.2000000476837,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2640.0999999046326,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2679.2999999523163,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2779.5,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2881.2999999523163,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 2992.2999999523163,
+      "phase": "Victory",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": false
+    },
+    {
+      "ms": 3001,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3124.2000000476837,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3139.2000000476837,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3184.2000000476837,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3222.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3263,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3352.2999999523163,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3421.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3458.2000000476837,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3467.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3533.2999999523163,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3633.5999999046326,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3723.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3760.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3768.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3822.0999999046326,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3830.2999999523163,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3923.0999999046326,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 3929.2000000476837,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4024,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4039,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4078.2000000476837,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4223.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4246.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4379.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4466.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4538,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4596.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4724.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4757.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4773.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4783,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4858.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4864.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4958.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 4966.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5061,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5061.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5124.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5149.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5251.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5323.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5349,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5422.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5464.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5574.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5592.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5599.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5666,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5736.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5777.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5778.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5924.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 5946.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6066.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6130.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6260.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6267.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6322.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6336.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6408.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6430.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6524.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6557.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6574.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6601.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6683.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6780.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6824,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6837.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6872.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 6916.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7005.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7038.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7063.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7131.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7222,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7267.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7322.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7337.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7373.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7378.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7448.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7553.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7624.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7658.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7680.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7784.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7824.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7839.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7851.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7923.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 7947.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8040.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8073.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8084.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8140.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8172.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8194.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8342.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8353.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8423.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8452.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8524.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8555.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8580.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8699.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8787.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8823.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8864.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8924.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 8929.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9013.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9139.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9181.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9255.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9305.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9324.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9328.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9464.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9574.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9581.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9666.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9740.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9766.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9823.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9828.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9922.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 9969.099999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10022.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10064.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10142.200000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10154.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10199.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10246.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10324.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10351.899999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10424.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10429,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10526.700000047684,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10529.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10657.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10667.5,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10722.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10742,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10745.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10883.299999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 10983.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 11018.399999856949,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 11083.799999952316,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 11143.599999904633,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    },
+    {
+      "ms": 11147,
+      "phase": "Battle complete",
+      "ratio": 0.25,
+      "level": "Lv. 4",
+      "xp": "1",
+      "enabled": true
+    }
+  ],
+  "final": {
+    "log": "BATTLE COMPLETE\n\nSheltered sparks: 1/3. A new note is waiting in your field journal.\n\nBattle won!",
+    "stats": "WickitLv. 4\n14/32 HP · Ember\nXP 1/4",
+    "button": [
+      {
+        "text": "ContinueReturn to your adventure",
+        "disabled": false
+      }
+    ]
+  }
+}

@@ -452,6 +452,7 @@ function experienceMeter(c, motion = null) {
 }
 function fighter(c, side) {
   const el = node("div", null, `fighter ${side}`);
+  el.classList.toggle("defeated", c.hp === 0);
   const contact = node("img", null, "fighter-contact");
   contact.src = "assets/world/battle-contact.png";
   contact.alt = "";

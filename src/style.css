@@ -417,4 +417,5 @@ details[open] > summary.journal-row > span:first-child::before { content: '▾ '
   .experience small { font-size: 13px; }
 }
 .effect-level-up .stats { animation: level-glow 400ms ease-out; }
+.fighter.defeated > .creature-sprite { opacity: .28; }
 @keyframes level-glow { 50% { border-color: #9edfff; box-shadow: 0 0 0 3px #63b9f555; } }
