@@ -1,0 +1,173 @@
+{
+  "reviewed_runtime_revision": "62babd7d182b91cf0deed5104cdb3cf36552a331",
+  "checks": {
+    "native_wild_capture": "Lunamoth encountered by ordinary grass traversal, weakened with Bump, caught with a vessel, then Continue and native Save.",
+    "caught_save_reload_bytes_equal": true,
+    "legacy_species_identity_preserved": [
+      "strila",
+      "daggla"
+    ],
+    "offline_runtime": {
+      "checked": 332,
+      "failures": [],
+      "controller": "http://127.0.0.1:4428/emberwild/sw.js"
+    },
+    "offline_network_probe_rejected": true,
+    "offline_save_bytes_equal": true,
+    "waiting_update_keeps_open_revision": "dd29914fd4c41b20dfccc65da724e3a7a58105d1",
+    "waiting_update_save_unchanged": true,
+    "update_save_bytes_equal": true,
+    "update_unrelated_cache_retained": true,
+    "legacy_solved_summit": "Lantern Crown. Position 9, 10.",
+    "menu_blocks_input": {
+      "menu": true,
+      "canvas": "Sedgeway. Position 8, 8.",
+      "sprintPressed": "false"
+    },
+    "menu_resumes_input": {
+      "menu": false,
+      "canvas": "Sedgeway. Position 9, 8.",
+      "sprintPressed": "false",
+      "busy": "false"
+    },
+    "reduced_motion": {
+      "reduce": true,
+      "canvas": "Sedgeway. Position 8, 10.",
+      "bounds": {
+        "width": 667,
+        "height": 375,
+        "scrollWidth": 667,
+        "scrollHeight": 375
+      },
+      "meta": "62babd7d182b91cf0deed5104cdb3cf36552a331"
+    },
+    "desktop": {
+      "canvas": "Lantern Crown. Position 9, 10.",
+      "bounds": {
+        "width": 1280,
+        "height": 720,
+        "scrollWidth": 1280,
+        "scrollHeight": 720
+      }
+    },
+    "portrait_gate": "Rotate your phone dialog at390x844; inspected retained screenshot.",
+    "limits": "Native browser input and emulation; no physical device, multitouch or listening claim. Legacy access fixtures are labelled diagnostics, not complete campaign runs."
+  },
+  "retained_evidence_digests": [
+    {
+      "file": "62ba-capture-native.json",
+      "sha256": "5cb03d2e8797285b278c2835779257c47b5c9d7998c7cf9a2feb3d002b1b6075",
+      "bytes": 192
+    },
+    {
+      "file": "62ba-caught-reload.json",
+      "sha256": "3cf511ba2766dcb4529cd9583792c5d3fc9253bd8f2666f95db6b8a822b75384",
+      "bytes": 234
+    },
+    {
+      "file": "62ba-caught-saved.json",
+      "sha256": "f0837a6ea6b52396778a1d6b41676063dfcd6cbf3cd1cee1e71eb2e038e47a0a",
+      "bytes": 1156
+    },
+    {
+      "file": "62ba-desktop.json",
+      "sha256": "303ecdd9da2c8da0469339ccdee93df90d5f284187a5d681db35e8fa7d315bdc",
+      "bytes": 118
+    },
+    {
+      "file": "62ba-exact-unsolved.json",
+      "sha256": "644591638d6aa8fedf717f603195ee582ab441b55cab55b9cdaf8f680618b27d",
+      "bytes": 746
+    },
+    {
+      "file": "62ba-legacy-loaded.json",
+      "sha256": "3aaea3665a27824886351b941330eafc8bc9c929ffb4f29dc3618fd22918c926",
+      "bytes": 854
+    },
+    {
+      "file": "62ba-legacy-saved.json",
+      "sha256": "755e822df79ab22b023e90f95c4757f82cbe01ef69d0c5f4f5c864cef0f61151",
+      "bytes": 1084
+    },
+    {
+      "file": "62ba-legacy-solved-summit.json",
+      "sha256": "dbec7268595c2df9b2fb2421c965caebd8e47c51a8c8e7f6b46dc53fd0fe6d69",
+      "bytes": 585
+    },
+    {
+      "file": "62ba-legacy-team.json",
+      "sha256": "7d283249683d18cf62322d72751bf36fe2ad2c8f78a470ada8611ebf7a895619",
+      "bytes": 953
+    },
+    {
+      "file": "62ba-menu-input-blocked.json",
+      "sha256": "b3d2a3598394ce31fac9b65e8e03c7a078de1819589ddd9409e6cbd7f7d5b972",
+      "bytes": 73
+    },
+    {
+      "file": "62ba-menu-input-resumed.json",
+      "sha256": "956f4f8bc69591d37dc63199a5479f805f415c8c49af9b0fb94c770cd94e558b",
+      "bytes": 89
+    },
+    {
+      "file": "62ba-offline-reload.json",
+      "sha256": "321a067e9987270860c7a444cc446606cfa958fab31929a69a285ae62663923f",
+      "bytes": 731
+    },
+    {
+      "file": "62ba-offline-runtime.json",
+      "sha256": "54d0cd3185576b986e5257f17e5a7c2035e8ad84e0fb534396cf329c45ee170f",
+      "bytes": 82
+    },
+    {
+      "file": "62ba-reduced667.json",
+      "sha256": "57e5494bd4a7befa47f404cd1bb67109923e7e5769d6aa2edc65766f8a5ae7f4",
+      "bytes": 175
+    },
+    {
+      "file": "62ba-runtime-inventory.json",
+      "sha256": "7ac1da465ab30070e2c772096877ef850abf16b01cca4210c4c606c4867ae44c",
+      "bytes": 45260
+    },
+    {
+      "file": "62ba-update-active.json",
+      "sha256": "c903a6d83bc1e3be885dec56d1243551491d50f0a4a27241065d23be03a214e4",
+      "bytes": 919
+    },
+    {
+      "file": "62ba-update-cleanup.json",
+      "sha256": "2c78f10489d538804f7369e1b598f375bc7c5307f5f325872068cb6aad9dea60",
+      "bytes": 880
+    },
+    {
+      "file": "62ba-update-pr8.json",
+      "sha256": "4be673ab0511cf2bf7127518d47120929507a8b991f2f8dba74a888d20a66db4",
+      "bytes": 838
+    },
+    {
+      "file": "62ba-update-waiting.json",
+      "sha256": "fba80add7f7b7f11ae0668d5ac1a456bbbfadef7a9c466da494d84dc5512ef87",
+      "bytes": 288
+    },
+    {
+      "file": "62ba-desktop.png",
+      "sha256": "8b1de99d97fe51dbe245e4f7083fec47c5220553e8bf78deafc43528c178baca",
+      "bytes": 46442
+    },
+    {
+      "file": "62ba-portrait.png",
+      "sha256": "fbd455b42b322f52722383e45b7cb8eb9ce32db53115adbdac0f4d4bdf45b39c",
+      "bytes": 24034
+    },
+    {
+      "file": "62ba-reduced667.png",
+      "sha256": "1e36ef50ebc4645854eae693d024223d59ebff99fd04f53753a5a5f80d7dbb24",
+      "bytes": 42205
+    },
+    {
+      "file": "62ba-unsolved-entry.png",
+      "sha256": "7ededb08b5c3662562300259454a8d9ebfb944cd384fbee64d7c6eb75c7e3333",
+      "bytes": 30794
+    }
+  ]
+}

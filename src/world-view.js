@@ -23,23 +23,33 @@ export function projectWorldRect(camera, raster, cssWidth, cssHeight, x, y, widt
 export class WorldLabels {
   constructor(root) { this.root = root; this.labels = new Map(); }
   begin() { for (const label of this.labels.values()) label.used = false; }
-  place(id, text, x, y, viewportWidth, {actor = false, left = false, notice = false} = {}) {
+  place(id, text, x, y, viewportWidth, {actor = false, left = false, notice = false, avoid = []} = {}) {
     let label = this.labels.get(id);
     if (!label) {
       const element = document.createElement('span');
       element.className = 'world-label' + (actor ? ' actor-label' : '') + (notice ? ' notice-label' : '');
-      element.textContent = text;
       this.root.append(element);
-      label = {element, width:element.offsetWidth};
+      label = {element, text:null, width:0};
       this.labels.set(id,label);
     }
     label.used = true;
     if (label.element.hidden) label.element.hidden = false;
+    if (label.text !== text) {
+      label.element.textContent = text;
+      label.text = text;
+      label.width = label.element.offsetWidth;
+    }
     const anchor = actor ? (left ? label.width : 0) : label.width / 2;
     const px = Math.max(4,Math.min(viewportWidth-label.width-4,x-anchor));
     // A four-tile vertical sight line can begin just above the viewport. Keep
     // the notice visible at its edge while the trainer enters the view.
-    const py = notice ? Math.max(4, y) : y;
+    let py = notice ? Math.max(4, y) : y;
+    // Keep interactive apparatus readouts clear of the persistent touch HUD.
+    // Use the actual safe-area-aware bounds, leaving the world/camera untouched.
+    for (const region of avoid) {
+      if (px < region.right + 6 && px + label.width > region.left - 6 &&
+          py < region.bottom + 6 && py + 18 > region.top - 6) py = region.bottom + 6;
+    }
     const transform = `translate(${px}px, ${py}px)`;
     if (label.transform !== transform) {
       label.element.style.transform = transform;

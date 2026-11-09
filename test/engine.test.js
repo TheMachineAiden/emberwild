@@ -141,12 +141,10 @@ test("chapter gates, wrong bowl retry and solved puzzle persist without item req
     s.facing = [0, -1];
     interact(s);
   };
-  bowl(10);
+  for (const x of [6,6,10,10,14,14]) bowl(x);
   assert.equal(s.bowlStep, 0);
   assert.equal(s.flags.puzzle, false);
-  bowl(6);
-  bowl(10);
-  bowl(14);
+  for (const x of [14,10,14,6,14,10]) bowl(x);
   assert.equal(s.flags.puzzle, true);
   const loaded = decodeSave(encodeSave(s));
   assert.equal(loaded.flags.trainer, true);

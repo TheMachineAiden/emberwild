@@ -1,0 +1,333 @@
+{
+  "runtimeRevision": "121acdb55346dcbd0f5330495b6544eb900117fc",
+  "preview": "http://127.0.0.1:4431/emberwild/index.html",
+  "position": [
+    10,
+    9
+  ],
+  "viewports": [
+    {
+      "revision": "121acdb55346dcbd0f5330495b6544eb900117fc",
+      "world": "Stillglass Vault. Position 10, 9.",
+      "viewport": [
+        667,
+        375
+      ],
+      "document": [
+        667,
+        375
+      ],
+      "controls": [
+        {
+          "id": "music-toggle",
+          "rect": {
+            "x": 553,
+            "y": 12,
+            "width": 48,
+            "height": 48,
+            "top": 12,
+            "right": 601,
+            "bottom": 60,
+            "left": 553
+          }
+        },
+        {
+          "id": "menu-toggle",
+          "rect": {
+            "x": 607,
+            "y": 12,
+            "width": 48,
+            "height": 48,
+            "top": 12,
+            "right": 655,
+            "bottom": 60,
+            "left": 607
+          }
+        },
+        {
+          "id": "joystick",
+          "rect": {
+            "x": 18,
+            "y": 245,
+            "width": 112,
+            "height": 112,
+            "top": 245,
+            "right": 130,
+            "bottom": 357,
+            "left": 18
+          }
+        },
+        {
+          "id": "sprint",
+          "rect": {
+            "x": 503,
+            "y": 287,
+            "width": 64,
+            "height": 64,
+            "top": 287,
+            "right": 567,
+            "bottom": 351,
+            "left": 503
+          }
+        },
+        {
+          "id": "interact",
+          "rect": {
+            "x": 585,
+            "y": 287,
+            "width": 64,
+            "height": 64,
+            "top": 287,
+            "right": 649,
+            "bottom": 351,
+            "left": 585
+          }
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 18,
+          "y": 18,
+          "width": 115.59375,
+          "height": 14,
+          "top": 18,
+          "right": 133.59375,
+          "bottom": 32,
+          "left": 18
+        },
+        {
+          "x": 553,
+          "y": 12,
+          "width": 102,
+          "height": 48,
+          "top": 12,
+          "right": 655,
+          "bottom": 60,
+          "left": 553
+        }
+      ],
+      "counters": [
+        {
+          "text": "Tide 0/3",
+          "rect": {
+            "x": 110,
+            "y": 38,
+            "width": 62.625,
+            "height": 18,
+            "top": 38,
+            "right": 172.625,
+            "bottom": 56,
+            "left": 110
+          },
+          "fits": true,
+          "occluded": false
+        },
+        {
+          "text": "Moss 1/3",
+          "rect": {
+            "x": 302,
+            "y": 17,
+            "width": 62.625,
+            "height": 18,
+            "top": 17,
+            "right": 364.625,
+            "bottom": 35,
+            "left": 302
+          },
+          "fits": true,
+          "occluded": false
+        },
+        {
+          "text": "Ember 0/3",
+          "rect": {
+            "x": 490.5,
+            "y": 66,
+            "width": 70.453125,
+            "height": 18,
+            "top": 66,
+            "right": 560.953125,
+            "bottom": 84,
+            "left": 490.5
+          },
+          "fits": true,
+          "occluded": false
+        }
+      ],
+      "music": {
+        "name": "Music on",
+        "pressed": "true"
+      }
+    },
+    {
+      "revision": "121acdb55346dcbd0f5330495b6544eb900117fc",
+      "world": "Stillglass Vault. Position 10, 9.",
+      "viewport": [
+        844,
+        390
+      ],
+      "document": [
+        844,
+        390
+      ],
+      "controls": [
+        {
+          "id": "music-toggle",
+          "rect": {
+            "x": 730,
+            "y": 12,
+            "width": 48,
+            "height": 48,
+            "top": 12,
+            "right": 778,
+            "bottom": 60,
+            "left": 730
+          }
+        },
+        {
+          "id": "menu-toggle",
+          "rect": {
+            "x": 784,
+            "y": 12,
+            "width": 48,
+            "height": 48,
+            "top": 12,
+            "right": 832,
+            "bottom": 60,
+            "left": 784
+          }
+        },
+        {
+          "id": "joystick",
+          "rect": {
+            "x": 24,
+            "y": 260,
+            "width": 112,
+            "height": 112,
+            "top": 260,
+            "right": 136,
+            "bottom": 372,
+            "left": 24
+          }
+        },
+        {
+          "id": "sprint",
+          "rect": {
+            "x": 680,
+            "y": 302,
+            "width": 64,
+            "height": 64,
+            "top": 302,
+            "right": 744,
+            "bottom": 366,
+            "left": 680
+          }
+        },
+        {
+          "id": "interact",
+          "rect": {
+            "x": 756,
+            "y": 302,
+            "width": 64,
+            "height": 64,
+            "top": 302,
+            "right": 820,
+            "bottom": 366,
+            "left": 756
+          }
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 18,
+          "y": 18,
+          "width": 123.3125,
+          "height": 15,
+          "top": 18,
+          "right": 141.3125,
+          "bottom": 33,
+          "left": 18
+        },
+        {
+          "x": 730,
+          "y": 12,
+          "width": 102,
+          "height": 48,
+          "top": 12,
+          "right": 832,
+          "bottom": 60,
+          "left": 730
+        }
+      ],
+      "counters": [
+        {
+          "text": "Tide 0/3",
+          "rect": {
+            "x": 198.5,
+            "y": 32,
+            "width": 62.625,
+            "height": 18,
+            "top": 32,
+            "right": 261.125,
+            "bottom": 50,
+            "left": 198.5
+          },
+          "fits": true,
+          "occluded": false
+        },
+        {
+          "text": "Moss 1/3",
+          "rect": {
+            "x": 390.5,
+            "y": 32,
+            "width": 62.625,
+            "height": 18,
+            "top": 32,
+            "right": 453.125,
+            "bottom": 50,
+            "left": 390.5
+          },
+          "fits": true,
+          "occluded": false
+        },
+        {
+          "text": "Ember 0/3",
+          "rect": {
+            "x": 579,
+            "y": 32,
+            "width": 70.453125,
+            "height": 18,
+            "top": 32,
+            "right": 649.453125,
+            "bottom": 50,
+            "left": 579
+          },
+          "fits": true,
+          "occluded": false
+        }
+      ],
+      "music": {
+        "name": "Music on",
+        "pressed": "true"
+      }
+    }
+  ],
+  "nativeChecks": [
+    "Isolated setup button installs untouched cellar entry and loads exact build",
+    "Native arrows to apparatus, speech-icon interaction increments live counter",
+    "Menu Save then ordinary reload retains exact bytes and partial counter",
+    "Music on/off uses native button, pressed/name changes; preference survives reload",
+    "Keyboard blocked facing then Enter resets apparatus; all counters return to zero",
+    "No error or warning console messages after reload and native interactions"
+  ],
+  "limitations": [
+    "No physical-device or audio-audition claim",
+    "Earlier full Catch, legacy solved, update and offline checks remain recorded against62ba; this bounded change affects only world-label clearance"
+  ],
+  "screenshots": {
+    "121-counters667-off.png": "751a51f9840110628eadae5f349616dfa145b98380436cee51c0ababb927bd86",
+    "121-counters667-on.png": "f1ac4ceeb5e956d4d28d79b703e10974a4f2d6ba82d6a653e6ecc1e57411ccb3",
+    "121-counters667-partial.png": "c71661a0789c4d19b136f7a810ddbd6c28ad59fe49da6ca0a8f08484333908a1",
+    "121-counters844-off.png": "eb3804db1d01f37f1db1ed46534bb3e7d136cc930791e65714dd7759de570cef",
+    "121-counters844-on.png": "94ff9b7b9fec5d8a6b340ed6c2d1bb3c1d7d23083d4e1b9594908b8e87709970"
+  }
+}

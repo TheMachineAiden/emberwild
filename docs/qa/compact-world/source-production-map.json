@@ -1,0 +1,480 @@
+[
+  {
+    "id": "player-south",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-south.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "341a8940598e2a75d0f9e89ed524a63f378839c62b6d333a673f1ffcc99e2bff"
+  },
+  {
+    "id": "player-south-1",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-south-1.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "eb8127cba26c8103f7a21f55c99bed83e8250e9da946cfe030154296f8d7a6eb"
+  },
+  {
+    "id": "player-south-2",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-south-2.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "58859a42e29520626bdf957c9de619256e3074942268b5a1d942442f85051e77"
+  },
+  {
+    "id": "player-north",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-north.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "66d88e8802d74d4d82c751b2587941da204206508145b98c3248fe1786fcc8f8"
+  },
+  {
+    "id": "player-north-1",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-north-1.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "0d4e40903bf588fa0c43453242de7fa653bc2481fc160ac5da49f1e3758531a7"
+  },
+  {
+    "id": "player-north-2",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-north-2.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "0a4e81591d0632140d034f9d99f27a8ff1c413c7aad7ac078f2c3ebf093f3ef2"
+  },
+  {
+    "id": "player-east",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-east.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "6b604168bc0b03758a48275cc670371c922a2e5d8611349abaa99e6cf8c293ae"
+  },
+  {
+    "id": "player-east-1",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-east-1.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "1c6c0b3e05637799ab58fbdfeac82b36bbcfe8a0a6c549f4deff04951fa4c599"
+  },
+  {
+    "id": "player-east-2",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-east-2.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "8c5ba5f3b02ce6499a9c79f9373365ac89c378be30e9a0656d407bd5dbfb7f0e"
+  },
+  {
+    "id": "player-west",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-west.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "0190827b5a08585fa3fb124de8bd55bc12aededd3cf39abf8eb9a67706e715e5"
+  },
+  {
+    "id": "player-west-1",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-west-1.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "88ff24e8e5d24af5592b01f058bf7e8e225eb5f121341803aa8d7fb75d83ffac"
+  },
+  {
+    "id": "player-west-2",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-west-2.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "7b1743b431322b5738c391d9e8212c0182c99eaeaa927c3c50c33e8e2950cd53"
+  },
+  {
+    "id": "player",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "341a8940598e2a75d0f9e89ed524a63f378839c62b6d333a673f1ffcc99e2bff"
+  },
+  {
+    "id": "player-back",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/player-back.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "66d88e8802d74d4d82c751b2587941da204206508145b98c3248fe1786fcc8f8"
+  },
+  {
+    "id": "healer",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/healer.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "9d0c949d96b7e6afc5a76f460a2a568ee6904a15c3c18a84da2b0c9f6932bdee"
+  },
+  {
+    "id": "perrin",
+    "source": "assets/source/world/humans-compact.json",
+    "logical_size": [
+      16,
+      24
+    ],
+    "production": "assets/world/perrin.png",
+    "png_size": [
+      32,
+      48
+    ],
+    "sha256": "76ecfeb9c75ec06ee4f841db4e439c0317d1019d0a1b9a534602e770345c4c2c"
+  },
+  {
+    "id": "a-meadow",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-meadow.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "fac93179e80f433c0edd1715cd26730866e04c44455a1c2e325bf4a5cb492525"
+  },
+  {
+    "id": "a-ground",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-ground.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "4b2d3892f26b8c68ebf1ab0615d48b04bb3ebd736858e8c8970f27af048ca39f"
+  },
+  {
+    "id": "a-path",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-path.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "111aeb0e261515b4ef0affd31547a85d0d45f7ef76423f08c0a05634fd697b9c"
+  },
+  {
+    "id": "a-water",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-water.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "f206bc3cc35599e8791f2526da866433bfc5c3ddb614b095e9db7ba250f891b0"
+  },
+  {
+    "id": "a-water-1",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-water-1.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "3407c885e6130e7808e2160473af479c24de143f29e00f9f6e50ae2ebe8b8662"
+  },
+  {
+    "id": "a-water-2",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-water-2.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "263ec5358e25b5437e28e2d487fa23b4d4a7a72ce07e16541bdb506fdf96aa62"
+  },
+  {
+    "id": "a-flowers",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-flowers.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "059fa9a190643cee90cf77af31dfdf9aa5f3fb4b8c69049a0ba8df9c25646757"
+  },
+  {
+    "id": "a-pebbles",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-pebbles.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "52c1368701f2b064ef0ce6b493a9dc75aa164916e1e1d7b30fbfc50446d55b3b"
+  },
+  {
+    "id": "a-shore-north",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-shore-north.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "70a2c60d6c133f3fa59bdaaeb405546e5b98fff87d591fa95d0f5e1c04a5f647"
+  },
+  {
+    "id": "a-path-edge-north",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-path-edge-north.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "8efac2d89f6377eae015b5769ec9ee2c9b010f105d264624f9f3a6b37dda93d5"
+  },
+  {
+    "id": "a-shore-east",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-shore-east.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "081ae2664d2d07c0c9ef312e66ba8c465a541862f7821199a049445bf5d77e7a"
+  },
+  {
+    "id": "a-path-edge-east",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-path-edge-east.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "41461e9e00177b245bce86d9603ecea6bb4dfed8a2e205e20e62236be4775bdd"
+  },
+  {
+    "id": "a-shore-south",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-shore-south.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "f4291558fe124ca02d284e32ef81c4c257cc2de6cc67cb9f81dd3a74b1cd32da"
+  },
+  {
+    "id": "a-path-edge-south",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-path-edge-south.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "aa8d6342c609b900f5c79be3536dea3d5a62ee4470b9cf15f4852f9714b85ea2"
+  },
+  {
+    "id": "a-shore-west",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-shore-west.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "5200f31616fa3ea91b7de94dc06c844f3e4ee1df5f66d40a463892b39a099db9"
+  },
+  {
+    "id": "a-path-edge-west",
+    "source": "assets/source/world/compact-ground.json",
+    "logical_size": [
+      24,
+      24
+    ],
+    "production": "assets/world/a-path-edge-west.png",
+    "png_size": [
+      48,
+      48
+    ],
+    "sha256": "6d20c193e17e7b64ef246a3ce771c2ffd998e0c39e4c6b7954f753bcad597a98"
+  },
+  {
+    "id": "a-cottage",
+    "source": "assets/source/compact-briarwick-master.png",
+    "exporter": "scripts/export_compact_world.py",
+    "logical_size": [
+      72,
+      72
+    ],
+    "production": "assets/world/a-cottage.png",
+    "png_size": [
+      144,
+      144
+    ],
+    "sha256": "a339423f79b9d0238a5ff34f765cd2a5b949decd857f760c927adcbef7328e2b"
+  },
+  {
+    "id": "a-tree",
+    "source": "assets/source/compact-briarwick-master.png",
+    "exporter": "scripts/export_compact_world.py",
+    "logical_size": [
+      40,
+      40
+    ],
+    "production": "assets/world/a-tree.png",
+    "png_size": [
+      80,
+      80
+    ],
+    "sha256": "1fa8452dd24b0c7e328cd24d4020d39f25486dd4d8a1fac625da8b4422b46331"
+  }
+]

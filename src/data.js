@@ -129,7 +129,7 @@ export const trainers = {
       ["kolkrabb", 4],
     ],
     reward:
-      "Maren: You look after your companions. The vault is open. Read the inscription beside the bowls.",
+      "Maren: You look after your companions. The vault is open. The keepers left records beside its apparatus.",
   },
   keeper: {
     name: "Alder",
@@ -220,7 +220,7 @@ maps.cellar = {
       to: [9, 10],
       requires: "puzzle",
       locked:
-        "The stairs are sealed. Light the bowls in the order shown by the inscription.",
+        "The vault's mechanism keeps these stairs sealed.",
     },
   ],
   npcs: [
@@ -228,7 +228,7 @@ maps.cellar = {
     { id: "bowl-tide", label: "Tide", x: 6, y: 6 },
     { id: "bowl-moss", label: "Moss", x: 10, y: 6 },
     { id: "bowl-ember", label: "Ember", x: 14, y: 6 },
-    { id: "reset", label: "Reset", x: 4, y: 8 },
+    { id: "reset", label: "Reset tablet", x: 4, y: 8 },
   ],
 };
 maps.summit = {
