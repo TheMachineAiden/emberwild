@@ -1,4 +1,5 @@
 import { Music, cueFor } from "./audio.js";
+import {weirGates} from "./weir-puzzle.js";
 import { towerBowls, towerTotal } from "./tower-puzzle.js";
 import { entryDuration } from "../music/scores.js";
 import { EncounterIntro } from "./encounter-intro.js";
@@ -10,6 +11,7 @@ import {
   maps,
   trainers,
   rescues,
+  fieldEncounters,
 } from "./data.js";
 import {
   newGame,
@@ -21,6 +23,9 @@ import {
   encodeSave,
   decodeSave,
   SAVE_KEY,
+  atCamp,
+  swapReserve,
+  RESERVE_LIMIT,
 } from "./engine.js";
 import { worldCamera } from "./camera.js";
 import { rasterSize, projectWorldRect, WorldLabels } from "./world-view.js";
@@ -36,7 +41,8 @@ import { battleEffect } from "./sfx.js";
 import { battleEnvironment, battleContacts } from "./battle-scene.js";
 let state = newGame(),
   panel = null,
-  dialogue = null;
+  dialogue = null,
+  reserveSelection = null;
 const SAVE_FAILURE_MESSAGE = "Could not save on this device. Check your browser storage settings. You can keep playing.";
 const music = new Music();
 const sequence = new BattleSequence(undefined, () => music.effects.stop());
@@ -301,7 +307,7 @@ function world() {
     .map(element => element.getBoundingClientRect());
   const draw = (id, x, y, width = 24, height = 24) =>
     ctx.drawImage(worldAssets[id], ...projectWorldRect(camera,raster,cssWidth,cssHeight,x,y,width,height));
-  const coast = state.map === "ridge";
+  const coast = ["ridge", "wrack"].includes(state.map);
   const terrain = id => id.startsWith("a-") ? id :
     coast && ["meadow", "ground", "path", "flowers", "pebbles"].includes(id) ? `a-coast-${id}` : `a-${id}`;
   const raised = [];
@@ -318,8 +324,9 @@ function world() {
       draw(inside ? terrain("wall") : water, x * 24, y * 24);
   map.rows.forEach((row, y) =>
     [...row].forEach((tile, x) => {
-      let id = inside ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
+      let id = inside || map.ground === "floor" ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
       if (tile === "#") id = inside ? "wall" : water;
+      if (state.map === "weir" && tile === "#" && x >= 8 && x <= 11 && y >= 2 && y <= 7 && !state.flags.weir) id = "a-coast-ground";
       if (tile === "T" || tile === "g") id = "ground";
       if (tile === "H" && state.map !== "village")
         id =
@@ -360,13 +367,19 @@ function world() {
     const trainerPose = trainerSight.pose(n, now);
     const nx = trainerPose.x, ny = trainerPose.y;
     let id =
-      npcArt[n.id] ||
+      n.art || npcArt[n.id] ||
       (n.id === "healer" || n.id === "rest" ? "healer" : "trainer");
-    const actor =
+    const actor = n.kind !== "prop" &&
       !n.id.startsWith("rescue-") &&
+      !n.id.startsWith("wild-") &&
       !n.id.startsWith("bowl-") &&
-      !["reset", "inscription", "beacon", "rest"].includes(n.id);
+      !["reset", "inscription", "beacon", "rest", "channel-record"].includes(n.id);
     if (actor) id = `a-${id}`;
+    if (n.id.startsWith("wild-")) id = "flame";
+    if (n.id === "channel-record") id = state.flags.weir ? "flame" : "bowl";
+    const gateIndex = weirGates.findIndex(g => g.id === n.id);
+    if (gateIndex >= 0) id = state.weirGates[gateIndex] ? "flame" : "bowl";
+    if (n.id === "basin-record" && state.flags.chapterTwo) id = "flame";
     if (n.id.startsWith("rescue-"))
       id = state.rescued.includes(n.id.slice(7)) ? "bowl" : "flame";
     if (n.id.startsWith("bowl-")) {
@@ -405,11 +418,18 @@ function world() {
       worldLabels.place(n.id,n.label,x,(ny*24+5-camera.y)*camera.scale,cssWidth,{actor:true,left});
     } else {
       const bowlIndex = towerBowls.findIndex(b => b.id === n.id);
-      const label = bowlIndex < 0 ? n.label : `${n.label} ${state.bowlCharges[bowlIndex]}/3`;
-      worldLabels.place(n.id,label,(n.x*24+12-camera.x)*camera.scale,
-        (n.y*24-camera.y)*camera.scale-22,cssWidth,{avoid: hudBounds});
+      const label = gateIndex >= 0 ? `${n.label} ${state.weirGates[gateIndex] ? "open" : "shut"}`
+        : n.id === "weir-test" && state.flags.weir ? "Channel flowing"
+        : bowlIndex < 0 ? n.label : `${n.label} ${state.bowlCharges[bowlIndex]}/3`;
+      const labelX = (n.x*24+12-camera.x)*camera.scale;
+      const labelY = (n.y*24-camera.y)*camera.scale-22;
+      // An off-screen apparatus must not leave a clamped label over another one.
+      if (labelX < -12 || labelX > cssWidth+12 || labelY < -18 || labelY > cssHeight) continue;
+      worldLabels.place(n.id,label,labelX,labelY,cssWidth,{avoid: hudBounds});
     }
   }
+  if (state.map === "basin" && state.flags.chapterTwo)
+    for (const [x,y] of [[10,2],[12,6],[15,4]]) draw("a-flame",x*24,y*24);
   const direction =
     state.facing[0] === 1
       ? "east"
@@ -453,9 +473,15 @@ function renderTeam(inBattle = false) {
         ? "Who will take their place?"
         : inBattle
           ? "Switch companion"
-          : "Your team",
+          : reserveSelection !== null
+            ? `Swap in ${species[state.reserve[reserveSelection].species].name}`
+            : "Your team",
     ),
   );
+  if (!inBattle && atCamp(state) && state.reserve.length && reserveSelection === null)
+    heading.append(button(`Camp reserve (${state.reserve.length})`, () => {
+      document.getElementById("camp-reserve-heading").scrollIntoView({block:"start"});
+    }, false, "camp-reserve"));
   if (!forced)
     heading.append(
       button(
@@ -494,18 +520,24 @@ function renderTeam(inBattle = false) {
     row.append(marker(c.species), details);
     row.append(
       button(
-        i === state.active ? "Lead" : "Choose",
+        !inBattle && reserveSelection !== null ? "Swap" : i === state.active ? "Lead" : "Choose",
         () => {
           if (inBattle) {
             panel = null;
             act("switch", i);
+          } else if (reserveSelection !== null) {
+            if (swapReserve(state, reserveSelection, i)) {
+              reserveSelection = null;
+              store();
+              render();
+            }
           } else {
             state.active = i;
             store();
             render();
           }
         },
-        c.hp === 0 || i === state.active,
+        reserveSelection === null || inBattle ? c.hp === 0 || i === state.active : false,
         `team-${i}`,
         inBattle ? null : "confirm",
       ),
@@ -514,12 +546,34 @@ function renderTeam(inBattle = false) {
       .querySelector("button")
       .setAttribute(
         "aria-label",
-        `${i === state.active ? "Lead" : "Choose"} ${species[c.species].name}`,
+        `${!inBattle && reserveSelection !== null ? "Swap with" : i === state.active ? "Lead" : "Choose"} ${species[c.species].name}`,
       );
     list.append(row);
   });
   scene.append(list);
   if (!inBattle) {
+    const reserveHeading = node("h3", `Camp reserve · ${state.reserve.length}/${RESERVE_LIMIT}`);
+    reserveHeading.id = "camp-reserve-heading";
+    reserveHeading.style.scrollMarginTop = "64px";
+    scene.append(reserveHeading);
+    const camp = atCamp(state);
+    scene.append(node("p", reserveSelection !== null
+      ? "Choose a travelling companion above to swap, or cancel."
+      : camp ? "Companions can rest here. Choose one to swap into your team."
+      : "Visit Mira or stand beside a camp to swap companions."));
+    if (reserveSelection !== null) scene.append(button("Cancel swap", () => {
+      reserveSelection = null; render();
+    }));
+    if (camp) for (const [i,c] of state.reserve.entries()) {
+      const row = node("div",null,"team-row");
+      row.append(marker(c.species), node("strong", species[c.species].name),
+        node("small", `Lv. ${c.level} · HP ${c.hp}/${c.maxHp}`),
+        button(reserveSelection === i ? "Selected" : "Swap", () => {
+          reserveSelection = i; render(); scene.scrollTop = 0;
+        }, reserveSelection === i, `reserve-${i}`));
+      row.querySelector("button").setAttribute("aria-label",`Swap ${species[c.species].name} from camp`);
+      scene.append(row);
+    }
     scene.append(
       node("h3", "Field journal"),
       node("p", `${state.rescued.length} of 3 sparks found`, "journal-count"),
@@ -546,6 +600,17 @@ function renderTeam(inBattle = false) {
           else journalOpen.delete(id);
         });
       }
+      scene.append(entry);
+    }
+    scene.append(node("h3","Along the return route"),
+      node("p",`${state.discoveries.length} of ${Object.keys(fieldEncounters).length} observations`,"journal-count"));
+    for (const [id, observation] of Object.entries(fieldEncounters)) {
+      const found = state.discoveries.includes(id);
+      const entry = node(found ? "details" : "div",null,"journal-entry");
+      const heading = node(found ? "summary" : "div",null,"journal-row");
+      heading.append(node("span",observation.title),node("small",found ? "Found" : "Unexplored","journal-status"));
+      entry.append(heading);
+      if (found) entry.append(node("p",observation.clue));
       scene.append(entry);
     }
   }
@@ -746,7 +811,7 @@ function renderBattle() {
       command(
         "Continue",
         b.result === "capture"
-          ? "Meet your new companion in Team"
+          ? b.captureDestination === "reserve" ? "Resting at camp · swap nearby" : "Meet your new companion in Team"
           : "Return to your adventure",
         () => {
           music.effects.play("confirm");
@@ -789,8 +854,8 @@ function renderBattle() {
   } else {
     const captureReason = b.trainer
       ? "Wild creatures only"
-      : state.team.length >= 6
-        ? "Team full (6/6)"
+      : state.team.length >= 6 && state.reserve.length >= RESERVE_LIMIT
+        ? `Camp full (${RESERVE_LIMIT}/${RESERVE_LIMIT})`
         : !state.items.capsules
           ? "Restock with Mira"
           : "";
@@ -900,8 +965,14 @@ function render() {
   document.body.classList.toggle("at-ending", state.mode === "ending");
   if (state.mode === "world" && !panel) world();
   scene.replaceChildren();
-  $("objective").textContent = state.flags.complete
-    ? "Stillglass shines again. Return to Briarwick or keep exploring."
+  $("objective").textContent = state.flags.chapterTwo
+    ? "The channel is open. Visit your companions, explore the coast or rest at camp."
+    : state.flags.weir
+      ? "Follow the stream into Glassreed Basin. Rest, then speak to Tamsin by the nursery."
+      : state.flags.complete
+    ? ["wrack","weir"].includes(state.map)
+        ? "Follow the dry channel. The weir keeps the returning sparks from their nursery."
+        : "Follow the eastern shore path from Saltwind Rise. The sparks are heading home."
     : !state.flags.rival
       ? "Follow Sedgeway east. Rowan is waiting near the far end."
       : !state.flags.trainer
@@ -966,18 +1037,24 @@ function render() {
     );
   } else if (state.mode === "ending") {
     scene.append(
-      node("h2", "A light worth sharing"),
+      node("h2", state.flags.chapterTwo ? "A place for the returning light" : "A light worth sharing"),
       node(
         "p",
-        "The creatures gather around the lantern. One by one, they offer their embers until a warm beam reaches across the sea.",
+        state.flags.chapterTwo
+          ? "A quiet current slips through the reed beds. One by one, the sparkwards settle beside the old nest ledges, their small lights reflected in the water."
+          : "The creatures gather around the lantern. One by one, they offer their embers until a warm beam reaches across the sea.",
       ),
       node(
         "p",
-        "Alder opens the shutters. Far below, the windows of Briarwick answer with tiny lights. The missing embers were never stolen. They were being kept safe.",
+        state.flags.chapterTwo
+          ? "Tamsin lowers the last rope across the bank. Beyond the headland, Stillglass keeps shining. The light has somewhere to travel, and somewhere to come home."
+          : "Alder opens the shutters. Far below, the windows of Briarwick answer with tiny lights. The missing embers were never stolen. They were being kept safe.",
       ),
       node(
         "p",
-        "Chapter complete. Your companions and the coast are still yours to explore.",
+        state.flags.chapterTwo
+          ? "Chapter complete. Your companions and the coast are still yours to explore."
+          : "Stillglass is shining. Tamsin has spotted sparks taking the eastern shore path from Saltwind Rise.",
       ),
       button("Return to the coast", () => {
         state.mode = "world";
@@ -1071,13 +1148,13 @@ function talk() {
   if (!canExplore()) return;
   afterTravel(() => {
     const npc = maps[state.map].npcs.find(n => n.x === state.x + state.facing[0] && n.y === state.y + state.facing[1]);
-    const bowl = towerTotal(state), solved = state.flags.puzzle;
+    const bowl = towerTotal(state), solved = state.flags.puzzle, flowing = state.flags.weir;
     interact(state);
     if (state.mode === "world") {
       const effect = !npc ? "unavailable" : ["healer", "rest"].includes(npc.id) ? "heal"
-        : !solved && state.flags.puzzle ? "reward"
+        : (!solved && state.flags.puzzle) || (!flowing && state.flags.weir) ? "reward"
         : towerTotal(state) > bowl ? "light"
-        : npc.id === "reset" || (npc.id.startsWith("bowl-") && !solved && towerTotal(state) < bowl) ? "reset" : "interact";
+        : ["reset","weir-reset"].includes(npc.id) || (npc.id.startsWith("bowl-") && !solved && towerTotal(state) < bowl) ? "reset" : "interact";
       music.effects.play(effect);
       store();
       dialogue = state.message;
@@ -1094,6 +1171,7 @@ $("team-toggle").addEventListener("click", () => {
   clearInput();
   music.effects.play(panel ? "back" : "confirm");
   battleMenu = "commands";
+  reserveSelection = null;
   panel = panel ? null : "team";
   if ($("game-menu").open) $("game-menu").close();
   render();
@@ -1284,6 +1362,7 @@ document.addEventListener("keydown", (event) => {
     }
     afterTravel(() => {
       music.effects.play(panel ? "back" : "confirm");
+      reserveSelection = null;
       panel = panel ? null : "team";
       render();
       if (panel) focusScene();
@@ -1297,6 +1376,9 @@ document.addEventListener("keydown", (event) => {
   if (!canExplore()) { if (dir) event.preventDefault(); return; }
   if (dir) {
     event.preventDefault();
+    // Movement returns keyboard intent to the world after leaving a menu.
+    // Enter can then inspect instead of activating the previously focused gear.
+    $("interact").focus({preventScroll:true});
     if (!event.repeat) travel.press(key, dir);
   }
   if (

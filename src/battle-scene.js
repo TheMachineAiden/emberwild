@@ -8,7 +8,7 @@ export const battleScenes = {
 
 export function battleEnvironment(map, x) {
   if (map === "summit") return "crown";
-  if (map === "ridge" || (map === "route" && x >= 13)) return "coast";
+  if (["ridge", "wrack", "weir"].includes(map) || (map === "route" && x >= 13)) return "coast";
   return "meadow";
 }
 

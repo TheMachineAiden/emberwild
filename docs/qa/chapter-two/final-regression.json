@@ -1,0 +1,27 @@
+{
+  "baseline": "b1c4a410430877dbb6fd5fd4ecf1b106d08304db",
+  "activated": "5dce57e85496024bad3d9ad967086b3c59657cd4",
+  "exactSaveBytesPreserved": true,
+  "musicPreserved": true,
+  "team": [
+    "glimra",
+    "strila",
+    "knopp",
+    "vippa",
+    "kolkrabb",
+    "tuvling"
+  ],
+  "oldCacheRemoved": true,
+  "offlineInventory": {
+    "entries": 346,
+    "badHashes": []
+  },
+  "audioGesture": {
+    "beforeGestureContexts": 0,
+    "afterNativeMovementContexts": [
+      "running"
+    ],
+    "music": "on",
+    "effects": "off"
+  }
+}
