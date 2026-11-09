@@ -6,6 +6,7 @@ import {
   rescues,
   typedMoves,
 } from "./data.js";
+import { TOWER_PUZZLE_VERSION, towerInscription, resetTowerPuzzle, touchTowerBowl, restoreTowerPuzzle } from "./tower-puzzle.js";
 export const SAVE_KEY = "emberwild.save.v1";
 export function creature(id, level = 3) {
   const base = species[id];
@@ -37,6 +38,8 @@ export function newGame() {
     },
     rescued: [],
     bowlStep: 0,
+    towerPuzzleVersion: TOWER_PUZZLE_VERSION,
+    bowlCharges: [0, 0, 0],
     steps: 0,
     battle: null,
     message:
@@ -129,33 +132,9 @@ export function interact(s) {
   if (npc.id === "lookout")
     s.message =
       "Tamsin: Alder shuttered the beacon when its embers vanished. But look at the creatures. They are shielding the sparks from the wind.";
-  if (npc.id === "inscription")
-    s.message =
-      "The inscription reads: Tide feeds moss. Moss shelters ember. Light the bowls in that order. The creatures have kept these sparks alive in the vault.";
-  if (npc.id === "reset") {
-    s.bowlStep = 0;
-    s.message = "The bowls are dark again. Begin with Tide.";
-  }
-  if (npc.id.startsWith("bowl-")) {
-    if (s.flags.puzzle) {
-      s.message =
-        "The three bowls shine together. The northeast stairs are open.";
-      return;
-    }
-    const order = ["tide", "moss", "ember"];
-    if (npc.id === "bowl-" + order[s.bowlStep]) {
-      s.bowlStep++;
-      if (s.bowlStep === 3) {
-        s.flags.puzzle = true;
-        s.message =
-          "The sparks join! The northeast stairs open. The creatures carry their light toward the lantern.";
-      } else s.message = `${s.bowlStep}/3 bowls lit.`;
-    } else {
-      s.bowlStep = 0;
-      s.message =
-        "The sparks fade. Try Tide, Moss, then Ember. Nothing was used up.";
-    }
-  }
+  if (npc.id === "inscription") s.message = towerInscription;
+  if (npc.id === "reset") s.message = resetTowerPuzzle(s);
+  if (npc.id.startsWith("bowl-")) s.message = touchTowerBowl(s, npc.id);
   if (npc.id === "beacon")
     s.message = s.flags.complete
       ? "Stillglass shines over Briarwick. A little light goes a long way when it is shared."
@@ -444,6 +423,7 @@ export function decodeSave(raw) {
     throw new Error("The saved location could not be read.");
   // Reconstruct only known fields, including a safe facing; never trust arbitrary saved UI data.
   const clean = newGame();
+  const tower = restoreTowerPuzzle(s);
   Object.assign(clean, {
     mode: "world",
     map: s.map,
@@ -468,9 +448,13 @@ export function decodeSave(raw) {
     rescued: Array.isArray(s.rescued)
       ? [...new Set(s.rescued.filter((id) => Object.hasOwn(rescues, id)))]
       : [],
-    bowlStep: s.flags.puzzle ? 3 : validInt(s.bowlStep, 0, 2) ? s.bowlStep : 0,
+    bowlStep: tower.bowlStep,
+    towerPuzzleVersion: TOWER_PUZZLE_VERSION,
+    bowlCharges: tower.bowlCharges,
     steps: s.steps,
-    message: "Save loaded. Welcome back!",
+    message: tower.legacyReset
+      ? "Save loaded. The vault's old sparks have settled; its bowls are empty again."
+      : "Save loaded. Welcome back!",
   });
   if (clean.team.every((c) => c.hp === 0)) lose(clean);
   return clean;

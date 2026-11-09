@@ -2,6 +2,9 @@ import { scores, eventsFor } from "../music/scores.js";
 import { SoundEffects } from "./sfx.js";
 const explorationCues = new Set(["village", "route", "landmark"]);
 const ZONE_FADE = 0.42;
+export const MUSIC_PREFERENCE_KEY = "emberwild.music.v1";
+export const EFFECTS_PREFERENCE_KEY = "emberwild.effects.v1";
+const browserStorage = () => { try { return globalThis.localStorage; } catch { return null; } };
 export function cueFor(state) {
   if (state.mode === "battle")
     return state.battle.result === "capture"
@@ -19,8 +22,10 @@ export function cueFor(state) {
       : "route";
 }
 export class Music {
-  constructor() {
-    this.enabled = false;
+  constructor({ storage = browserStorage() } = {}) {
+    this.storage = storage;
+    this.enabled = this.preference(MUSIC_PREFERENCE_KEY, false);
+    this.effectsEnabled = this.preference(EFFECTS_PREFERENCE_KEY, true);
     this.current = null;
     this.nodes = new Set();
     this.timer = null;
@@ -28,27 +33,55 @@ export class Music {
     this.bus = null;
     this.hidden = false;
     this.retiring = new Set();
-    this.effects = new SoundEffects(() => this.context, () => this.enabled && !this.hidden);
+    this.effects = new SoundEffects(() => this.context, () => this.effectsEnabled && !this.hidden);
+  }
+  preference(key, fallback) {
+    try { const value = this.storage?.getItem(key); return value === "on" ? true : value === "off" ? false : fallback; }
+    catch { return fallback; }
+  }
+  remember(key, enabled) {
+    try { this.storage?.setItem(key, enabled ? "on" : "off"); } catch {}
+  }
+  async unlock() {
+    if (this.hidden) return false;
+    this.context ||= new (globalThis.AudioContext || globalThis.webkitAudioContext)();
+    if (this.context.state === "running") { this.play(); return true; }
+    if (this.unlocking) return this.unlocking;
+    this.unlocking = (async () => { await this.context.resume(); this.play(); return true; })();
+    try { return await this.unlocking; } finally { this.unlocking = null; }
   }
   async toggle() {
     if (this.pending) return this.enabled;
     if (this.enabled) {
       this.enabled = false;
-      this.effects.stop();
+      this.introPending = false;
+      this.remember(MUSIC_PREFERENCE_KEY, false);
       this.stop();
       return false;
     }
-    this.context ||= new (globalThis.AudioContext ||
-      globalThis.webkitAudioContext)();
     this.pending = true;
     try {
-      await this.context.resume();
+      // A manual unmute joins the main section; it never replays an encounter.
+      this.introPending = false;
+      await this.unlock();
       this.enabled = true;
+      this.remember(MUSIC_PREFERENCE_KEY, true);
       this.play();
       return true;
     } finally {
       this.pending = false;
     }
+  }
+  async toggleEffects() {
+    if (this.effectsEnabled) {
+      this.effectsEnabled = false;
+      this.effects.stop();
+    } else {
+      await this.unlock();
+      this.effectsEnabled = true;
+    }
+    this.remember(EFFECTS_PREFERENCE_KEY, this.effectsEnabled);
+    return this.effectsEnabled;
   }
   stop() {
     clearTimeout(this.timer);
@@ -116,6 +149,7 @@ export class Music {
   }
   play(fade = 0.025) {
     if (!this.enabled || this.hidden || !this.context || !this.current) return;
+    if (this.context.state && this.context.state !== "running") return;
     if (this.bus && !this.bus.retiring) return;
     const intro = !!this.introPending;
     this.introPending = false;

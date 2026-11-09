@@ -1,0 +1,70 @@
+{
+  "scope": "source preview4425; labelled6,5 initial save fixture; subsequent ordinary keyboard/joystick input",
+  "viewport844": {
+    "directions": [
+      "a-player-east-1.png",
+      "a-player-east-2.png",
+      "a-player-east.png",
+      "a-player-north-1.png",
+      "a-player-north-2.png",
+      "a-player-north.png",
+      "a-player-south-1.png",
+      "a-player-south-2.png",
+      "a-player-south.png",
+      "a-player-west-1.png",
+      "a-player-west-2.png",
+      "a-player-west.png"
+    ],
+    "screen_foot": [
+      219
+    ],
+    "canvas_resizes": 0,
+    "held_after": 0
+  },
+  "joystick667": {
+    "events": [
+      {
+        "name": "release",
+        "t": 57177.700000047684,
+        "a": [
+          "joystick"
+        ]
+      },
+      {
+        "name": "press",
+        "t": 57177.700000047684,
+        "a": [
+          "joystick",
+          [
+            0,
+            -1
+          ]
+        ]
+      },
+      {
+        "name": "release",
+        "t": 57381.60000014305,
+        "a": [
+          "joystick"
+        ]
+      }
+    ],
+    "end_position": "Briarwick. Position 7, 5.",
+    "poses": [
+      "a-player-north-1.png",
+      "a-player-north-2.png",
+      "a-player-north.png",
+      "a-player-south.png"
+    ],
+    "screen_foot": [
+      212
+    ],
+    "held_after": 0
+  },
+  "normal_interaction": "Mira heal/restock dialogue; Continue; native Shift+Down; Menu Save; ordinary reload",
+  "save_bytes_identical": true,
+  "final_position": "Briarwick. Position 7, 6.",
+  "source_png_pairs": 14,
+  "deterministic_world_exports": 184,
+  "limits": "short native input gestures; no sustained physical-device refresh, multitouch or hearing claim"
+}

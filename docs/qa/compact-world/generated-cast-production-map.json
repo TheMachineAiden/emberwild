@@ -1,0 +1,3642 @@
+[
+  {
+    "id": "a-player-south",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      113,
+      33,
+      302,
+      337
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-south.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "3d772242b331fe28f2ca8643110895c378d5fbdcf8b0853bbef358069edd9daa"
+  },
+  {
+    "id": "a-player-south-1",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      84,
+      33,
+      273,
+      336
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-south-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "1fb38c94728a40bdc3354ff26b38562f65af4d2412707eb220b0b5b8f3b3d3da"
+  },
+  {
+    "id": "a-player-south-2",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      56,
+      33,
+      245,
+      337
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-south-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "0241b2bbf2ca8ecef1de03d8a0d5589cd174b229696b61bf4012830e99880c50"
+  },
+  {
+    "id": "a-player-north",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      117,
+      34,
+      304,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-north.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "8a4a1f25776a26b46474d53be60b987a26af75ad3d43325513bb2f6a28b63e68"
+  },
+  {
+    "id": "a-player-north-1",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      90,
+      34,
+      277,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-north-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "beaee2317063b8addd5ae0fef6477cb0f4c3f7a0421bb84fb79c3262dd9c15e2"
+  },
+  {
+    "id": "a-player-north-2",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      62,
+      34,
+      248,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-north-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "09d37252585d48a4df322699936e140ec3c7a5e526cc33001dcc684a1cf1aedd"
+  },
+  {
+    "id": "a-player-east",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      114,
+      32,
+      307,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-east.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "74819599b50105159a772deba385911dd4dcf24c63c5e90805c3549746cb687c"
+  },
+  {
+    "id": "a-player-east-1",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      87,
+      32,
+      281,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-east-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "9e2fce25c28f348f52f8ac69f9009fbd4d83279d497ba1a0af259b55eda19966"
+  },
+  {
+    "id": "a-player-east-2",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      58,
+      32,
+      252,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-east-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "d571ebe5a87f68cd900cf824aea713103e579a4f7163bee8e6b51666f0f2cba8"
+  },
+  {
+    "id": "a-player-west",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      111,
+      35,
+      309,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-west.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "5d1e0703d5335198efa42759e8cae9dac3a9bca2510706968c562c4c1a48ee91"
+  },
+  {
+    "id": "a-player-west-1",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      84,
+      34,
+      281,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-west-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "4eb87dd0bc6982a19cd78940ed1f7533c4c22cc96dda07b93df304c57c36c2a1"
+  },
+  {
+    "id": "a-player-west-2",
+    "source": "assets/source/a-hero-poses-master.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      56,
+      34,
+      252,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-player-west-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "ca4675ea78f4f85f4c79df804076420d46cc3a0e36672731279f47dada5bed97"
+  },
+  {
+    "id": "a-healer",
+    "source": "assets/source/a-villagers-master.png",
+    "source_cell": [
+      0,
+      0,
+      887,
+      887
+    ],
+    "alpha_crop": [
+      257,
+      117,
+      703,
+      776
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "5399e3291cc1a03482c9b2ededf90bbf98369e10c859fc62019dbcbfbcd2791f"
+  },
+  {
+    "id": "a-perrin",
+    "source": "assets/source/a-villagers-master.png",
+    "source_cell": [
+      887,
+      0,
+      1774,
+      887
+    ],
+    "alpha_crop": [
+      258,
+      117,
+      638,
+      776
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "4c2a2bcf8a3d987bddaa8d7ea75b203ff7818b8629f1c7d6bcb15817a5471b63"
+  },
+  {
+    "id": "a-rowan-south",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      111,
+      26,
+      311,
+      342
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-south.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "b050c9f787dd85b45c1a706d3024a91e3bd3964a1015b120bd0b3b876fe1edc4"
+  },
+  {
+    "id": "a-rowan-south-1",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      81,
+      26,
+      281,
+      341
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-south-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "2ddd557e0ad84caf70879b50556fb0e9bcebb640c239f6c32316825903dfa6cb"
+  },
+  {
+    "id": "a-rowan-south-2",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      52,
+      26,
+      251,
+      342
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-south-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "8a261b3cde0f460c7fac7742a8880e7da8ef60ee8595ba35cc05cbd1de266442"
+  },
+  {
+    "id": "a-rowan-north",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      112,
+      19,
+      311,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-north.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "dfece68ef113e273e30461bacb5cd8ce543bf4b0e25a1fda1a6d9ccfb8aacc93"
+  },
+  {
+    "id": "a-rowan-north-1",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      82,
+      19,
+      281,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-north-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "937c08997558ad0fcfa175a23ebbeacff116855a7b8b54edf58ec8a6cbcd569e"
+  },
+  {
+    "id": "a-rowan-north-2",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      52,
+      19,
+      251,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-north-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "d7ad9f40135c3543d7050ae2a18fd7d577d7ad86089836f22309197813478bf5"
+  },
+  {
+    "id": "a-rowan-east",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      114,
+      15,
+      305,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-east.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "a879839a01519ca97788e551ec74ebef894361e055fcf1f4f6427d4c494fa805"
+  },
+  {
+    "id": "a-rowan-east-1",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      84,
+      15,
+      275,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-east-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "66a3feaaaef0a3a59c407e875380b6bbb222ebf0731547abac84fea50dce50bd"
+  },
+  {
+    "id": "a-rowan-east-2",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      54,
+      15,
+      245,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-east-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "ed3efce046a81dcf468a7e67bb27ef5a6bc79d201671170e6d4bda81860eeb0d"
+  },
+  {
+    "id": "a-rowan-west",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      115,
+      13,
+      309,
+      328
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-west.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "a53dc96ffd49fe66aa3fbaabac456865d4624d5aaac0a49f7feabe599c456f5d"
+  },
+  {
+    "id": "a-rowan-west-1",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      86,
+      13,
+      279,
+      328
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-west-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "09e5700430814f5666965b6e1c57b8223557af4d86063e10e67542b9081ad987"
+  },
+  {
+    "id": "a-rowan-west-2",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      55,
+      13,
+      248,
+      326
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan-west-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "313a20b150259ce7d46faf1e9c6b74f427846cebc4a3c3526a4b96d203d294df"
+  },
+  {
+    "id": "a-rowan",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      111,
+      26,
+      311,
+      342
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-rowan.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "b050c9f787dd85b45c1a706d3024a91e3bd3964a1015b120bd0b3b876fe1edc4"
+  },
+  {
+    "id": "a-maren-south",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      112,
+      33,
+      299,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-south.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "d4674a8f84e9b87a121c998728bece86d8abf366c972433d855da1fe4d0459c8"
+  },
+  {
+    "id": "a-maren-south-1",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      82,
+      33,
+      269,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-south-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "025772a6b04651545dc86329c195e2ac4dbb6b89e61e09ef999b4e94c48ee4ba"
+  },
+  {
+    "id": "a-maren-south-2",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      52,
+      33,
+      238,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-south-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "b42f5b0272b2ce91a2d7a791e3c2470dd21249559741f54bc55bdd124c2fab0c"
+  },
+  {
+    "id": "a-maren-north",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      120,
+      33,
+      310,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-north.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "777355bc2e87570fa54c6cd6647f1d46c89a7f978b6e652a2a272264429cebcd"
+  },
+  {
+    "id": "a-maren-north-1",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      90,
+      33,
+      279,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-north-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "2b65e10699285e373f2dac3159d97da6775124e6db3854d00d52a4129ea34027"
+  },
+  {
+    "id": "a-maren-north-2",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      60,
+      33,
+      249,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-north-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "49abaf531688265f095d2645555ff0a32ad0fec4d612c1b3d79ff6fc0a5c17d5"
+  },
+  {
+    "id": "a-maren-east",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      113,
+      32,
+      303,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-east.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "306d5eb5bced0dba6fe029430ad8a5eeeb0a5a10aa91aba083b047ca192354e7"
+  },
+  {
+    "id": "a-maren-east-1",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      83,
+      32,
+      272,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-east-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "e9b9169531c5d08e1a9bef65e6d692c3f68ac5df7909f3f00b4d87e6fa3c15e8"
+  },
+  {
+    "id": "a-maren-east-2",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      53,
+      32,
+      242,
+      333
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-east-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "e80fbefa1c535dcba968acfc7f6845661f8c92638295f5761b7576eb5a4bd39f"
+  },
+  {
+    "id": "a-maren-west",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      119,
+      31,
+      311,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-west.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "fd590e4a6f80e5c2ad39841852475badf926e24462f0538883c3eade445b2279"
+  },
+  {
+    "id": "a-maren-west-1",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      89,
+      31,
+      281,
+      331
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-west-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "5f517a0d28072bf9e940ae2d53ab5ef4455532d8c964428743132d7817602938"
+  },
+  {
+    "id": "a-maren-west-2",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      59,
+      31,
+      251,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren-west-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "30bd6d5d3a1e758f8a355fa7e99a2635a96bdfd2247eaa53318c10536814fa18"
+  },
+  {
+    "id": "a-maren",
+    "source": "assets/source/a-maren-poses-master-v2.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      112,
+      33,
+      299,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-maren.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "d4674a8f84e9b87a121c998728bece86d8abf366c972433d855da1fe4d0459c8"
+  },
+  {
+    "id": "a-alder-south",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      99,
+      31,
+      301,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-south.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "9dc6b2ece1d449968f28ffcdbfe039fc4450a44c242bec47b1bfb38fa58b74b6"
+  },
+  {
+    "id": "a-alder-south-1",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      72,
+      31,
+      274,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-south-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "15adb6efef6a29b226deac9a11efbfbf712dc8d407058141138b601680e93142"
+  },
+  {
+    "id": "a-alder-south-2",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      50,
+      31,
+      252,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-south-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "7b8b0e29411e965f83125787df76021f61f357e24d0c4bb0e8edb28549b2aade"
+  },
+  {
+    "id": "a-alder-north",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      99,
+      26,
+      306,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-north.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "13fd6bcf888e5133d7338c50b790194889ad41e790a2fb9d3dccd2c45f4af6d6"
+  },
+  {
+    "id": "a-alder-north-1",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      72,
+      26,
+      279,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-north-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "5bc5b6681effff8129552dbf96fff7a2b0d19cbd44113cd74fe66fb69065b4d2"
+  },
+  {
+    "id": "a-alder-north-2",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      52,
+      26,
+      259,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-north-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "c662a29d4b51f9579d038d1f7a186aa03a3b5ce62efb0e185c4f7c60be9d1f10"
+  },
+  {
+    "id": "a-alder-east",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      107,
+      20,
+      300,
+      324
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-east.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "07e605fe5be9a93ba319954cb51abd78469dd5327a87361f8501de7d644d7514"
+  },
+  {
+    "id": "a-alder-east-1",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      80,
+      20,
+      272,
+      324
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-east-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "ef0a0c4ddb358a0ca9da52d664753f96009c64fe1d76b3c5153bddc445d390cc"
+  },
+  {
+    "id": "a-alder-east-2",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      60,
+      20,
+      251,
+      324
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-east-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "43ac3ce8b8ca2700d2edb7fe570a840bcc0574fdb15bf0024d2c1f60e51a49f2"
+  },
+  {
+    "id": "a-alder-west",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      104,
+      16,
+      300,
+      320
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-west.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "be0c6ee542b4b6d38a0024c620ab1ad7db6c5796ff327321e2acf7e3bdadb402"
+  },
+  {
+    "id": "a-alder-west-1",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      78,
+      16,
+      274,
+      319
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-west-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "a72ed42c31d439fb4c42df0452035630d47945f999eeb0bba02b1993b6c611a6"
+  },
+  {
+    "id": "a-alder-west-2",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      53,
+      16,
+      254,
+      320
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder-west-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "8334f3f3ec3c994a72314fc17a1f9f33928e5674234f1da8ce4569bf8337d441"
+  },
+  {
+    "id": "a-alder",
+    "source": "assets/source/a-alder-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      99,
+      31,
+      301,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-alder.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "9dc6b2ece1d449968f28ffcdbfe039fc4450a44c242bec47b1bfb38fa58b74b6"
+  },
+  {
+    "id": "a-tamsin-south",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      100,
+      33,
+      294,
+      332
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-south.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "90ea12f79f96f90ab382d42230760af9d51952a84cffcb20bd4a0fd272dbd2f6"
+  },
+  {
+    "id": "a-tamsin-south-1",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      82,
+      35,
+      276,
+      332
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-south-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "d01039d753faf4337d39cb0259838502fca4f3dfc2389026a80e89c0747836aa"
+  },
+  {
+    "id": "a-tamsin-south-2",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      64,
+      36,
+      259,
+      332
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-south-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "7c13c360809e27fd07788f014bd519b5f1903aade0b4736dadfe63906842060d"
+  },
+  {
+    "id": "a-tamsin-north",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      100,
+      26,
+      298,
+      326
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-north.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "c3fe60008b26fc6abaca0b2c77471a0f94db34b429e7deb69de4964063760021"
+  },
+  {
+    "id": "a-tamsin-north-1",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      82,
+      26,
+      279,
+      328
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-north-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "8cf281d408ce257b9bb6bac51ef54e3e154daa6844ae9ec242f0d532eba45e69"
+  },
+  {
+    "id": "a-tamsin-north-2",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      61,
+      26,
+      261,
+      329
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-north-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "8b064f4271777f0ce3f4eeddbe4005a05e904082b012a7453ccc6a039bfa366b"
+  },
+  {
+    "id": "a-tamsin-east",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      102,
+      22,
+      283,
+      320
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-east.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "00ae0b127337d4ca1570979150c6a85d0c41c58bc8c907c77bb6f972e3f51c56"
+  },
+  {
+    "id": "a-tamsin-east-1",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      77,
+      21,
+      261,
+      320
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-east-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "24d5d2593f60d81d83cec6f907d5fec1fcc9ee24d27790f8563e0bf3b8cb5704"
+  },
+  {
+    "id": "a-tamsin-east-2",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      62,
+      22,
+      242,
+      320
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-east-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "e485a9862dcb18992a1677d2a359f509e1b8bfa98a8c002c1318a2b3673d1637"
+  },
+  {
+    "id": "a-tamsin-west",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      111,
+      14,
+      295,
+      313
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-west.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "88cb428b4a8bcd220da3f54a49fb176ae32319941b59337e42a76c5cb90ddd98"
+  },
+  {
+    "id": "a-tamsin-west-1",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      86,
+      16,
+      270,
+      312
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-west-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "ea2255d91c18d448a98b90147b303b4d8a6ae2b6673534acf1aa3cdb574ba64d"
+  },
+  {
+    "id": "a-tamsin-west-2",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      65,
+      16,
+      253,
+      312
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin-west-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "e373fce6cce45a7d404d9b9234a9606c6fde5ca673322296aae2515e067f06f0"
+  },
+  {
+    "id": "a-tamsin",
+    "source": "assets/source/a-tamsin-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      100,
+      33,
+      294,
+      332
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-tamsin.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "90ea12f79f96f90ab382d42230760af9d51952a84cffcb20bd4a0fd272dbd2f6"
+  },
+  {
+    "id": "a-healer-south",
+    "source": "assets/source/a-villagers-master.png",
+    "source_cell": [
+      0,
+      0,
+      887,
+      887
+    ],
+    "alpha_crop": [
+      257,
+      117,
+      703,
+      776
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-south.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "5399e3291cc1a03482c9b2ededf90bbf98369e10c859fc62019dbcbfbcd2791f"
+  },
+  {
+    "id": "a-healer-south-1",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      76,
+      20,
+      288,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-south-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "e9dee8135ccd1fb3d65c7b009da1089b70be1e0a9c800943e9be800f75f57089"
+  },
+  {
+    "id": "a-healer-south-2",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      38,
+      20,
+      248,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-south-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      44,
+      60
+    ],
+    "sha256": "4af2106c1b1e06ae0a472fbeeb552409dba20ab793d522a70664e226e2ba7c37"
+  },
+  {
+    "id": "a-healer-north",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      104,
+      20,
+      319,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-north.png",
+    "opaque_bounds": [
+      2,
+      0,
+      44,
+      60
+    ],
+    "sha256": "4b48527ea0b822f129eae88c8a570da60b64febc86941757e9c62be8add3332b"
+  },
+  {
+    "id": "a-healer-north-1",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      65,
+      20,
+      283,
+      336
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-north-1.png",
+    "opaque_bounds": [
+      2,
+      0,
+      44,
+      60
+    ],
+    "sha256": "9c0967fd62952f4670449def07a31ca6f9572efc2db5bac119420c352e309ae5"
+  },
+  {
+    "id": "a-healer-north-2",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      25,
+      20,
+      242,
+      336
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-north-2.png",
+    "opaque_bounds": [
+      2,
+      0,
+      44,
+      60
+    ],
+    "sha256": "5031e583512f1372c72b35d7a7c40e65022dbebe86f04a3ae9b4b22d7ab671a4"
+  },
+  {
+    "id": "a-healer-east",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      107,
+      21,
+      297,
+      328
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-east.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "536465c2940d1a1826ae756d858cf28d842b880aebfa69de1db024093d7eed7f"
+  },
+  {
+    "id": "a-healer-east-1",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      73,
+      21,
+      264,
+      328
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-east-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "1903b6972324e090681de57eeb7615f29379ed8fe97b8e387ce307aed188b10a"
+  },
+  {
+    "id": "a-healer-east-2",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      36,
+      21,
+      223,
+      328
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-east-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      42,
+      60
+    ],
+    "sha256": "33614fcac2d45a179e4d80da79d15c7fb07149823a4cebb62d3a90e020d96241"
+  },
+  {
+    "id": "a-healer-west",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      125,
+      19,
+      320,
+      326
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-west.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "9a62a755c7ce10038125a51b4399afecae20e0a4d1aad8620bbbbda185860da2"
+  },
+  {
+    "id": "a-healer-west-1",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      81,
+      20,
+      279,
+      326
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-west-1.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "6119376c48c8dd0e44f8b29a28f873593564518dafaaaf856567bb5365a03ac1"
+  },
+  {
+    "id": "a-healer-west-2",
+    "source": "assets/source/a-healer-poses-master.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      47,
+      20,
+      238,
+      326
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-healer-west-2.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "4f9ca1c97e942643da0ab652be476ff586495f0f5fd8ab2456b72c2b76a027b0"
+  },
+  {
+    "id": "a-perrin-south",
+    "source": "assets/source/a-villagers-master.png",
+    "source_cell": [
+      887,
+      0,
+      1774,
+      887
+    ],
+    "alpha_crop": [
+      258,
+      117,
+      638,
+      776
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-south.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "4c2a2bcf8a3d987bddaa8d7ea75b203ff7818b8629f1c7d6bcb15817a5471b63"
+  },
+  {
+    "id": "a-perrin-south-1",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      362,
+      0,
+      724,
+      362
+    ],
+    "alpha_crop": [
+      92,
+      17,
+      278,
+      340
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-south-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "550112b45a59074296bc8498bac8226bc27636d3f8e82f13375f2d755026dd19"
+  },
+  {
+    "id": "a-perrin-south-2",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      724,
+      0,
+      1086,
+      362
+    ],
+    "alpha_crop": [
+      63,
+      17,
+      248,
+      340
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-south-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "8c10396578e6fbcaf31cb2225ff5bc56e8face2e7c5829545ac95c59fb0cd414"
+  },
+  {
+    "id": "a-perrin-north",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      0,
+      362,
+      362,
+      724
+    ],
+    "alpha_crop": [
+      126,
+      19,
+      308,
+      334
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-north.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "e26089d9c944df30adf1e0ed6ca3c8cf23ec43a720bfb1ccbab939431c4c0a61"
+  },
+  {
+    "id": "a-perrin-north-1",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      362,
+      362,
+      724,
+      724
+    ],
+    "alpha_crop": [
+      96,
+      19,
+      277,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-north-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "cb788d3abacd1f8edb10360e5e7ffa67ccee3e3afa641e22d05d28388aa3cf49"
+  },
+  {
+    "id": "a-perrin-north-2",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      724,
+      362,
+      1086,
+      724
+    ],
+    "alpha_crop": [
+      66,
+      19,
+      247,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-north-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "879774ad94886f96cab3dc8dd97159567633f73085640448069830e31bb152d2"
+  },
+  {
+    "id": "a-perrin-east",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      0,
+      724,
+      362,
+      1086
+    ],
+    "alpha_crop": [
+      127,
+      20,
+      307,
+      336
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-east.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "ae3c10c8247682feb7ffcdb1b533038a35690c47844df6a078c020ef7a36ce25"
+  },
+  {
+    "id": "a-perrin-east-1",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      362,
+      724,
+      724,
+      1086
+    ],
+    "alpha_crop": [
+      97,
+      20,
+      277,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-east-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "8b34cfb97e31cce8ae43a46dda63b9b80a0669103330e3be441bf97f3c6b8b21"
+  },
+  {
+    "id": "a-perrin-east-2",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      724,
+      724,
+      1086,
+      1086
+    ],
+    "alpha_crop": [
+      67,
+      20,
+      247,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-east-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "5e2c8427bfe82dd61cb521f8cd84d1ab907a8f62b6f8dad1718f8477b911defc"
+  },
+  {
+    "id": "a-perrin-west",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      0,
+      1086,
+      362,
+      1448
+    ],
+    "alpha_crop": [
+      124,
+      21,
+      303,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-west.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "645509fd9575d5393932cd83168447cbf8782bd0bf216b3e8ea68226f8f1604c"
+  },
+  {
+    "id": "a-perrin-west-1",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      362,
+      1086,
+      724,
+      1448
+    ],
+    "alpha_crop": [
+      95,
+      21,
+      273,
+      331
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-west-1.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "33b0cabf19729aec6191b9cf1ceb3e56569c8616d5bc661156851d7dfc5387b1"
+  },
+  {
+    "id": "a-perrin-west-2",
+    "source": "assets/source/a-perrin-poses-master.png",
+    "source_cell": [
+      724,
+      1086,
+      1086,
+      1448
+    ],
+    "alpha_crop": [
+      65,
+      21,
+      243,
+      335
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-perrin-west-2.png",
+    "opaque_bounds": [
+      6,
+      0,
+      40,
+      60
+    ],
+    "sha256": "b57be71af87ec071e52d50f6b421321b1d4474e26b62328e5ab222b6ff5f879e"
+  },
+  {
+    "id": "a-trainer",
+    "source": "assets/source/a-rowan-poses-master.png",
+    "source_cell": [
+      0,
+      0,
+      362,
+      362
+    ],
+    "alpha_crop": [
+      111,
+      26,
+      311,
+      342
+    ],
+    "logical_size": [
+      24,
+      30
+    ],
+    "png_size": [
+      48,
+      60
+    ],
+    "foot_anchor": [
+      12,
+      30
+    ],
+    "world_offset": [
+      0,
+      -6
+    ],
+    "production": "assets/world/a-trainer.png",
+    "opaque_bounds": [
+      4,
+      0,
+      42,
+      60
+    ],
+    "sha256": "b050c9f787dd85b45c1a706d3024a91e3bd3964a1015b120bd0b3b876fe1edc4"
+  }
+]

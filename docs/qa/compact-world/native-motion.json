@@ -1,0 +1,87 @@
+{
+  "viewport": [
+    844,
+    390
+  ],
+  "dpr": 1,
+  "normal_browser_input": true,
+  "observations": [
+    {
+      "direction": "north",
+      "native_input": "ArrowNorth",
+      "moving_frames_observed": 5,
+      "used_poses": [
+        "player-north-1.png",
+        "player-north-2.png"
+      ],
+      "screen_y": [
+        171
+      ],
+      "canvas_reallocations": 0,
+      "held_after": 0,
+      "committed_state": {
+        "x": 8,
+        "y": 5,
+        "steps": 1
+      }
+    },
+    {
+      "direction": "south",
+      "native_input": "ArrowSouth",
+      "moving_frames_observed": 7,
+      "used_poses": [
+        "player-south-1.png",
+        "player-south-2.png"
+      ],
+      "screen_y": [
+        171
+      ],
+      "canvas_reallocations": 0,
+      "held_after": 0,
+      "committed_state": {
+        "x": 8,
+        "y": 6,
+        "steps": 2
+      }
+    },
+    {
+      "direction": "west",
+      "native_input": "ArrowWest",
+      "moving_frames_observed": 7,
+      "used_poses": [
+        "player-west-1.png",
+        "player-west-2.png"
+      ],
+      "screen_y": [
+        171
+      ],
+      "canvas_reallocations": 0,
+      "held_after": 0,
+      "committed_state": {
+        "x": 7,
+        "y": 6,
+        "steps": 3
+      }
+    },
+    {
+      "direction": "east",
+      "native_input": "ArrowEast",
+      "moving_frames_observed": 7,
+      "used_poses": [
+        "player-east-1.png",
+        "player-east-2.png"
+      ],
+      "screen_y": [
+        171
+      ],
+      "canvas_reallocations": 0,
+      "held_after": 0,
+      "committed_state": {
+        "x": 8,
+        "y": 6,
+        "steps": 4
+      }
+    }
+  ],
+  "physical_refresh_claim": false
+}

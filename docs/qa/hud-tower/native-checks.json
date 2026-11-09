@@ -1,0 +1,20 @@
+{
+  "music_mute_preserves_sfx_native": true,
+  "music_preference_survives_reload": true,
+  "effects_preference_survives_reload": true,
+  "contexts_before_first_gesture": 0,
+  "contexts_after_first_gesture": 1,
+  "context_state": "running",
+  "first_mute_creates_no_context": true,
+  "native_shift_duration_ms": [
+    145
+  ],
+  "native_sprint_button_release": "false",
+  "held_after": 0,
+  "partial_tower_save_bytes_unchanged": true,
+  "native_wrong_retry": true,
+  "native_solve": true,
+  "supplies_or_hp_spent": false,
+  "limits": "Browser input/scheduling observations; no listening, physical refresh or multitouch claim.",
+  "dynamic_counter_increment_and_failure_reset_match_saved_state": true
+}

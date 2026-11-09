@@ -1,4 +1,5 @@
 import { Music, cueFor } from "./audio.js";
+import { towerBowls, towerTotal } from "./tower-puzzle.js";
 import { entryDuration } from "../music/scores.js";
 import { EncounterIntro } from "./encounter-intro.js";
 import {
@@ -200,6 +201,18 @@ function load() {
 const worldAssets = {};
 let worldLoaded = false;
 const worldIds = [
+  "a-trainer",
+  ...["healer", "perrin", "rowan", "maren", "alder", "tamsin"].flatMap(name => [
+    `a-${name}`, ...["north", "south", "east", "west"].flatMap(dir =>
+      [0,1,2].map(step => `a-${name}-${dir}${step ? "-"+step : ""}`)),
+  ]),
+  ...["north", "south", "east", "west"].flatMap(dir =>
+    [0,1,2].map(step => `a-player-${dir}${step ? "-"+step : ""}`)),
+  ...["meadow", "ground", "path", "flowers", "pebbles", "cottage", "tree", "water", "water-1", "water-2"].map(id => `a-${id}`),
+  ...["floor", "wall", "tower-wall", "reeds", "grass-front-1", "grass-front-2", "camp", "bowl", "flame", "stairs", "seal", "door", "lens", "lens-lit", "lighthouse", "beacon-dark", "beacon-lit"].map(id => `a-${id}`),
+  ...["meadow", "ground", "path", "flowers", "pebbles"].map(id => `a-coast-${id}`),
+  ...["north", "east", "south", "west"].flatMap(dir => [`a-shore-${dir}`, `a-path-edge-${dir}`]),
+  ...["north", "east", "south", "west"].map(dir => `a-coast-path-edge-${dir}`),
   "meadow",
   "path",
   "flowers",
@@ -211,7 +224,7 @@ const worldIds = [
   "maren",
   "alder",
   "tamsin",
-  ...["rowan", "maren", "alder"].flatMap((name) =>
+  ...["rowan", "maren", "alder", "healer", "perrin", "tamsin"].flatMap((name) =>
     ["north", "south", "east", "west"].flatMap((dir) =>
       [0, 1, 2].map((step) => `${name}-${dir}${step ? "-" + step : ""}`),
     ),
@@ -284,14 +297,25 @@ function world() {
   ctx.imageSmoothingEnabled = false;
   if (!worldLoaded) return;
   worldLabels.begin();
+  const hudBounds = [$("location"), document.querySelector('.hud-tools')]
+    .map(element => element.getBoundingClientRect());
   const draw = (id, x, y, width = 24, height = 24) =>
     ctx.drawImage(worldAssets[id], ...projectWorldRect(camera,raster,cssWidth,cssHeight,x,y,width,height));
-  const water = reducedMotion() ? "water" : ["water", "water-1", "water-2"][waterFrame(worldClock.time)];
+  const coast = state.map === "ridge";
+  const terrain = id => id.startsWith("a-") ? id :
+    coast && ["meadow", "ground", "path", "flowers", "pebbles"].includes(id) ? `a-coast-${id}` : `a-${id}`;
+  const raised = [];
+  const drawRaised = (id, x, y, width, height) => {
+    raised.push({ id, x, y, width, height, foot: y + height });
+  };
+  const edges = [["north",0,-1],["east",1,0],["south",0,1],["west",-1,0]];
+  const waterPose = reducedMotion() ? "water" : ["water", "water-1", "water-2"][waterFrame(worldClock.time)];
+  const water = terrain(waterPose);
   // Authored boundary tiles fill the view when the camera extends past a map
   // edge. Collision and map transitions still use the original logical tiles.
   for (let y = Math.floor(cameraY); y <= Math.ceil((camera.y + camera.height) / 24); y++)
     for (let x = Math.floor(cameraX); x <= Math.ceil((camera.x + camera.width) / 24); x++)
-      draw(inside ? "wall" : water, x * 24, y * 24);
+      draw(inside ? terrain("wall") : water, x * 24, y * 24);
   map.rows.forEach((row, y) =>
     [...row].forEach((tile, x) => {
       let id = inside ? "floor" : onPath(state.map, x, y) ? "path" : "meadow";
@@ -300,26 +324,35 @@ function world() {
       if (tile === "H" && state.map !== "village")
         id =
           state.map === "ridge"
-            ? "wall"
+            ? "tower-wall"
             : map.rows[y - 1]?.[x] === "H"
               ? "house"
               : "roof";
-      draw(id, x * 24, y * 24);
-      if (tile === "T") draw("tree", x * 24, y * 24);
-      if (tile === "g") draw("reeds", x * 24, y * 24);
-      if (tile === "h" && state.map !== "village") draw("door", x * 24, y * 24);
+      draw(terrain(id), x * 24, y * 24);
+      if (id === "path") for (const [dir, dx, dy] of edges) {
+        if (!onPath(state.map, x+dx, y+dy)) draw(`a-${coast ? "coast-" : ""}path-edge-${dir}`, x*24, y*24);
+      }
+      if (!inside && tile === "#") for (const [dir, dx, dy] of edges) {
+        const next = map.rows[y+dy]?.[x+dx];
+        if (next && next !== "#") draw(`a-shore-${dir}`, x*24, y*24);
+      }
+      if (tile === "T") {
+        drawRaised("a-tree", x*24-8, y*24-16, 40, 40);
+      }
+      if (tile === "g") draw(terrain("reeds"), x * 24, y * 24);
+      if (tile === "h" && state.map !== "village") draw(terrain("door"), x * 24, y * 24);
     }),
   );
   if (state.map === "village") {
-    draw("cottage", 4 * 24, 2 * 24, 72, 72);
-    draw("cottage", 12 * 24, 2 * 24, 72, 72);
+    drawRaised("a-cottage", 4 * 24, 2 * 24, 72, 72);
+    drawRaised("a-cottage", 12 * 24, 2 * 24, 72, 72);
   }
   for (const [id, x, y] of decorations[state.map] || [])
-    draw(id, x * 24, y * 24);
-  if (state.map === "ridge") draw("lighthouse", 15 * 24, 0, 72, 96);
+    draw(terrain(id), x * 24, y * 24);
+  if (state.map === "ridge") drawRaised("a-lighthouse", 15 * 24, 0, 72, 96);
   for (const exit of map.exits)
     draw(
-      exit.requires && !state.flags[exit.requires] ? "seal" : "stairs",
+      terrain(exit.requires && !state.flags[exit.requires] ? "seal" : "stairs"),
       exit.x * 24,
       exit.y * 24,
     );
@@ -333,18 +366,19 @@ function world() {
       !n.id.startsWith("rescue-") &&
       !n.id.startsWith("bowl-") &&
       !["reset", "inscription", "beacon", "rest"].includes(n.id);
+    if (actor) id = `a-${id}`;
     if (n.id.startsWith("rescue-"))
       id = state.rescued.includes(n.id.slice(7)) ? "bowl" : "flame";
     if (n.id.startsWith("bowl-")) {
-      const order = ["bowl-tide", "bowl-moss", "bowl-ember"];
+      const index = towerBowls.findIndex(b => b.id === n.id);
       id =
-        state.flags.puzzle || order.indexOf(n.id) < state.bowlStep
+        state.flags.puzzle || state.bowlCharges[index] > 0
           ? "flame"
           : "bowl";
     }
     if (n.id === "beacon") {
-      draw(
-        state.flags.complete ? "beacon-lit" : "beacon-dark",
+      drawRaised(
+        state.flags.complete ? "a-beacon-lit" : "a-beacon-dark",
         n.x * 24 - 24,
         n.y * 24 - 48,
         72,
@@ -359,9 +393,10 @@ function world() {
       const step = trainerPose.moving && !reducedMotion() ? trainerPose.frame : 0;
       id += `-${direction}${step ? "-" + step : ""}`;
     }
-    draw(id, nx * 24 + (actor ? 4 : 0), ny * 24, actor ? 16 : 24, 24);
+    (actor ? drawRaised : draw)(actor ? id : terrain(id),
+      nx * 24, ny * 24 - (actor ? 6 : 0), 24, actor ? 30 : 24);
     if (trainerPose.notice) worldLabels.place(`notice:${n.id}`, "!",
-      (nx*24+12-camera.x)*camera.scale, (ny*24-camera.y)*camera.scale-32,
+      (nx*24+12-camera.x)*camera.scale, (ny*24-6-camera.y)*camera.scale-32,
       cssWidth, { notice: true });
     if (actor) {
       if (Math.abs(px - nx) + Math.abs(py - ny) > 2) continue;
@@ -369,8 +404,10 @@ function world() {
       const x = ((nx + (left ? 0 : 1)) * 24 - camera.x) * camera.scale + (left ? -6 : 6);
       worldLabels.place(n.id,n.label,x,(ny*24+5-camera.y)*camera.scale,cssWidth,{actor:true,left});
     } else {
-      worldLabels.place(n.id,n.label,(n.x*24+12-camera.x)*camera.scale,
-        (n.y*24-camera.y)*camera.scale-22,cssWidth);
+      const bowlIndex = towerBowls.findIndex(b => b.id === n.id);
+      const label = bowlIndex < 0 ? n.label : `${n.label} ${state.bowlCharges[bowlIndex]}/3`;
+      worldLabels.place(n.id,label,(n.x*24+12-camera.x)*camera.scale,
+        (n.y*24-camera.y)*camera.scale-22,cssWidth,{avoid: hudBounds});
     }
   }
   const direction =
@@ -382,17 +419,21 @@ function world() {
           ? "north"
           : "south";
   const step = pose && !reducedMotion() ? (pose.progress < 0.5 ? 1 : 2) : 0;
-  draw(
-    `player-${direction}${step ? "-" + (((step + pose.stride) % 2) + 1) : ""}`,
-    px * 24 + 4,
-    py * 24,
-    16,
+  drawRaised(
+    `a-player-${direction}${step ? "-" + (((step + pose.stride) % 2) + 1) : ""}`,
+    px * 24,
+    py * 24 - 6,
     24,
+    30,
   );
+  // Foot depth is presentation only. A canopy can cover an actor behind it
+  // without changing the existing tree tile, collider or traversal commits.
+  for (const item of raised.sort((a, b) => a.foot - b.foot))
+    draw(item.id, item.x, item.y, item.width, item.height);
   const rustle = grass.pose(state.map, now, reducedMotion());
   if (rustle) {
     ctx.globalAlpha = rustle.alpha;
-    draw(`grass-front-${rustle.frame}`, rustle.x - 12, rustle.y - 10, 24, 12);
+    draw(`a-grass-front-${rustle.frame}`, rustle.x - 12, rustle.y - 10, 24, 12);
     ctx.globalAlpha = 1;
   }
   worldLabels.end();
@@ -866,7 +907,7 @@ function render() {
       : !state.flags.trainer
         ? "Head east to Saltwind Rise. Find Maren near the beacon."
         : !state.flags.puzzle
-          ? "Enter Stillglass. Read the inscription and light the three bowls."
+          ? "Explore Stillglass Vault. Its apparatus guards the way upward."
           : "The stairs are open. Rest, then meet Alder at the Lantern Crown.";
   $("location").textContent = maps[state.map].name;
   $("message").textContent = dialogue || "";
@@ -1030,13 +1071,13 @@ function talk() {
   if (!canExplore()) return;
   afterTravel(() => {
     const npc = maps[state.map].npcs.find(n => n.x === state.x + state.facing[0] && n.y === state.y + state.facing[1]);
-    const bowl = state.bowlStep, solved = state.flags.puzzle;
+    const bowl = towerTotal(state), solved = state.flags.puzzle;
     interact(state);
     if (state.mode === "world") {
       const effect = !npc ? "unavailable" : ["healer", "rest"].includes(npc.id) ? "heal"
         : !solved && state.flags.puzzle ? "reward"
-        : state.bowlStep > bowl ? "light"
-        : npc.id === "reset" || (npc.id.startsWith("bowl-") && !solved && state.bowlStep === 0) ? "reset" : "interact";
+        : towerTotal(state) > bowl ? "light"
+        : npc.id === "reset" || (npc.id.startsWith("bowl-") && !solved && towerTotal(state) < bowl) ? "reset" : "interact";
       music.effects.play(effect);
       store();
       dialogue = state.message;
@@ -1083,16 +1124,44 @@ $("restart").addEventListener("click", () => {
     render();
   }
 });
-$("sound").addEventListener("click", async () => {
+function syncAudioControls() {
+  const label = music.enabled ? "Music on" : "Music off";
+  $("music-toggle").dataset.enabled = String(music.enabled);
+  $("music-toggle").setAttribute("aria-label", label);
+  $("music-toggle").setAttribute("aria-pressed", String(music.enabled));
+  $("music-toggle").title = label;
+  $("sound").textContent = music.effectsEnabled ? "Sound effects on" : "Sound effects off";
+  $("sound").setAttribute("aria-pressed", String(music.effectsEnabled));
+}
+$("music-toggle").addEventListener("click", async () => {
+  $("music-toggle").disabled = true;
   try {
-    const enabled = await music.toggle();
-    $("sound").textContent = enabled ? "Sound on" : "Sound off";
-    $("sound").setAttribute("aria-pressed", String(enabled));
-    if (enabled) music.effects.play("confirm");
+    await music.toggle();
+    syncAudioControls();
   } catch {
-    $("sound").textContent = "Sound unavailable";
-  }
+    $("music-toggle").setAttribute("aria-label", "Music unavailable");
+    $("music-toggle").title = "Music unavailable";
+  } finally { $("music-toggle").disabled = false; }
 });
+$("sound").addEventListener("click", async () => {
+  $("sound").disabled = true;
+  try {
+    const enabled = await music.toggleEffects();
+    syncAudioControls();
+    if (enabled) music.effects.play("confirm");
+  } catch { $("sound").textContent = "Sound effects unavailable"; }
+  finally { $("sound").disabled = false; }
+});
+syncAudioControls();
+for (const eventName of ["pointerdown", "keydown"]) {
+  document.addEventListener(eventName, event => {
+    // Muting a restored preference must not start a brief note on pointerdown.
+    const musicActivation = event.target.closest?.("#music-toggle") &&
+      (eventName === "pointerdown" || ["Enter", " "].includes(event.key));
+    if (!musicActivation && event.isTrusted && !document.hidden && (music.enabled || music.effectsEnabled))
+      music.unlock().catch(() => {});
+  }, { capture: true });
+}
 document.addEventListener("visibilitychange", () => {
   music.setHidden(document.hidden);
   if (document.hidden) { interruptEntry(); clearInput(); worldClock.stop(); }

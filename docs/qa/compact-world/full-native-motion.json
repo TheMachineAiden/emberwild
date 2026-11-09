@@ -1,0 +1,24 @@
+{
+  "scope": "source-preview4423; normal Right from labelled route11,8 fixture",
+  "human_poses": [
+    "rowan-west-1.png",
+    "rowan-west-2.png",
+    "rowan-west.png"
+  ],
+  "draw_samples": 46,
+  "screen_feet": [
+    219
+  ],
+  "x_range": [
+    516,
+    660
+  ],
+  "monotonic_approach": true,
+  "player_poses": [
+    "player-east-1.png",
+    "player-east-2.png",
+    "player-east.png",
+    "player-north.png"
+  ],
+  "outcome": "one Challenge \u00b7 Rowan entry; player12,8; disabled travel during notice/approach"
+}

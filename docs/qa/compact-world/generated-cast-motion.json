@@ -1,0 +1,58 @@
+{
+  "rowan": {
+    "samples": 63,
+    "poses": [
+      "a-rowan-west-1.png",
+      "a-rowan-west-2.png",
+      "a-rowan-west.png"
+    ],
+    "x_range": [
+      508,
+      652
+    ],
+    "foot_range": [
+      219,
+      219
+    ],
+    "vertical_monotonic": true,
+    "ui": "Menu\nChallenge \u00b7 Rowan\nBuddleLv. 4\n38/38 HP \u00b7 Moss\nWickitLv. 3\n28/28 HP \u00b7 Ember\nXP 0/4\nCHOOSE YOUR N"
+  },
+  "alder": {
+    "samples": 32,
+    "poses": [
+      "a-alder-south-1.png",
+      "a-alder-south-2.png",
+      "a-alder-south.png"
+    ],
+    "x_range": [
+      310,
+      358
+    ],
+    "foot_range": [
+      178,
+      226
+    ],
+    "vertical_monotonic": true,
+    "ui": "Menu\nChallenge \u00b7 Alder\nBrambleboarLv. 4\n36/36 HP \u00b7 Moss\nWickitLv. 3\n28/28 HP \u00b7 Ember\nXP 0/4\nCHOOSE Y"
+  },
+  "maren": {
+    "samples": 89,
+    "poses": [
+      "a-maren-south-1.png",
+      "a-maren-south-2.png",
+      "a-maren-south.png"
+    ],
+    "x_range": [
+      379,
+      379
+    ],
+    "foot_range": [
+      87,
+      183
+    ],
+    "vertical_monotonic": true,
+    "ui": "Menu"
+  },
+  "scope": "Source4425, labelled starting saves; encounters initiated by ordinary Right. Maren notice interrupted by nativeMenu, resumed only after nativeLeft/Right reentry. No synthetic input or paused intro.",
+  "limits": "Short native gestures and scheduling observations; no sustained physical-device refresh or audio audition claim."
+}

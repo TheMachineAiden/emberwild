@@ -261,3 +261,55 @@ test('rapid zone requests coalesce behind one crossfade and retire on mute/hide'
     globalThis.setTimeout=oldSet;globalThis.clearTimeout=oldClear;
   }
 });
+
+test('persisted music and effects preferences are independent and remain silent before a gesture', async()=>{
+  const old=globalThis.AudioContext, values=new Map(),storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};
+  const param=()=>({value:0,setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){},cancelScheduledValues(){}});
+  class Context {
+    constructor(){this.currentTime=10;this.state='suspended';this.destination={};this.resumes=0;}
+    async resume(){this.resumes++;this.state='running';}
+    createGain(){return {gain:param(),connect(){},disconnect(){}};}
+    createOscillator(){return {frequency:param(),connect(){},disconnect(){},start(){},stop(){}};}
+  }
+  globalThis.AudioContext=Context;const m=new Music({storage});
+  try {
+    m.setCue('village');assert.equal(m.context,null);assert.equal(m.effectsEnabled,true);
+    await m.unlock();assert.equal(m.context.resumes,1);assert.equal(m.nodes.size,0);
+    await m.toggle();assert.ok(m.nodes.size>0);
+    assert.equal(m.effects.play('guard'),true);const effects=[...m.effects.nodes];
+    await m.toggle();assert.equal(m.nodes.size,0);assert.deepEqual([...m.effects.nodes],effects,'music mute leaves SFX alive');
+    await m.toggle();const bus=m.bus;
+    await m.toggleEffects();assert.equal(m.effects.nodes.size,0);assert.equal(m.bus,bus,'SFX mute does not restart music');
+    await m.toggleEffects();assert.equal(m.context.resumes,1);
+    const restored=new Music({storage});assert.equal(restored.enabled,true);assert.equal(restored.effectsEnabled,true);
+    restored.setCue('village');assert.equal(restored.context,null);assert.equal(restored.timer,null);
+    m.setHidden(true);m.setHidden(false);assert.equal(m.effects.nodes.size,0,'visibility resume never replays skipped SFX');
+  } finally {m.effects.stop();m.enabled=false;m.stop();globalThis.AudioContext=old;}
+});
+
+test('blocked preference storage and rejected audio resume do not claim a successful unmute',async()=>{
+  const old=globalThis.AudioContext;
+  globalThis.AudioContext=class {constructor(){this.state='suspended';}async resume(){throw new Error('blocked');}};
+  const m=new Music({storage:{getItem(){throw new Error('blocked');},setItem(){throw new Error('blocked');}}});
+  try {
+    await assert.rejects(m.toggle(),/blocked/);assert.equal(m.enabled,false);assert.equal(m.pending,false);assert.equal(m.unlocking,null);
+    assert.equal(m.effects.play('guard'),false);assert.equal(m.timer,null);
+  } finally {globalThis.AudioContext=old;}
+});
+
+test('a pending gesture resume cannot queue music or replay an intro after the page hides',async()=>{
+  const old=globalThis.AudioContext;let resume;
+  globalThis.AudioContext=class {
+    constructor(){this.currentTime=0;this.state='suspended';}
+    resume(){return new Promise(resolve=>{resume=()=>{this.state='running';resolve();};});}
+    createGain(){throw new Error('suspended/hidden scheduling');}
+  };
+  const m=new Music({storage:{getItem:()=> 'on',setItem(){}}});
+  try {
+    m.setCue('village');const pending=m.unlock();
+    m.setCue('battle',{intro:true});assert.equal(m.bus,null);assert.equal(m.nodes.size,0);
+    m.setHidden(true);resume();await pending;
+    assert.equal(m.bus,null);assert.equal(m.timer,null);assert.equal(m.nodes.size,0);
+    assert.equal(m.effects.nodes.size,0);assert.equal(m.introPending,false);
+  } finally {m.enabled=false;m.stop();globalThis.AudioContext=old;}
+});

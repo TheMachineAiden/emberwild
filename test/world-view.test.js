@@ -44,19 +44,39 @@ test('native raster covers the viewport and shared terrain edges have no fractio
   }
 });
 
-test('directional human frames retain head and contact anchors at the existing footprint', async () => {
+test('retained matrix human frames preserve their head and contact anchors', async () => {
   const {readFile}=await import('node:fs/promises');
-  const {characters}=JSON.parse(await readFile(new URL('../assets/source/world/humans.json',import.meta.url),'utf8'));
+  const {characters}=JSON.parse(await readFile(new URL('../assets/source/world/humans-compact.json',import.meta.url),'utf8'));
+  for(const actor of ['player','healer','perrin','rowan','maren','alder','tamsin'])
   for(const direction of ['north','south','east','west']) {
-    const standing=characters[`player-${direction}`];
+    const standing=characters[`${actor}-${direction}`];
     for(const suffix of ['','-1','-2']) {
-      const rows=characters[`player-${direction}${suffix}`];
+      const rows=characters[`${actor}-${direction}${suffix}`];
       assert.equal(rows.length,24);
       assert.ok(rows.every(r=>r.length===16));
       assert.deepEqual(rows.slice(0,11),standing.slice(0,11), 'head never bobs with the gait');
       assert.ok(rows[23].includes('o'),'boots keep their bottom contact row');
     }
-    assert.notDeepEqual(characters[`player-${direction}-1`].slice(13,18),
-      characters[`player-${direction}-2`].slice(13,18), 'opposed arm poses are visible above the legs');
+    assert.notDeepEqual(characters[`${actor}-${direction}-1`].slice(13,18),
+      characters[`${actor}-${direction}-2`].slice(13,18), 'opposed arm poses are visible above the legs');
   }
+});
+
+test('reused world labels reflect changed counters and resets without replacing unchanged nodes', async () => {
+  const {WorldLabels}=await import('../src/world-view.js');
+  const prior=globalThis.document,children=[];let writes=0;
+  globalThis.document={createElement(){return {hidden:false,style:{},
+    get textContent(){return this.text;},set textContent(v){this.text=v;writes++;},
+    get offsetWidth(){return this.hidden?0:this.text.length*8;}};}};
+  try {
+    const labels=new WorldLabels({append:e=>children.push(e)});
+    const draw=text=>{labels.begin();labels.place('bowl-tide',text,50,20,100);labels.end();};
+    draw('Tide 1/3');const element=children[0];
+    draw('Tide 0/3');assert.equal(element.textContent,'Tide 0/3');
+    for(let i=0;i<20;i++)draw('Tide 0/3');
+    assert.equal(children.length,1);assert.equal(writes,2);
+    labels.begin();labels.end();assert.equal(element.hidden,true);
+    draw('Reset tablet');assert.equal(element.hidden,false);assert.equal(element.textContent,'Reset tablet');
+    assert.equal(element.style.transform,'translate(4px, 20px)');
+  } finally {globalThis.document=prior;}
 });
