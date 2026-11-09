@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "mode": "world",
+  "map": "ridge",
+  "x": 16,
+  "y": 8,
+  "facing": [
+    -1,
+    0
+  ],
+  "team": [
+    {
+      "species": "glimra",
+      "level": 5,
+      "hp": 36,
+      "maxHp": 36,
+      "xp": 0
+    },
+    {
+      "species": "strila",
+      "level": 5,
+      "hp": 39,
+      "maxHp": 39,
+      "xp": 0
+    },
+    {
+      "species": "knopp",
+      "level": 5,
+      "hp": 42,
+      "maxHp": 42,
+      "xp": 0
+    },
+    {
+      "species": "vippa",
+      "level": 5,
+      "hp": 30,
+      "maxHp": 30,
+      "xp": 0
+    },
+    {
+      "species": "kolkrabb",
+      "level": 5,
+      "hp": 38,
+      "maxHp": 38,
+      "xp": 0
+    },
+    {
+      "species": "tuvling",
+      "level": 5,
+      "hp": 40,
+      "maxHp": 40,
+      "xp": 0
+    }
+  ],
+  "active": 2,
+  "items": {
+    "capsules": 6,
+    "tonics": 3
+  },
+  "flags": {
+    "captured": true,
+    "rival": true,
+    "trainer": true,
+    "puzzle": true,
+    "complete": true
+  },
+  "rescued": [],
+  "bowlStep": 3,
+  "towerPuzzleVersion": 2,
+  "bowlCharges": [
+    1,
+    2,
+    3
+  ],
+  "steps": 1,
+  "battle": null,
+  "message": "Save loaded. Welcome back!"
+}

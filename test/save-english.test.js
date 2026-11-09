@@ -19,7 +19,6 @@ test("released Swedish save keeps its team, supplies, position and progress unde
   for (const key of [
     "team",
     "items",
-    "flags",
     "map",
     "x",
     "y",
@@ -27,6 +26,7 @@ test("released Swedish save keeps its team, supplies, position and progress unde
     "steps",
   ])
     assert.deepEqual(loaded[key], raw[key]);
+  assert.deepEqual(loaded.flags,{...raw.flags,weir:false,weirPractice:false,chapterTwo:false});
   assert.equal(SAVE_KEY, "emberwild.save.v1");
   assert.equal(loaded.message, "Save loaded. Welcome back!");
   assert.equal(species[loaded.team[0].species].name, "Rillfin");
@@ -46,7 +46,7 @@ test("released Swedish save keeps its team, supplies, position and progress unde
   const roundtrip = decodeSave(
     encodeSave(decodeSave(JSON.stringify(progressed))),
   );
-  assert.deepEqual(roundtrip.flags, progressed.flags);
+  assert.deepEqual(roundtrip.flags, {...progressed.flags,weir:false,weirPractice:false,chapterTwo:false});
   assert.deepEqual(roundtrip.rescued, progressed.rescued);
   assert.equal(roundtrip.bowlStep, 3);
   assert.equal(trainers.liv.name, "Rowan");

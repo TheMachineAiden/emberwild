@@ -11,13 +11,13 @@ export function cueFor(state) {
       ? "capture"
       : state.battle.result === "win"
         ? "victory"
-        : state.battle.trainerId === "keeper"
+        : ["keeper","haven"].includes(state.battle.trainerId)
           ? "boss"
           : "battle";
   if (state.mode === "ending") return "village";
   return state.map === "village"
     ? "village"
-    : ["cellar", "summit"].includes(state.map)
+    : ["cellar", "summit", "weir"].includes(state.map)
       ? "landmark"
       : "route";
 }

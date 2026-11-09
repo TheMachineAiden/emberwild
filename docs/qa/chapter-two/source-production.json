@@ -1,0 +1,302 @@
+{
+  "siltippet": {
+    "source": "assets/source/siltippet-poses.png",
+    "source_sha256": "11eafee50e116e0dfa3df91efcbb563556bfa77a3f32512dafa5574c476199a1",
+    "source_size": [
+      1774,
+      887
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "production": {
+      "front": {
+        "path": "assets/creatures/siltippet-front.png",
+        "sha256": "7368cd1498c0b5fd953c2dd123f3c3f83e210d8ab3ef7b2157edf90b275d30f3",
+        "crop": [
+          81,
+          173,
+          800,
+          713
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      },
+      "back": {
+        "path": "assets/creatures/siltippet-back.png",
+        "sha256": "964500a32c8f93e4ce03c703fc3c6c71d731561718c9f6d8999d51835fb9451b",
+        "crop": [
+          87,
+          173,
+          806,
+          713
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      }
+    }
+  },
+  "coaldrill": {
+    "source": "assets/source/coaldrill-poses.png",
+    "source_sha256": "cb172a5cd61ab8f064dccf02e83c5e816f78682798e88e216232ed592ffc9255",
+    "source_size": [
+      1774,
+      887
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "production": {
+      "front": {
+        "path": "assets/creatures/coaldrill-front.png",
+        "sha256": "eee058ede895ba078433bf0c8f0575371497c6bcf236ca2591ef4a92fc5e2ca4",
+        "crop": [
+          62,
+          204,
+          843,
+          774
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      },
+      "back": {
+        "path": "assets/creatures/coaldrill-back.png",
+        "sha256": "f700a51718c6115bde4552b92f29f1e733fdf645ba9a1d597104156815e6eb54",
+        "crop": [
+          60,
+          190,
+          812,
+          767
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      }
+    }
+  },
+  "vesperknot": {
+    "source": "assets/source/vesperknot-poses.png",
+    "source_sha256": "c59f15cea134a1fa988e1e0d744bec36cb7840ecea606e052325d8672e263739",
+    "source_size": [
+      1774,
+      887
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "production": {
+      "front": {
+        "path": "assets/creatures/vesperknot-front.png",
+        "sha256": "84cef3f2a6c39bbce52fcd94e736b6f83de3c179e4dc849883ed05977a55ba74",
+        "crop": [
+          70,
+          52,
+          805,
+          841
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      },
+      "back": {
+        "path": "assets/creatures/vesperknot-back.png",
+        "sha256": "d8783b422960cfb59a79095e5761687eafad078d97b97310f36fb090c580c51c",
+        "crop": [
+          70,
+          51,
+          813,
+          842
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      }
+    }
+  },
+  "bractisel": {
+    "source": "assets/source/bractisel-poses.png",
+    "source_sha256": "15cd7f2be5f6374adaaeee0bb75df01e6b6257095f6864003ed3e201b033ba95",
+    "source_size": [
+      1774,
+      887
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "production": {
+      "front": {
+        "path": "assets/creatures/bractisel-front.png",
+        "sha256": "6cea32e8c6c3674c76d5b87fb361d19f85aefd935acae845a81955098a5ac2b6",
+        "crop": [
+          101,
+          19,
+          770,
+          861
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      },
+      "back": {
+        "path": "assets/creatures/bractisel-back.png",
+        "sha256": "b05f37c1e051bd51dae448e582542024c76907d5c1083ae95769efaac38643d1",
+        "crop": [
+          122,
+          19,
+          771,
+          861
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      }
+    }
+  },
+  "kelpurl": {
+    "source": "assets/source/kelpurl-poses.png",
+    "source_sha256": "8d4f1d7bb25a0d82351be92a49988c9b8b571bee7414c604b5ef54bc36e718b0",
+    "source_size": [
+      1774,
+      887
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "production": {
+      "front": {
+        "path": "assets/creatures/kelpurl-front.png",
+        "sha256": "e59955aada2aab527d91472ce00ab67e6fc124c64933d387629a013988b0529a",
+        "crop": [
+          219,
+          20,
+          654,
+          867
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      },
+      "back": {
+        "path": "assets/creatures/kelpurl-back.png",
+        "sha256": "33a0f4d6dcbeb5f6cff89a7139f13cf21b5418f579333e128c11d0ca70714116",
+        "crop": [
+          240,
+          20,
+          666,
+          867
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      }
+    }
+  },
+  "peatuff": {
+    "source": "assets/source/peatuff-poses.png",
+    "source_sha256": "5529158ce4a7ec62171290643dd516c730afeaebf1ca8e6f8a336e646024a132",
+    "source_size": [
+      1774,
+      887
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "production": {
+      "front": {
+        "path": "assets/creatures/peatuff-front.png",
+        "sha256": "b84fda501b6d0ba2bf1e574c250435fab01d29c2c1d18673bc16db523bac666b",
+        "crop": [
+          53,
+          217,
+          838,
+          757
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      },
+      "back": {
+        "path": "assets/creatures/peatuff-back.png",
+        "sha256": "b70d9b8f5e7f7ac72dc251946068085b595532878f428ba211ebb645cb0df12c",
+        "crop": [
+          44,
+          217,
+          838,
+          754
+        ],
+        "frame": [
+          64,
+          64
+        ],
+        "anchor": [
+          32,
+          60
+        ]
+      }
+    }
+  }
+}

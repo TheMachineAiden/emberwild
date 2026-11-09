@@ -5,8 +5,11 @@ import {
   trainers,
   rescues,
   typedMoves,
+  fieldEncounters,
 } from "./data.js";
 import { TOWER_PUZZLE_VERSION, towerInscription, resetTowerPuzzle, touchTowerBowl, restoreTowerPuzzle } from "./tower-puzzle.js";
+import {restoreWeir,touchWeir} from "./weir-puzzle.js";
+export const RESERVE_LIMIT = 64;
 export const SAVE_KEY = "emberwild.save.v1";
 export function creature(id, level = 3) {
   const base = species[id];
@@ -27,6 +30,8 @@ export function newGame() {
     y: 8,
     facing: [0, -1],
     team: [],
+    reserve: [],
+    discoveries: [],
     active: 0,
     items: { capsules: 6, tonics: 3 },
     flags: {
@@ -35,11 +40,15 @@ export function newGame() {
       trainer: false,
       puzzle: false,
       complete: false,
+      weir: false,
+      weirPractice: false,
+      chapterTwo: false,
     },
     rescued: [],
     bowlStep: 0,
     towerPuzzleVersion: TOWER_PUZZLE_VERSION,
     bowlCharges: [0, 0, 0],
+    weirGates: [false,false,false],
     steps: 0,
     battle: null,
     message:
@@ -83,7 +92,9 @@ export function walk(s, dx, dy, rng = Math.random) {
   }
   if (tile === "g" && s.steps % 4 === 0 && rng() < 0.65) {
     const pool = map.encounters || ["vippa", "daggla", "tuvling"];
-    startBattle(s, pool[Math.floor(rng() * pool.length)], false);
+    const id = pool[Math.floor(rng() * pool.length)];
+    startBattle(s, id, false);
+    if (s.battle && map.encounterLevel) s.battle.enemy = creature(id,map.encounterLevel);
   }
   return true;
 }
@@ -94,6 +105,29 @@ export function interact(s) {
   );
   if (!npc) {
     s.message = "Stand next to someone and face them to talk.";
+    return;
+  }
+  if (npc.id.startsWith("wild-")) {
+    const id = npc.id.slice(5), entry = fieldEncounters[id];
+    startBattle(s, entry.species);
+    if (!s.battle) return;
+    s.battle.enemy = creature(entry.species, entry.level);
+    s.battle.discoveryId = id;
+    s.battle.log = [`${entry.title}: ${species[entry.species].name} shelters a spark. You can catch it, battle, or leave and return.`];
+    return;
+  }
+  if (npc.id.startsWith("weir-") || npc.id.startsWith("gate-")) {
+    s.message = touchWeir(s,npc.id);
+    return;
+  }
+  if (npc.id === "basin-record") {
+    s.message = s.flags.chapterTwo
+      ? "Warm lights rest among the glassy reeds. The returning sparkwards can come and go, and Stillglass still shines beyond the headland."
+      : "The stream runs gently past old nest ledges. Tamsin is watching the arriving sparkwards from the bank. Speak to her when your companions are ready.";
+    return;
+  }
+  if (npc.id === "channel-record") {
+    s.message = s.flags.weir ? "The channel carries a quiet stream toward Glassreed Basin. The sparkwards follow the water home." : "The old channel runs toward Glassreed Basin. Tiny tracks stop at the dry stones. The sparkwards are carrying their light home, but the tide gate is closed.";
     return;
   }
   if (npc.id.startsWith("rescue-")) {
@@ -123,7 +157,9 @@ export function interact(s) {
       "Perrin: Look for sheltered sparks along Sedgeway and Saltwind Rise. Weaken their guardians before catching them. Mira will heal your team for free.";
   if (npc.id === "neighbor" && s.flags.complete)
     s.message =
-      "Perrin: The light reaches Briarwick again! You saw what those little creatures were trying to tell us. Thank you.";
+      "Perrin: Stillglass shines again! Tamsin spotted sparks heading beyond Saltwind Rise. The eastern shore path is open.";
+  if (npc.id === "neighbor" && s.flags.chapterTwo)
+    s.message = "Perrin: The lights are travelling both ways now. A beacon to guide them, and a quiet home to return to. You and your companions made room for both.";
   if (trainers[npc.id]) {
     const trainer = trainers[npc.id];
     if (s.flags[trainer.flag]) s.message = trainer.reward;
@@ -132,6 +168,8 @@ export function interact(s) {
   if (npc.id === "lookout")
     s.message =
       "Tamsin: Alder shuttered the beacon when its embers vanished. But look at the creatures. They are shielding the sparks from the wind.";
+  if (npc.id === "lookout" && s.flags.complete)
+    s.message = "Tamsin: See those lights moving east? The sparkwards are taking their embers home. Follow the shore path beyond the rise.";
   if (npc.id === "inscription") s.message = towerInscription;
   if (npc.id === "reset") s.message = resetTowerPuzzle(s);
   if (npc.id.startsWith("bowl-")) s.message = touchTowerBowl(s, npc.id);
@@ -141,7 +179,7 @@ export function interact(s) {
       : "The lantern is dark. Warden Alder waits just below it.";
 }
 export function heal(s) {
-  for (const c of s.team) c.hp = c.maxHp;
+  for (const c of [...s.team, ...s.reserve]) c.hp = c.maxHp;
   s.active = 0;
 }
 export function startBattle(s, id, trainer = false) {
@@ -215,6 +253,11 @@ function lose(s) {
     "Mira brought you home safely. Your whole team is rested and your supplies are topped up. You are ready to try again.";
 }
 function completeRescue(s) {
+  const discovery = s.battle.discoveryId;
+  if (discovery) {
+    if (!s.discoveries.includes(discovery)) s.discoveries.push(discovery);
+    s.battle.log.push(fieldEncounters[discovery].clue);
+  }
   const id = s.battle.rescueId;
   if (!id || s.rescued.includes(id)) return;
   s.rescued.push(id);
@@ -294,23 +337,27 @@ export function battleAction(
     b.log.push("A Mending Draught restores up to 22 HP.");
     emit("heal", { actor: "ally", target: "ally" });
   } else if (action === "capture") {
-    if (b.trainer || s.team.length >= 6 || !s.items.capsules) {
+    if (b.trainer || (s.team.length >= 6 && s.reserve.length >= RESERVE_LIMIT) || !s.items.capsules) {
       b.log = [
         b.trainer
           ? "Only wild creatures can join you in a Spark Vessel."
-          : s.team.length >= 6
-            ? "Your team is full. You can travel with six companions."
+          : s.team.length >= 6 && s.reserve.length >= RESERVE_LIMIT
+            ? `Your team and camp reserve are full (${RESERVE_LIMIT} resting companions). No vessel was used.`
             : "No Spark Vessels left. Mira can give you more.",
       ];
       return false;
     }
     s.items.capsules--;
     if (rng() < 0.25 + 0.75 * (1 - enemy.hp / enemy.maxHp)) {
-      s.team.push({ ...enemy, hp: Math.max(1, enemy.hp) });
+      const toReserve = s.team.length >= 6;
+      (toReserve ? s.reserve : s.team).push({ ...enemy, hp: Math.max(1, enemy.hp) });
       s.flags.captured = true;
       b.result = "capture";
+      b.captureDestination = toReserve ? "reserve" : "team";
       completeRescue(s);
-      b.log.push(`${species[enemy.species].name} joins your team!`);
+      b.log.push(toReserve
+        ? `${species[enemy.species].name} is resting at camp. Swap companions beside Mira or a camp.`
+        : `${species[enemy.species].name} joins your team!`);
       emit("capture", { target: "enemy" });
       return true;
     }
@@ -364,7 +411,7 @@ export function battleAction(
 }
 export function finishBattle(s) {
   if (s.mode !== "battle" || !s.battle.result) return false;
-  const ending = s.battle.trainerId === "keeper" && s.battle.result === "win";
+  const ending = ["keeper","haven"].includes(s.battle.trainerId) && s.battle.result === "win";
   s.message = s.battle.log.join(" ");
   s.battle = null;
   s.mode = ending ? "ending" : "world";
@@ -378,6 +425,26 @@ export function encodeSave(s) {
   copy.battle = null;
   return JSON.stringify(copy);
 }
+const validCreature = (c) => c && species[c.species] &&
+  [c.level, c.maxHp, c.hp, c.xp].every(Number.isInteger) &&
+  c.level >= 1 && c.level <= 100 && c.maxHp >= 1 && c.maxHp <= 1000 &&
+  c.hp >= 0 && c.hp <= c.maxHp && c.xp >= 0 && c.xp <= 3;
+const savedCreature = c => ({species:c.species,level:c.level,hp:c.hp,maxHp:c.maxHp,xp:c.xp});
+
+export function atCamp(s) {
+  return s.mode === "world" && maps[s.map].npcs.some(n =>
+    ["healer", "rest"].includes(n.id) && Math.abs(n.x-s.x)+Math.abs(n.y-s.y) === 1);
+}
+export function swapReserve(s, reserveIndex, teamIndex) {
+  if (!atCamp(s) || !Number.isInteger(reserveIndex) || !Number.isInteger(teamIndex) ||
+      !s.reserve[reserveIndex] || !s.team[teamIndex]) return false;
+  const incoming = s.reserve[reserveIndex];
+  if (incoming.hp === 0 && s.team.every((c,i) => i === teamIndex || c.hp === 0)) return false;
+  [s.team[teamIndex], s.reserve[reserveIndex]] = [incoming, s.team[teamIndex]];
+  if (s.team[s.active].hp === 0) s.active = s.team.findIndex(c => c.hp > 0);
+  return true;
+}
+
 export function decodeSave(raw) {
   const s = JSON.parse(raw),
     validInt = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
@@ -394,17 +461,12 @@ export function decodeSave(raw) {
     !Array.isArray(s.team) ||
     s.team.length < 1 ||
     s.team.length > 6 ||
-    !s.team.every(
-      (c) =>
-        c &&
-        species[c.species] &&
-        validInt(c.level, 1, 100) &&
-        validInt(c.maxHp, 1, 1000) &&
-        validInt(c.hp, 0, c.maxHp) &&
-        validInt(c.xp, 0, 3),
-    )
+    !s.team.every(validCreature)
   )
     throw new Error("The saved team could not be read.");
+  const reserve = s.reserve === undefined ? [] : s.reserve;
+  if (!Array.isArray(reserve) || reserve.length > RESERVE_LIMIT || !reserve.every(validCreature))
+    throw new Error("The saved camp reserve could not be read.");
   if (
     !s.items ||
     !validInt(s.items.capsules, 0, 9999) ||
@@ -429,13 +491,10 @@ export function decodeSave(raw) {
     map: s.map,
     x: s.x,
     y: s.y,
-    team: s.team.map((c) => ({
-      species: c.species,
-      level: c.level,
-      hp: c.hp,
-      maxHp: c.maxHp,
-      xp: c.xp,
-    })),
+    team: s.team.map(savedCreature),
+    reserve: reserve.map(savedCreature),
+    discoveries: Array.isArray(s.discoveries)
+      ? [...new Set(s.discoveries.filter(id => Object.hasOwn(fieldEncounters,id)))] : [],
     active: s.active,
     items: { capsules: s.items.capsules, tonics: s.items.tonics },
     flags: {
@@ -444,6 +503,9 @@ export function decodeSave(raw) {
       trainer: s.flags.trainer === true,
       puzzle: s.flags.puzzle === true,
       complete: s.flags.complete === true,
+      weir: s.flags.weir === true,
+      weirPractice: s.flags.weirPractice === true,
+      chapterTwo: s.flags.chapterTwo === true,
     },
     rescued: Array.isArray(s.rescued)
       ? [...new Set(s.rescued.filter((id) => Object.hasOwn(rescues, id)))]
@@ -451,6 +513,7 @@ export function decodeSave(raw) {
     bowlStep: tower.bowlStep,
     towerPuzzleVersion: TOWER_PUZZLE_VERSION,
     bowlCharges: tower.bowlCharges,
+    weirGates: restoreWeir(s),
     steps: s.steps,
     message: tower.legacyReset
       ? "Save loaded. The vault's old sparks have settled; its bowls are empty again."
